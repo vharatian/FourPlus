@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Four</string>
+    <string name="signUp">ثبت نام</string>
+    <string name="anonymousLogin">می خوای به عنوان مهمان وارد شی ؟</string>
+    <string name="emailIsNeeded">وارد کردن ایمیل ضروری است</string>
+    <string name="passwordRepeatDoesNotMatch">تکرار پسورد مطابق نیست</string>
+    <string name="passwordIsNeeded">وارد کردن پسورد ضروری است</string>
+    <string name="passwordSouldBeLonger">پسورد باید جداقل ۴ کاراکتر باشد</string>
+    <string name="mailIsInvalid">ایمیل وارد شده صحیح نمی باشد</string>
+    <string name="email">ایمیل</string>
+    <string name="password">رمز عبور</string>
+    <string name="passwordRepeat">تکرار رمز عبور</string>
+    <string name="signIn">ورود</string>
+    <string name="forgotPassword">رمز عبور یادت رفته ؟</string>
+</resources>

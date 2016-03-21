@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#26303c</color>
+    <color name="colorPrimaryDark">#131a20</color>
+    <color name="colorAccent">#56cdd5</color>
+    <color name="input_background">#85888a</color>
+    <color name="input_invalid">#ed3f36</color>
+    <color name="input_valid">#41d47b</color>
+    <color name="errorMessageColor">#ed3f36</color>
+</resources>

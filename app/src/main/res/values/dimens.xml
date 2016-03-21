@@ -1,0 +1,25 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="xxsmallBreak">1dp</dimen>
+    <dimen name="xsmallBreak">2dp</dimen>
+    <dimen name="smallBreak">5dp</dimen>
+    <dimen name="normalBreak">10dp</dimen>
+    <dimen name="largeBreak">15dp</dimen>
+    <dimen name="xlargeBreak">20dp</dimen>
+    <dimen name="xxlargeBreak">30dp</dimen>
+    <dimen name="longBreak">50dp</dimen>
+
+
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="input_stroke">1dp</dimen>
+    <dimen name="input_corner">10dp</dimen>
+    <dimen name="signUpMainWidth">350dp</dimen>
+    <dimen name="inputWithStatusIconSize">30dp</dimen>
+    <dimen name="inputWithStatusLeftMargin">40dp</dimen>
+    <dimen name="signUpBtnWidth">270dp</dimen>
+    <dimen name="largeText">20dp</dimen>
+    <dimen name="lineHeight">2dp</dimen>
+    <dimen name="autoSignInItemsSize">70dp</dimen>
+
+</resources>
