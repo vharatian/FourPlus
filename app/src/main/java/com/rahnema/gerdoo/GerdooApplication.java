@@ -6,7 +6,7 @@ import android.util.Log;
 /**
  * Created by psycho on 3/14/16.
  */
-public class FourApplication extends Application {
+public class GerdooApplication extends Application {
 
     @Override
     public void onCreate() {
@@ -17,5 +17,7 @@ public class FourApplication extends Application {
                 Log.e("psycho", "error", ex);
             }
         });
+
+//        FontsOverride.setDefaultFont(this, "DEFAULT", "irsans.ttf");
     }
 }

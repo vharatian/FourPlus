@@ -1,8 +1,11 @@
 package com.rahnema.gerdoo.auth;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -15,9 +18,13 @@ import com.rahnema.gerdoo.view.validation.validator.PasswordValidator;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SignInActivity extends AppCompatActivity {
+public class SignInFragment extends Fragment implements PsychoChangeable.StateChangedListener {
 
     public static final int STATE_NOT_SPECIFIED = -1;
+
+    public static SignInFragment newINstance(){
+        return new SignInFragment();
+    }
 
     //Views
     private TextView messageView;
@@ -25,35 +32,34 @@ public class SignInActivity extends AppCompatActivity {
     private ValidatableInput passwordInput;
     private Button signInBtn;
 
-    // These properties are for tracking inputs validity
-    private int inputsState;
-    private InnerStateChangeListener stateChangeListener;
-    private Map<ValidatableInput, Integer> states = new HashMap<>();
+    // This properties are for tracking inputs validity
+    private AuthStateChangeListener stateChangeListener;
 
+
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_in);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_sign_in, container, false);
 
-        initViews();
+        initViews(rootView);
+
+        return rootView;
     }
 
-    private void initViews() {
+    private void initViews(View rootView) {
 
-        messageView = (TextView) findViewById(R.id.message);
+        messageView = (TextView) rootView.findViewById(R.id.message);
 
-        stateChangeListener = new InnerStateChangeListener();
+        stateChangeListener = new AuthStateChangeListener(this);
 
-        initMailInput();
-        initPasswordInput();
+        initMailInput(rootView);
+        initPasswordInput(rootView);
 
-        initSignInBtn();
-
-        checkInputsValidity();
+        initSignInBtn(rootView);
     }
 
-    private void initSignInBtn() {
-        signInBtn = (Button) findViewById(R.id.signInBtn);
+    private void initSignInBtn(View rootView) {
+        signInBtn = (Button) rootView.findViewById(R.id.signInBtn);
         signInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,15 +68,15 @@ public class SignInActivity extends AppCompatActivity {
         });
     }
 
-    private void initMailInput() {
-        mailInput = (ValidatableInput) findViewById(R.id.mail);
+    private void initMailInput(View rootView) {
+        mailInput = (ValidatableInput) rootView.findViewById(R.id.mail);
         mailInput.setValidator(new EmailValidator());
         stateChangeListener.addEditText(mailInput);
         mailInput.setHintMessage(R.string.email);
     }
 
-    private void initPasswordInput() {
-        passwordInput = (ValidatableInput) findViewById(R.id.password);
+    private void initPasswordInput(View rootView) {
+        passwordInput = (ValidatableInput) rootView.findViewById(R.id.password);
         passwordInput.setValidator(new PasswordValidator());
         stateChangeListener.addEditText(passwordInput);
         passwordInput.setHintMessage(R.string.password);
@@ -78,7 +84,7 @@ public class SignInActivity extends AppCompatActivity {
 
 
     private void onSignInRequested() {
-        if (inputsState != ValidatableInput.STATE_VALID){
+        if (stateChangeListener.getState() != ValidatableInput.STATE_VALID){
             showErrors();
         }else{
             messageView.setText("");
@@ -111,21 +117,6 @@ public class SignInActivity extends AppCompatActivity {
 
     }
 
-    private int checkInputsValidity() {
-        int newState = ValidatableInput.STATE_VALID;
-        for(ValidatableInput key: states.keySet()){
-            if(states.get(key) != ValidatableInput.STATE_VALID){
-                newState = ValidatableInput.STATE_INVALID;
-            }
-        }
-
-        if(inputsState != newState) {
-            inputsState = newState;
-            setSignInBtnState(newState);
-        }
-        return newState;
-    }
-
     private void setSignInBtnState(int state) {
         if(state == ValidatableInput.STATE_VALID){
             signInBtn.setBackgroundResource(R.drawable.dark_button_background_valid);
@@ -134,19 +125,8 @@ public class SignInActivity extends AppCompatActivity {
         }
     }
 
-
-    private class InnerStateChangeListener implements PsychoChangeable.StateChangedListener {
-
-        @Override
-        public void stateChanged(PsychoChangeable changeable, int newState) {
-            states.put((ValidatableInput) changeable, newState);
-
-            checkInputsValidity();
-        }
-
-        protected void addEditText(PsychoChangeable editText){
-            states.put((ValidatableInput) editText, STATE_NOT_SPECIFIED);
-            editText.setStateChangedListener(this);
-        }
+    @Override
+    public void stateChanged(PsychoChangeable editText, int newState) {
+        setSignInBtnState(newState);
     }
 }

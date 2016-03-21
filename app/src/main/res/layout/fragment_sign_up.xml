@@ -4,8 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".auth.SignInActivity"
+    tools:context=".auth.SignUpFragment"
     android:orientation="vertical">
+
 
 
     <LinearLayout
@@ -35,23 +36,28 @@
             android:layout_marginBottom="@dimen/normalBreak"
             android:id="@+id/password"/>
 
+        <com.rahnema.gerdoo.view.validation.ValidatableInput
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/passwordRepeat"/>
+
 
         <com.rahnema.gerdoo.view.font.Button
             android:layout_width="@dimen/signUpBtnWidth"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@drawable/dark_button_background_normal"
+            android:background="@drawable/dark_button_background_invalid"
             android:layout_marginTop="@dimen/xxlargeBreak"
-            android:text="@string/signIn"
+            android:text="@string/signUp"
             android:textColor="@color/colorAccent"
             android:textSize="20dp"
             android:textStyle="bold"
-            android:id="@+id/signInBtn"/>
+            android:id="@+id/signUpBtn"/>
 
         <LinearLayout
             android:layout_width="@dimen/signUpBtnWidth"
             android:layout_height="wrap_content"
-            android:id="@+id/forgotPassword"
+            android:id="@+id/enterAnonymous"
             android:orientation="vertical"
             android:layout_marginTop="@dimen/xxlargeBreak"
             android:layout_gravity="center">
@@ -60,7 +66,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@string/forgotPassword"
+                android:text="@string/anonymousLogin"
                 android:textColor="@android:color/white"
                 android:textSize="18dp"
                 android:layout_marginBottom="@dimen/normalBreak"/>
@@ -71,6 +77,57 @@
                 android:background="@color/colorAccent"/>
 
         </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/longBreak"
+        android:background="@color/colorPrimaryDark">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/lineHeight"
+            android:background="@color/colorAccent"/>
+
+
+        <com.rahnema.gerdoo.view.font.Button
+            android:layout_width="@dimen/signUpBtnWidth"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/button_background_normal"
+            android:layout_marginTop="@dimen/xxlargeBreak"
+            android:text="@string/signIn"
+            android:textColor="@color/colorAccent"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:id="@+id/signInBtn"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/normalBreak"
+            android:layout_gravity="center">
+
+            <ImageView
+                android:layout_width="@dimen/autoSignInItemsSize"
+                android:layout_height="@dimen/autoSignInItemsSize"
+                android:src="@drawable/insta"
+                android:id="@+id/signInWidthInstagram"/>
+
+            <ImageView
+                android:layout_width="@dimen/autoSignInItemsSize"
+                android:layout_height="@dimen/autoSignInItemsSize"
+                android:src="@drawable/google"
+                android:layout_marginLeft="@dimen/largeBreak"
+                android:id="@+id/signInWidthGoogle"/>
+
+        </LinearLayout>
+
 
     </LinearLayout>
 

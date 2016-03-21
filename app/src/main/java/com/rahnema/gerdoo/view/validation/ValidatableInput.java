@@ -58,14 +58,15 @@ public class ValidatableInput extends LinearLayout implements PsychoChangeable {
         statusIcon = (GifImageView) findViewById(R.id.statusIcon);
 
         editText.addTextChangedListener(new InnerTextWatcher());
+        editText.addTextChangedListener(new PersianHintGravityTextWatcher(editText));
         checkState();
     }
 
     private void checkState(){
         int newState;
-        if(getText().toString().isEmpty()){
+        if(getText().isEmpty()){
             newState = STATE_EMPTY;
-        }else if(validator.validate(getText().toString())){
+        }else if(validator.validate(getText())){
             newState = STATE_VALID;
         }else {
             newState = STATE_INVALID;
@@ -127,6 +128,10 @@ public class ValidatableInput extends LinearLayout implements PsychoChangeable {
 
     public void setRightIcon(int drawableResource) {
         editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawableResource, 0);
+    }
+
+    public void setInputType(int type){
+        editText.setInputType(type);
     }
 
 

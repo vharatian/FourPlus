@@ -1,9 +1,12 @@
 package com.rahnema.gerdoo.auth;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.text.InputType;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -14,12 +17,12 @@ import com.rahnema.gerdoo.view.validation.validator.EmailValidator;
 import com.rahnema.gerdoo.view.validation.validator.PasswordValidator;
 import com.rahnema.gerdoo.view.validation.validator.RepeatPasswordValidator;
 
-import java.util.HashMap;
-import java.util.Map;
 
-public class SignUpActivity extends AppCompatActivity {
+public class SignUpFragment extends Fragment implements PsychoChangeable.StateChangedListener {
 
-    public static final int STATE_NOT_SPECIFIED = -1;
+    public static SignUpFragment newInstance(){
+        return new SignUpFragment();
+    }
 
     //Views
     private TextView messageView;
@@ -28,46 +31,46 @@ public class SignUpActivity extends AppCompatActivity {
     private ValidatableInput passwordRepeatInput;
     private Button signUpBtn;
 
-    // These properties are for tracking inputs validity
-    private int inputsState;
-    private InnerStateChangeListener stateChangeListener;
-    private Map<ValidatableInput, Integer> states = new HashMap<>();
+    // This properties are for tracking inputs validity
+    private AuthStateChangeListener stateChangeListener;
 
+
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_sign_up, container, false);
 
-        initViews();
+        initViews(rootView);
+
+        return rootView;
     }
 
-    private void initViews() {
+    private void initViews(View rootView) {
 
-        messageView = (TextView) findViewById(R.id.message);
+        messageView = (TextView) rootView.findViewById(R.id.message);
 
-        stateChangeListener = new InnerStateChangeListener();
+        stateChangeListener = new AuthStateChangeListener(this);
 
-        initMailInput();
-        initPasswordInput();
-        initPasswordRepeat();
+        initMailInput(rootView);
+        initPasswordInput(rootView);
+        initPasswordRepeat(rootView);
 
-        initSignUpBtn();
-        initSignInBtn();
+        initSignUpBtn(rootView);
+        initSignInBtn(rootView);
 
-        checkInputsValidity();
     }
 
-    private void initSignInBtn() {
-        findViewById(R.id.signInBtn).setOnClickListener(new View.OnClickListener() {
+    private void initSignInBtn(View rootView) {
+        rootView.findViewById(R.id.signInBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SignUpActivity.this, SignInActivity.class));
+                ((AuthenticationActivity) getActivity()).changeFragment(SignInFragment.newINstance());
             }
         });
     }
 
-    private void initSignUpBtn() {
-        signUpBtn = (Button) findViewById(R.id.signUpBtn);
+    private void initSignUpBtn(View rootView) {
+        signUpBtn = (Button) rootView.findViewById(R.id.signUpBtn);
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,31 +79,34 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
-    private void initMailInput() {
-        mailInput = (ValidatableInput) findViewById(R.id.mail);
+    private void initMailInput(View rootView) {
+        mailInput = (ValidatableInput) rootView.findViewById(R.id.mail);
         mailInput.setValidator(new EmailValidator());
         stateChangeListener.addEditText(mailInput);
         mailInput.setHintMessage(R.string.email);
-//        mailInput.setRightIcon(R.drawable.google);
+        mailInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+
     }
 
-    private void initPasswordInput() {
-        passwordInput = (ValidatableInput) findViewById(R.id.password);
+    private void initPasswordInput(View rootView) {
+        passwordInput = (ValidatableInput) rootView.findViewById(R.id.password);
         passwordInput.setValidator(new PasswordValidator());
         stateChangeListener.addEditText(passwordInput);
         passwordInput.setHintMessage(R.string.password);
+        passwordInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
     }
 
-    private void initPasswordRepeat() {
-        passwordRepeatInput = (ValidatableInput) findViewById(R.id.passwordRepeat);
+    private void initPasswordRepeat(View rootView) {
+        passwordRepeatInput = (ValidatableInput) rootView.findViewById(R.id.passwordRepeat);
         passwordRepeatInput.setValidator(new RepeatPasswordValidator(passwordInput));
         stateChangeListener.addEditText(passwordRepeatInput);
         passwordRepeatInput.setHintMessage(R.string.passwordRepeat);
+        passwordRepeatInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
     }
 
 
     private void onSignUpRequested() {
-        if (inputsState != ValidatableInput.STATE_VALID){
+        if (stateChangeListener.getState() != ValidatableInput.STATE_VALID){
             showErrors();
         }else{
             messageView.setText("");
@@ -137,26 +143,11 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private boolean passwordRepeatDosNotMatch() {
-        return !passwordInput.getText().toString().equals(passwordRepeatInput.getText().toString());
+        return !passwordInput.getText().equals(passwordRepeatInput.getText());
     }
 
     private void doSignUp() {
 
-    }
-
-    private int checkInputsValidity() {
-        int newState = ValidatableInput.STATE_VALID;
-        for(ValidatableInput key: states.keySet()){
-            if(states.get(key) != ValidatableInput.STATE_VALID){
-                newState = ValidatableInput.STATE_INVALID;
-            }
-        }
-
-        if(inputsState != newState) {
-            inputsState = newState;
-            setSignUpBtnState(newState);
-        }
-        return newState;
     }
 
     private void setSignUpBtnState(int state) {
@@ -167,19 +158,8 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
-
-    private class InnerStateChangeListener implements PsychoChangeable.StateChangedListener {
-
-        @Override
-        public void stateChanged(PsychoChangeable changeable, int newState) {
-            states.put((ValidatableInput) changeable, newState);
-
-            checkInputsValidity();
-        }
-
-        protected void addEditText(PsychoChangeable editText){
-            states.put((ValidatableInput) editText, STATE_NOT_SPECIFIED);
-            editText.setStateChangedListener(this);
-        }
+    @Override
+    public void stateChanged(PsychoChangeable editText, int newState) {
+        setSignUpBtnState(newState);
     }
 }
