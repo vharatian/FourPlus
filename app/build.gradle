@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 
+
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
@@ -26,4 +27,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.2.0'
 
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.1.+'
+    compile 'fr.avianey.com.viewpagerindicator:library:2.4.1.1@aar'
 }

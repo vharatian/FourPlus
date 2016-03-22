@@ -12,4 +12,6 @@
     <string name="passwordRepeat">تکرار رمز عبور</string>
     <string name="signIn">ورود</string>
     <string name="forgotPassword">رمز عبور یادت رفته ؟</string>
+    <string name="introTitle">عنوان ۱</string>
+    <string name="introDescription1">توضیحات توضیحات توضیحات توضیحات توضیحات</string>
 </resources>

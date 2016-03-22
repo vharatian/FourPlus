@@ -115,7 +115,7 @@ public class ValidatableInput extends LinearLayout implements PsychoChangeable {
 
     public void showErrorStatusIcon() {
         statusIcon.setVisibility(VISIBLE);
-        statusIcon.setImageResource(R.drawable.splash_logo);
+        statusIcon.setImageResource(R.drawable.zarbdar);
     }
 
     public void hidStatusIcon(){
