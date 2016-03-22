@@ -1,5 +1,6 @@
 package com.rahnema.gerdoo.auth;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -17,28 +18,26 @@ import com.rahnema.gerdoo.core.service.callback.CallbackWithErrorDialog;
 import com.rahnema.gerdoo.view.validation.PsychoChangeable;
 import com.rahnema.gerdoo.view.validation.ValidatableInput;
 import com.rahnema.gerdoo.view.validation.validator.EmailValidator;
-import com.rahnema.gerdoo.view.validation.validator.PasswordValidator;
 
 import retrofit2.Call;
 import retrofit2.Response;
 
-public class SignInFragment extends Fragment implements PsychoChangeable.StateChangedListener {
+public class ForgetPasswordFragment extends Fragment implements PsychoChangeable.StateChangedListener {
 
-
-    public static SignInFragment newInstance(){
-        return new SignInFragment();
+    public static ForgetPasswordFragment newInstance(){
+        return new ForgetPasswordFragment();
     }
 
     //Views
     private TextView messageView;
     private ValidatableInput mailInput;
-    private ValidatableInput passwordInput;
-    private Button signInBtn;
+    private Button sendMailBtn;
 
     private AuthStateChangeListener stateChangeListener;
 
     private ProgressDialog progressDialog;
     private Call signInCall;
+    private AlertDialog okDialog;
 
     private GerdooServer server;
 
@@ -46,7 +45,7 @@ public class SignInFragment extends Fragment implements PsychoChangeable.StateCh
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_sign_in, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_forget_password, container, false);
 
         server = new GerdooServer();
 
@@ -62,27 +61,16 @@ public class SignInFragment extends Fragment implements PsychoChangeable.StateCh
         stateChangeListener = new AuthStateChangeListener(this);
 
         initMailInput(rootView);
-        initPasswordInput(rootView);
 
         initSignInBtn(rootView);
-        initForgetPassword(rootView);
-    }
-
-    private void initForgetPassword(View rootView) {
-        rootView.findViewById(R.id.forgotPassword).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((AuthenticationActivity) getActivity()).changeFragment(ForgetPasswordFragment.newInstance());
-            }
-        });
     }
 
     private void initSignInBtn(View rootView) {
-        signInBtn = (Button) rootView.findViewById(R.id.signInBtn);
-        signInBtn.setOnClickListener(new View.OnClickListener() {
+        sendMailBtn = (Button) rootView.findViewById(R.id.sendMailBtn);
+        sendMailBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onSignInRequested();
+                onSendMailRequested();
             }
         });
     }
@@ -94,32 +82,18 @@ public class SignInFragment extends Fragment implements PsychoChangeable.StateCh
         mailInput.setHintMessage(R.string.email);
     }
 
-    private void initPasswordInput(View rootView) {
-        passwordInput = (ValidatableInput) rootView.findViewById(R.id.password);
-        passwordInput.setValidator(new PasswordValidator());
-        stateChangeListener.addEditText(passwordInput);
-        passwordInput.setHintMessage(R.string.password);
-    }
 
-
-    private void onSignInRequested() {
+    private void onSendMailRequested() {
         if (stateChangeListener.getState() != ValidatableInput.STATE_VALID){
             showErrors();
         }else{
             messageView.setText("");
-            signIn();
+            sendMail();
         }
     }
 
     private void showErrors() {
         int message = -1;
-        if(passwordInput.getState() == ValidatableInput.STATE_EMPTY){
-            message = R.string.passwordIsNeeded;
-            passwordInput.showErrorStatusIcon();
-        }else if(passwordInput.getState() == ValidatableInput.STATE_INVALID){
-            message = R.string.passwordSouldBeLonger;
-            passwordInput.showErrorStatusIcon();
-        }
 
         if(mailInput.getState() == ValidatableInput.STATE_EMPTY){
             message = R.string.emailIsNeeded;
@@ -143,10 +117,10 @@ public class SignInFragment extends Fragment implements PsychoChangeable.StateCh
         }
     }
 
-    private void signIn() {
+    private void sendMail() {
         cancelRequesting();
         progressDialog = ProgressDialog.show(getActivity(),
-                getString(R.string.signIn),
+                getString(R.string.sendMail),
                 getString(R.string.pleaseWait),
                 false,
                 true,
@@ -159,53 +133,59 @@ public class SignInFragment extends Fragment implements PsychoChangeable.StateCh
         );
 
         String email = mailInput.getText();
-        String password = passwordInput.getText();
 
-        signInCall = server.signIn(email, password);
-        signInCall.enqueue(new SignInCallBack());
-
+        signInCall = server.sendForgetPasswordMail(email);
+        signInCall.enqueue(new SendMailCallBack());
     }
 
-    private void setSignInBtnState(int state) {
+    private void setSendMailBtnState(int state) {
         if(state == ValidatableInput.STATE_VALID){
-            signInBtn.setBackgroundResource(R.drawable.dark_button_background_valid);
+            sendMailBtn.setBackgroundResource(R.drawable.dark_button_background_valid);
         }else{
-            signInBtn.setBackgroundResource(R.drawable.dark_button_background_invalid);
+            sendMailBtn.setBackgroundResource(R.drawable.dark_button_background_invalid);
         }
     }
 
     @Override
     public void stateChanged(PsychoChangeable editText, int newState) {
-        setSignInBtnState(newState);
+        setSendMailBtnState(newState);
     }
 
-    private void signInFinished(String sessionKey) {
+    private void sentMail(Boolean result) {
         progressDialog.dismiss();
         progressDialog = null;
         signInCall = null;
 
-        passwordInput.clearText();
-
-        if(sessionKey == null){
+        if(result == null){
             showWrongInputError();
         }else{
-            ((AuthenticationActivity) getActivity()).enter(sessionKey);
+            okDialog = new AlertDialog.Builder(getActivity())
+                    .setTitle(R.string.sendMail)
+                    .setMessage(R.string.sentForgetPasswordMail)
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            okDialog.dismiss();
+                            getActivity().onBackPressed();
+                        }
+                    }).show();
         }
     }
 
     private void showWrongInputError() {
-        messageView.setText(R.string.wrongMailOrPassword);
+        messageView.setText(R.string.wrongMail);
     }
 
-    private class SignInCallBack extends CallbackWithErrorDialog<String> {
+    private class SendMailCallBack extends CallbackWithErrorDialog<Boolean> {
 
-        public SignInCallBack() {
+        public SendMailCallBack() {
             super(getActivity());
         }
 
         @Override
-        public void handleSuccessful(Response<String> response) {
-            signInFinished(response.body());
+        public void handleSuccessful(Response<Boolean> response) {
+
+            sentMail(response.body());
         }
     }
 

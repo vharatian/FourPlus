@@ -14,4 +14,13 @@
     <string name="forgotPassword">رمز عبور یادت رفته ؟</string>
     <string name="introTitle">عنوان ۱</string>
     <string name="introDescription1">توضیحات توضیحات توضیحات توضیحات توضیحات</string>
+    <string name="error">خطا</string>
+    <string name="networkError">خطا در اتصال به سرور</string>
+    <string name="ok">باشه</string>
+    <string name="pleaseWait">لطفا صبر کنید ...</string>
+    <string name="repeatedMail">ایمیل وارد شده تکراری است</string>
+    <string name="wrongMailOrPassword">ایمیل یا پسورد اشتباه است</string>
+    <string name="sendMail">ارسال ایمیل</string>
+    <string name="wrongMail">ایمیل وارد شده اشتباه است</string>
+    <string name="sentForgetPasswordMail">برای تصحیح کلمه عبور، ایمیل خود را بررسی کنید</string>
 </resources>

@@ -134,6 +134,10 @@ public class ValidatableInput extends LinearLayout implements PsychoChangeable {
         editText.setInputType(type);
     }
 
+    public void clearText() {
+        editText.setText("");
+    }
+
 
     private class InnerTextWatcher implements TextWatcher {
         @Override

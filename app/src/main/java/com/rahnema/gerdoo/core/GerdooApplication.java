@@ -1,4 +1,4 @@
-package com.rahnema.gerdoo;
+package com.rahnema.gerdoo.core;
 
 import android.app.Application;
 import android.util.Log;
@@ -20,4 +20,6 @@ public class GerdooApplication extends Application {
 
 //        FontsOverride.setDefaultFont(this, "DEFAULT", "irsans.ttf");
     }
+
+
 }

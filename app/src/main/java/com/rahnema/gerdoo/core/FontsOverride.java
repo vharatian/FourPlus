@@ -1,4 +1,4 @@
-package com.rahnema.gerdoo;
+package com.rahnema.gerdoo.core;
 
 import android.content.Context;
 import android.graphics.Typeface;
