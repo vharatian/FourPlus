@@ -7,6 +7,4 @@ import java.util.regex.Pattern;
  * Created by psycho on 3/17/16.
  */
 public class PsychoUtils {
-
-
 }

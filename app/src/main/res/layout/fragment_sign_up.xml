@@ -7,85 +7,98 @@
     tools:context=".auth.SignUpFragment"
     android:orientation="vertical">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"/>
 
-
-    <LinearLayout
+    <com.rahnema.gerdoo.view.font.TextView
         android:layout_width="@dimen/signUpMainWidth"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/longBreak"
-        android:orientation="vertical">
+        android:id="@+id/message"
+        android:gravity="center"
+        android:textColor="@color/errorMessageColor"/>
 
-        <com.rahnema.gerdoo.view.font.TextView
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"/>
+
+    <com.rahnema.gerdoo.view.validation.ValidatableInput
+        android:layout_width="@dimen/signUpMainWidth"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/normalBreak"
+        android:id="@+id/mail"/>
+
+    <com.rahnema.gerdoo.view.validation.ValidatableInput
+        android:layout_width="@dimen/signUpMainWidth"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/normalBreak"
+        android:id="@+id/password"/>
+
+    <com.rahnema.gerdoo.view.validation.ValidatableInput
+        android:layout_width="@dimen/signUpMainWidth"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:id="@+id/passwordRepeat"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"/>
+
+
+    <com.rahnema.gerdoo.view.font.Button
+        android:layout_width="@dimen/signUpBtnWidth"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/dark_button_background_invalid"
+        android:text="@string/signUp"
+        android:textColor="@color/colorAccent"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:id="@+id/signUpBtn"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"/>
+
+    <LinearLayout
+        android:layout_width="@dimen/signUpBtnWidth"
+        android:layout_height="wrap_content"
+        android:id="@+id/enterAnonymous"
+        android:orientation="vertical"
+        android:layout_gravity="center">
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/message"
             android:gravity="center"
-            android:layout_marginBottom="@dimen/xlargeBreak"
-            android:textColor="@color/errorMessageColor"/>
+            android:text="@string/anonymousLogin"
+            android:textColor="@color/white"
+            android:textSize="18dp"
+            android:layout_marginBottom="@dimen/normalBreak"/>
 
-        <com.rahnema.gerdoo.view.validation.ValidatableInput
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/normalBreak"
-            android:id="@+id/mail"/>
-
-        <com.rahnema.gerdoo.view.validation.ValidatableInput
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/normalBreak"
-            android:id="@+id/password"/>
-
-        <com.rahnema.gerdoo.view.validation.ValidatableInput
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/passwordRepeat"/>
-
-
-        <com.rahnema.gerdoo.view.font.Button
-            android:layout_width="@dimen/signUpBtnWidth"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@drawable/dark_button_background_invalid"
-            android:layout_marginTop="@dimen/xxlargeBreak"
-            android:text="@string/signUp"
-            android:textColor="@color/colorAccent"
-            android:textSize="20dp"
-            android:textStyle="bold"
-            android:id="@+id/signUpBtn"/>
-
-        <LinearLayout
-            android:layout_width="@dimen/signUpBtnWidth"
-            android:layout_height="wrap_content"
-            android:id="@+id/enterAnonymous"
-            android:orientation="vertical"
-            android:layout_marginTop="@dimen/xxlargeBreak"
-            android:layout_gravity="center">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/anonymousLogin"
-                android:textColor="@android:color/white"
-                android:textSize="18dp"
-                android:layout_marginBottom="@dimen/normalBreak"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/lineHeight"
-                android:background="@color/colorAccent"/>
-
-        </LinearLayout>
+            android:layout_height="@dimen/lineHeight"
+            android:background="@color/colorAccent"/>
 
     </LinearLayout>
 
-    <LinearLayout
+    <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="5"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="@dimen/longBreak"
         android:background="@color/colorPrimaryDark">
 
         <View
@@ -111,6 +124,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="@dimen/normalBreak"
+            android:layout_marginBottom="@dimen/xlargeBreak"
             android:layout_gravity="center">
 
             <ImageView

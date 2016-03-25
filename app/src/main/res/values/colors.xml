@@ -7,4 +7,5 @@
     <color name="input_invalid">#ed3f36</color>
     <color name="input_valid">#41d47b</color>
     <color name="errorMessageColor">#ed3f36</color>
+    <color name="white">#ffffff</color>
 </resources>

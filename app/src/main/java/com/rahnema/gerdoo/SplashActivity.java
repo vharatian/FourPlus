@@ -4,12 +4,12 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.rahnema.gerdoo.auth.AuthenticationActivity;
+import com.rahnema.gerdoo.pages.auth.AuthenticationActivity;
 import com.rahnema.gerdoo.core.DataHelper;
 import com.rahnema.gerdoo.core.service.GerdooServer;
 import com.rahnema.gerdoo.core.service.callback.CallbackWithErrorDialog;
-import com.rahnema.gerdoo.home.HomeActivity;
-import com.rahnema.gerdoo.intro.IntroductionActivity;
+import com.rahnema.gerdoo.pages.home.HomeActivity;
+import com.rahnema.gerdoo.pages.intro.IntroductionActivity;
 
 import pl.droidsonroids.gif.AnimationListener;
 import pl.droidsonroids.gif.GifDrawable;
@@ -99,7 +99,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private class InnerAnimationListener implements AnimationListener {
         @Override
-        public void onAnimationCompleted() {
+        public void onAnimationCompleted(int loopNumber) {
             imageView.postDelayed(new Runnable() {
                 @Override
                 public void run() {

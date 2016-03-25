@@ -80,6 +80,13 @@ public class ValidatableInput extends LinearLayout implements PsychoChangeable {
 
             setBackground(state);
         }
+        checkStatusIcon(state);
+    }
+
+    private void checkStatusIcon(int state) {
+        if (state == STATE_VALID){
+            statusIcon.setVisibility(INVISIBLE);
+        }
     }
 
     private void setBackground(int state) {
@@ -118,9 +125,6 @@ public class ValidatableInput extends LinearLayout implements PsychoChangeable {
         statusIcon.setImageResource(R.drawable.zarbdar);
     }
 
-    public void hidStatusIcon(){
-        statusIcon.setVisibility(INVISIBLE);
-    }
 
     public void setHintMessage(int messageResource) {
         editText.setHint(messageResource);
@@ -143,19 +147,16 @@ public class ValidatableInput extends LinearLayout implements PsychoChangeable {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             checkState();
-            hidStatusIcon();
         }
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             checkState();
-            hidStatusIcon();
         }
 
         @Override
         public void afterTextChanged(Editable s) {
             checkState();
-            hidStatusIcon();
         }
     }
 }

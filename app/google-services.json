@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_id": "test-4dfe7",
+    "project_number": "460008964953",
+    "name": "test"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:460008964953:android:0d7cee6de39d41b1",
+        "client_id": "android:com.rahnema.gerdoo",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "com.rahnema.gerdoo",
+          "certificate_hash": []
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "460008964953-dgbnqfom0bt04r9gvaqpr37u6fsb0lea.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rahnema.gerdoo",
+            "certificate_hash": "CFCF8A1419D2A35BD92CF11F32619EFA9A3C4FCF"
+          }
+        },
+        {
+          "client_id": "460008964953-ug2i8f1fe4obdotigjqmvilrn03hmu4l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 1,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 2
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}

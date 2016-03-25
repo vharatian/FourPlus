@@ -32,7 +32,7 @@ class MockService implements GerdooService {
     @Override
     public Call<String> signUp(String email, String password) {
         String sessionKey = null;
-        if(email.equals("test") && password.equals("test")){
+        if(email.equals("test@test.com") && password.equals("test")){
             sessionKey = UUID.randomUUID().toString();
         }
 
@@ -47,7 +47,7 @@ class MockService implements GerdooService {
     @Override
     public Call<String> signIn(String email, String password) {
         String sessionKey = null;
-        if(email.equals("test") && password.equals("test")){
+        if(email.equals("test@test.com") && password.equals("test")){
             sessionKey = UUID.randomUUID().toString();
         }
 
