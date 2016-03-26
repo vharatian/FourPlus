@@ -23,4 +23,5 @@
     <string name="sendMail">ارسال ایمیل</string>
     <string name="wrongMail">ایمیل وارد شده اشتباه است</string>
     <string name="sentForgetPasswordMail">برای تصحیح کلمه عبور، ایمیل خود را بررسی کنید</string>
+    <string name="emailNotFound">ایمیل وارد شده موجود نیست</string>
 </resources>

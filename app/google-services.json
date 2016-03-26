@@ -1,31 +1,31 @@
 {
   "project_info": {
-    "project_id": "test-4dfe7",
-    "project_number": "460008964953",
-    "name": "test"
+    "project_id": "gerdoo-a6f3f",
+    "project_number": "772045087067",
+    "name": "Gerdoo"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:460008964953:android:0d7cee6de39d41b1",
-        "client_id": "android:com.rahnema.gerdoo",
+        "mobilesdk_app_id": "1:772045087067:android:8446a20938b2ed92",
+        "client_id": "android:com.anashidgames.gerdoo",
         "client_type": 1,
         "android_client_info": {
-          "package_name": "com.rahnema.gerdoo",
+          "package_name": "com.anashidgames.gerdoo",
           "certificate_hash": []
         }
       },
       "oauth_client": [
         {
-          "client_id": "460008964953-dgbnqfom0bt04r9gvaqpr37u6fsb0lea.apps.googleusercontent.com",
+          "client_id": "772045087067-riav8qiihnm7ospfg5dtaqfh6vtfi6c8.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.rahnema.gerdoo",
-            "certificate_hash": "CFCF8A1419D2A35BD92CF11F32619EFA9A3C4FCF"
+            "package_name": "com.anashidgames.gerdoo",
+            "certificate_hash": "47584EA095A478AC8E4658565CA377806169250D"
           }
         },
         {
-          "client_id": "460008964953-ug2i8f1fe4obdotigjqmvilrn03hmu4l.apps.googleusercontent.com",
+          "client_id": "772045087067-a2u91ltl9hdpid8fjrneorhv7aia8v8a.apps.googleusercontent.com",
           "client_type": 3
         }
       ],

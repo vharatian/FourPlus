@@ -15,7 +15,7 @@
         android:layout_marginTop="@dimen/longBreak"
         android:orientation="vertical">
 
-        <com.rahnema.gerdoo.view.font.TextView
+        <com.anashidgames.gerdoo.view.font.TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/message"
@@ -23,20 +23,20 @@
             android:layout_marginBottom="@dimen/xlargeBreak"
             android:textColor="@color/errorMessageColor"/>
 
-        <com.rahnema.gerdoo.view.validation.ValidatableInput
+        <com.anashidgames.gerdoo.view.validation.ValidatableInput
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/normalBreak"
             android:id="@+id/mail"/>
 
-        <com.rahnema.gerdoo.view.validation.ValidatableInput
+        <com.anashidgames.gerdoo.view.validation.ValidatableInput
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/normalBreak"
             android:id="@+id/password"/>
 
 
-        <com.rahnema.gerdoo.view.font.Button
+        <com.anashidgames.gerdoo.view.font.Button
             android:layout_width="@dimen/signUpBtnWidth"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

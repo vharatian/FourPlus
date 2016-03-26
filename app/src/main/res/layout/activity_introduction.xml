@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="@color/colorPrimary"
-    tools:context="com.rahnema.gerdoo.pages.intro.IntroductionActivity"
+    tools:context="com.anashidgames.gerdoo.pages.intro.IntroductionActivity"
     android:orientation="vertical">
 
     <android.support.v4.view.ViewPager
@@ -43,7 +43,7 @@
         android:visibility="invisible"
         android:gravity="center">
 
-        <com.rahnema.gerdoo.view.FitToHeightImageView
+        <com.anashidgames.gerdoo.view.FitToHeightImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:src="@drawable/check"

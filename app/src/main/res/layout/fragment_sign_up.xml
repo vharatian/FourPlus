@@ -12,7 +12,7 @@
         android:layout_height="0dp"
         android:layout_weight="5"/>
 
-    <com.rahnema.gerdoo.view.font.TextView
+    <com.anashidgames.gerdoo.view.font.TextView
         android:layout_width="@dimen/signUpMainWidth"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -25,21 +25,21 @@
         android:layout_height="0dp"
         android:layout_weight="2"/>
 
-    <com.rahnema.gerdoo.view.validation.ValidatableInput
+    <com.anashidgames.gerdoo.view.validation.ValidatableInput
         android:layout_width="@dimen/signUpMainWidth"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/normalBreak"
         android:id="@+id/mail"/>
 
-    <com.rahnema.gerdoo.view.validation.ValidatableInput
+    <com.anashidgames.gerdoo.view.validation.ValidatableInput
         android:layout_width="@dimen/signUpMainWidth"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/normalBreak"
         android:id="@+id/password"/>
 
-    <com.rahnema.gerdoo.view.validation.ValidatableInput
+    <com.anashidgames.gerdoo.view.validation.ValidatableInput
         android:layout_width="@dimen/signUpMainWidth"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -51,7 +51,7 @@
         android:layout_weight="3"/>
 
 
-    <com.rahnema.gerdoo.view.font.Button
+    <com.anashidgames.gerdoo.view.font.Button
         android:layout_width="@dimen/signUpBtnWidth"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -107,7 +107,7 @@
             android:background="@color/colorAccent"/>
 
 
-        <com.rahnema.gerdoo.view.font.Button
+        <com.anashidgames.gerdoo.view.font.Button
             android:layout_width="@dimen/signUpBtnWidth"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
