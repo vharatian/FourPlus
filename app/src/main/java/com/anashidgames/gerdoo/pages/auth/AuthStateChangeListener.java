@@ -1,7 +1,7 @@
 package com.anashidgames.gerdoo.pages.auth;
 
-import com.anashidgames.gerdoo.view.validation.PsychoChangeable;
-import com.anashidgames.gerdoo.view.validation.ValidatableInput;
+import com.anashidgames.gerdoo.pages.auth.view.PsychoChangeable;
+import com.anashidgames.gerdoo.pages.auth.view.ValidatableInput;
 
 import java.util.HashMap;
 import java.util.Map;

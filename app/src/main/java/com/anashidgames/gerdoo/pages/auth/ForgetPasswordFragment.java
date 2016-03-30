@@ -10,8 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.anashidgames.gerdoo.core.service.GerdooServer;
-import com.anashidgames.gerdoo.view.validation.ValidatableInput;
-import com.anashidgames.gerdoo.view.validation.validator.EmailValidator;
+import com.anashidgames.gerdoo.pages.auth.view.ValidatableInput;
+import com.anashidgames.gerdoo.pages.auth.view.validator.EmailValidator;
 import com.anashidgames.gerdoo.R;
 
 import retrofit2.Call;

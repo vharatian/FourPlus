@@ -1,4 +1,4 @@
-package com.anashidgames.gerdoo;
+package com.anashidgames.gerdoo.pages;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -51,9 +51,12 @@ public class KeyboardHiderFragment extends Fragment {
     }
 
     public void hideSoftKeyboard() {
-        InputMethodManager inputMethodManager = (InputMethodManager)  getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
-        if (inputMethodManager.isActive()) {
-            inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        try {
+            InputMethodManager inputMethodManager = (InputMethodManager)  getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+            if (inputMethodManager.isActive()) {
+                inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+            }
+        } catch (Exception e) {
         }
     }
 }

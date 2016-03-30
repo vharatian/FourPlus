@@ -1,6 +1,6 @@
-package com.anashidgames.gerdoo.view.validation.validator;
+package com.anashidgames.gerdoo.pages.auth.view.validator;
 
-import com.anashidgames.gerdoo.view.validation.ValidatableInput;
+import com.anashidgames.gerdoo.pages.auth.view.ValidatableInput;
 
 /**
  * Created by psycho on 3/19/16.

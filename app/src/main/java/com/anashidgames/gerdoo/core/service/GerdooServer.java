@@ -1,5 +1,12 @@
 package com.anashidgames.gerdoo.core.service;
 
+import com.anashidgames.gerdoo.core.service.model.Category;
+import com.anashidgames.gerdoo.core.service.model.CategoryItem;
+import com.anashidgames.gerdoo.core.service.model.HomeItem;
+import com.anashidgames.gerdoo.utils.PsychoUtils;
+
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -47,5 +54,17 @@ public class GerdooServer{
 
     public Call<String> signIn(String email, String password) {
         return service.signIn(email, password);
+    }
+
+    public Call<List<HomeItem>> getHome() {
+        return service.getHome();
+    }
+
+    public Call<List<CategoryItem>> getCategoryItems(String url) {
+        return service.getCategoryItems(PsychoUtils.fixUrl(url));
+    }
+
+    public Call<List<Category>> getCategories(String url) {
+        return service.getCategories(PsychoUtils.fixUrl(url));
     }
 }

@@ -1,27 +1,19 @@
 package com.anashidgames.gerdoo.pages.auth;
 
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.anashidgames.gerdoo.core.service.GerdooServer;
-import com.anashidgames.gerdoo.view.validation.PsychoChangeable;
 import com.anashidgames.gerdoo.R;
-import com.anashidgames.gerdoo.core.service.callback.CallbackWithErrorDialog;
-import com.anashidgames.gerdoo.view.validation.ValidatableInput;
-import com.anashidgames.gerdoo.view.validation.validator.EmailValidator;
-import com.anashidgames.gerdoo.view.validation.validator.PasswordValidator;
+import com.anashidgames.gerdoo.pages.auth.view.ValidatableInput;
+import com.anashidgames.gerdoo.pages.auth.view.validator.EmailValidator;
+import com.anashidgames.gerdoo.pages.auth.view.validator.PasswordValidator;
 
 import retrofit2.Call;
-import retrofit2.Response;
 
 public class SignInFragment extends FormFragment {
 

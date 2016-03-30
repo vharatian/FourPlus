@@ -1,0 +1,150 @@
+package com.anashidgames.gerdoo.pages.home.view;
+
+import android.annotation.TargetApi;
+import android.content.Context;
+import android.os.Build;
+import android.util.AttributeSet;
+import android.util.TypedValue;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+
+/**
+ * Created by psycho on 3/30/16.
+ */
+public class ExpandableRelativeLayout extends RelativeLayout {
+
+    private boolean expanded = false;
+    private Animation animation;
+
+    public ExpandableRelativeLayout(Context context) {
+        super(context);
+        init(context);
+    }
+
+    public ExpandableRelativeLayout(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init(context);
+    }
+
+    public ExpandableRelativeLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init(context);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public ExpandableRelativeLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        init(context);
+    }
+
+    private void init(Context context) {
+
+    }
+
+    private boolean isAnimating() {
+        return animation != null;
+    }
+
+    public boolean isExpanded() {
+        return expanded;
+    }
+
+    public void setExpanded(boolean expanded) {
+        if(isAnimating())
+            return;
+
+        this.expanded = expanded;
+
+        checkState();
+    }
+
+    public void checkState() {
+        if(isExpanded()){
+            getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        }else{
+            getLayoutParams().height = 0;
+        }
+
+        requestLayout();
+    }
+
+    public void expand() {
+        if (isExpanded() || isAnimating())
+            return;
+
+        measure(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        final int targetHeight = getMeasuredHeight() + getPaddingBottom() + getPaddingTop();
+
+        getLayoutParams().height = 0;
+        setVisibility(View.VISIBLE);
+        animation = new Animation()
+        {
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                getLayoutParams().height = (int)(targetHeight * interpolatedTime);
+                requestLayout();
+
+                if (interpolatedTime == 1)
+                    animation = null;
+            }
+
+            @Override
+            public boolean willChangeBounds() {
+                return true;
+            }
+        };
+
+        // 1dp/ms
+        animation.setDuration(getDurationMillis(targetHeight));
+        startAnimation(animation);
+        expanded = true;
+    }
+
+    public void collapse() {
+        if (!isExpanded() || isAnimating())
+            return;
+
+        final int initialHeight = getMeasuredHeight();
+
+        animation = new Animation()
+        {
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                if(interpolatedTime == 1){
+                    setVisibility(View.GONE);
+                    animation = null;
+                }else{
+                    getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
+                    requestLayout();
+                }
+            }
+
+            @Override
+            public boolean willChangeBounds() {
+                return true;
+            }
+        };
+
+        // 1dp/ms
+        animation.setDuration(getDurationMillis(initialHeight));
+        startAnimation(animation);
+        expanded = false;
+    }
+
+    private int getDurationMillis(int height) {
+       return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, getResources().getDisplayMetrics());
+    }
+
+    public void toggle() {
+        if (isAnimating())
+            return;
+
+        if(expanded)
+            collapse();
+        else
+            expand();
+    }
+}

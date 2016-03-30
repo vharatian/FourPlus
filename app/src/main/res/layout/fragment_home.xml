@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:scrollbars="none"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/mainLayout">
+
+        <com.anashidgames.gerdoo.view.FitToWidthImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/allCategories"
+            android:src="@drawable/all_categories_banner"/>
+
+        <com.pnikosis.materialishprogress.ProgressWheel
+            android:layout_width="@dimen/progressWheelSize"
+            android:layout_height="@dimen/progressWheelSize"
+            app:matProg_barColor="@color/colorAccent"
+            android:layout_marginTop="100dp"
+            android:layout_gravity="center"
+            app:matProg_progressIndeterminate="true"
+            android:id="@+id/progress"/>
+
+    </LinearLayout>
+</ScrollView>

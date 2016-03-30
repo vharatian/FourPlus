@@ -6,13 +6,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
-import com.anashidgames.gerdoo.KeyboardHiderFragment;
+import com.anashidgames.gerdoo.pages.KeyboardHiderFragment;
 import com.anashidgames.gerdoo.R;
 import com.anashidgames.gerdoo.core.service.callback.CallbackWithErrorDialog;
-import com.anashidgames.gerdoo.view.validation.PsychoChangeable;
-import com.anashidgames.gerdoo.view.validation.ValidatableInput;
+import com.anashidgames.gerdoo.pages.auth.view.PsychoChangeable;
+import com.anashidgames.gerdoo.pages.auth.view.ValidatableInput;
 import retrofit2.Call;
-import retrofit2.Response;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -166,16 +165,14 @@ public abstract class FormFragment extends KeyboardHiderFragment {
         }
 
         @Override
-        public void handleSuccessful(Response response) {
+        protected void postExecution() {
+            super.postExecution();
             cancelRequesting();
-            submitted(response.body());
         }
 
         @Override
-        protected void postError() {
-            super.postError();
-
-            cancelRequesting();
+        protected void handleSuccessful(Object data) {
+            submitted(data);
         }
     }
 }

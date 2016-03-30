@@ -1,4 +1,4 @@
-package com.anashidgames.gerdoo.view.validation;
+package com.anashidgames.gerdoo.pages.auth.view;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -9,7 +9,7 @@ import android.util.AttributeSet;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-import com.anashidgames.gerdoo.view.validation.validator.PsychoValidator;
+import com.anashidgames.gerdoo.pages.auth.view.validator.PsychoValidator;
 import com.anashidgames.gerdoo.R;
 
 import pl.droidsonroids.gif.GifImageView;

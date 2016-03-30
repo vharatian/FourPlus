@@ -1,4 +1,4 @@
-package com.anashidgames.gerdoo.view.validation.validator;
+package com.anashidgames.gerdoo.pages.auth.view.validator;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

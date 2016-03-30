@@ -1,7 +1,5 @@
 package com.anashidgames.gerdoo.pages.auth;
 
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
@@ -9,15 +7,10 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
-import com.anashidgames.gerdoo.KeyboardHiderFragment;
 import com.anashidgames.gerdoo.core.DataHelper;
 import com.anashidgames.gerdoo.core.service.GerdooServer;
-import com.anashidgames.gerdoo.core.service.callback.CallbackWithErrorDialog;
-import com.anashidgames.gerdoo.view.validation.PsychoChangeable;
-import com.anashidgames.gerdoo.view.validation.validator.EmailValidator;
+import com.anashidgames.gerdoo.pages.auth.view.validator.EmailValidator;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -25,13 +18,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.anashidgames.gerdoo.R;
-import com.anashidgames.gerdoo.view.validation.ValidatableInput;
-import com.anashidgames.gerdoo.view.validation.validator.PasswordValidator;
-import com.anashidgames.gerdoo.view.validation.validator.RepeatPasswordValidator;
+import com.anashidgames.gerdoo.pages.auth.view.ValidatableInput;
+import com.anashidgames.gerdoo.pages.auth.view.validator.PasswordValidator;
+import com.anashidgames.gerdoo.pages.auth.view.validator.RepeatPasswordValidator;
 
 import br.com.dina.oauth.instagram.InstagramApp;
 import retrofit2.Call;
-import retrofit2.Response;
 
 
 public class SignUpFragment extends FormFragment {
@@ -70,6 +62,23 @@ public class SignUpFragment extends FormFragment {
 
         initViews(rootView);
         return rootView;
+    }
+
+    @Override
+    public void onStop() {
+        if(googleApiClient != null && googleApiClient.isConnected()) {
+            googleApiClient.stopAutoManage(getActivity());
+            googleApiClient.disconnect();
+            googleApiClient = null;
+        }
+        super.onStop();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (googleApiClient != null)
+            googleApiClient.connect();
     }
 
     @Override
@@ -200,11 +209,11 @@ public class SignUpFragment extends FormFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
         if(requestCode == REQUEST_CODE_GOOGLE_SIGN_IN){
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleGoogleSignInResult(result);
+        }else {
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -216,7 +225,7 @@ public class SignUpFragment extends FormFragment {
 
     }
 
-    private void handleInstagramSiginResult(boolean success) {
+    private void handleInstagramSigInResult(boolean success) {
         if(success){
             ((AuthenticationActivity) getActivity()).enter(instagramApp.getId());
         }
@@ -232,12 +241,12 @@ public class SignUpFragment extends FormFragment {
     private class InstagramCallBack implements InstagramApp.OAuthAuthenticationListener {
         @Override
         public void onSuccess() {
-            handleInstagramSiginResult(true);
+            handleInstagramSigInResult(true);
         }
 
         @Override
         public void onFail(String error) {
-            handleInstagramSiginResult(false);
+            handleInstagramSigInResult(false);
         }
     }
 }

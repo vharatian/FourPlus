@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#26303c</color>
+    <color name="colorPrimarySide">#1C232D</color>
     <color name="colorPrimaryDark">#131a20</color>
     <color name="colorAccent">#56cdd5</color>
-    <color name="input_background">#85888a</color>
-    <color name="input_invalid">#ed3f36</color>
-    <color name="input_valid">#41d47b</color>
-    <color name="errorMessageColor">#ed3f36</color>
+    <color name="errorColor">#ed3f36</color>
     <color name="white">#ffffff</color>
+
+    <color name="input_background">#85888a</color>
+    <color name="input_invalid">@color/errorColor</color>
+    <color name="input_valid">#41d47b</color>
+    <color name="errorMessageColor">@color/errorColor</color>
+    <color name="categoryItemsRowColor1">@color/colorPrimary</color>
+    <color name="categoryItemsRowColor2">@color/colorPrimarySide</color>
+    <color name="categoryBackgroundClose">@color/colorPrimarySide</color>
+    <color name="categoryBackgroundOpen">@color/colorPrimary</color>
 </resources>

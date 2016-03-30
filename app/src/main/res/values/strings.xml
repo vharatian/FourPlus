@@ -24,4 +24,5 @@
     <string name="wrongMail">ایمیل وارد شده اشتباه است</string>
     <string name="sentForgetPasswordMail">برای تصحیح کلمه عبور، ایمیل خود را بررسی کنید</string>
     <string name="emailNotFound">ایمیل وارد شده موجود نیست</string>
+    <string name="serverError">با عرض پوزش خطایی در سرور رخ داده است</string>
 </resources>

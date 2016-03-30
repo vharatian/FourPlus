@@ -3,20 +3,32 @@ apply plugin: 'com.google.gms.google-services'
 
 
 android {
+    signingConfigs {
+        key {
+            keyAlias 'GerdooApp'
+            keyPassword 'gerdoo@pp94'
+            storeFile file('/Users/psycho/Desktop/Four/Gerdoo/key/gerdooApp.jks')
+            storePassword 'gerdoo@pp'
+        }
+    }
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
-
     defaultConfig {
         applicationId "com.anashidgames.gerdoo"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        signingConfig signingConfigs.key
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.key
+        }
+        debug {
+            signingConfig signingConfigs.key
         }
     }
 }
@@ -25,6 +37,8 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:24.0.0-alpha1'
+    compile 'com.android.support:support-v4:24.0.0-alpha1'
+    compile 'com.android.support:recyclerview-v7:24.0.0-alpha1'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.1.14'
     compile 'fr.avianey.com.viewpagerindicator:library:2.4.1.1@aar'
     compile 'com.squareup.retrofit2:retrofit:2.0.0'
@@ -32,6 +46,7 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.0.0'
     compile 'com.squareup.retrofit2:retrofit-mock:2.0.0'
     compile 'com.google.android.gms:play-services-auth:8.3.0'
-
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.pnikosis:materialish-progress:1.7'
     compile project(':androidinstagramoauth')
 }

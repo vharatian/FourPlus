@@ -14,13 +14,14 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import com.anashidgames.gerdoo.R;
+import com.anashidgames.gerdoo.pages.GerdooActivity;
 import com.anashidgames.gerdoo.pages.auth.AuthenticationActivity;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class IntroductionActivity extends AppCompatActivity {
+public class IntroductionActivity extends GerdooActivity {
 
     public static Intent newIntent(Context context) {
         return new Intent(context, IntroductionActivity.class);
@@ -73,6 +74,15 @@ public class IntroductionActivity extends AppCompatActivity {
         return pager;
     }
 
+    @Override
+    public void onBackPressed() {
+        int currentItem = pager.getCurrentItem();
+        if(currentItem != 0){
+            pager.setCurrentItem(currentItem - 1);
+        }else {
+            super.onBackPressed();
+        }
+    }
 
     private class InnerAdapter extends FragmentPagerAdapter {
 
@@ -118,5 +128,7 @@ public class IntroductionActivity extends AppCompatActivity {
 
         @Override
         public void onPageScrollStateChanged(int state) {}
+
+
     }
 }

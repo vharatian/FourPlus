@@ -1,4 +1,4 @@
-package com.anashidgames.gerdoo.view.validation;
+package com.anashidgames.gerdoo.pages.auth.view;
 
 /**
  * Created by psycho on 3/19/16.

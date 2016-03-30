@@ -1,7 +1,6 @@
-package com.anashidgames.gerdoo;
+package com.anashidgames.gerdoo.pages;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.anashidgames.gerdoo.core.DataHelper;
@@ -18,7 +17,7 @@ import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Call;
 import retrofit2.Response;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends GerdooActivity {
 
     private GifImageView imageView;
 
@@ -139,10 +138,9 @@ public class SplashActivity extends AppCompatActivity {
             super(SplashActivity.this);
         }
 
-
         @Override
-        public void handleSuccessful(Response<Boolean> response) {
-            authenticated = response.body();
+        protected void handleSuccessful(Boolean data) {
+            authenticated = data;
             checkState();
         }
 
@@ -151,5 +149,6 @@ public class SplashActivity extends AppCompatActivity {
             super.postError();
             finish();
         }
+
     }
 }

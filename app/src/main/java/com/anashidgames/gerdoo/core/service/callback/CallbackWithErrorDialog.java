@@ -2,6 +2,7 @@ package com.anashidgames.gerdoo.core.service.callback;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 
 import com.anashidgames.gerdoo.R;
@@ -13,6 +14,8 @@ import retrofit2.Response;
  * Created by psycho on 3/22/16.
  */
 public abstract class CallbackWithErrorDialog<T> extends PsychoCallBack<T>{
+    private static Long lastErrorTime = 0l;
+
     private Context context;
     private AlertDialog dialog;
 
@@ -21,19 +24,28 @@ public abstract class CallbackWithErrorDialog<T> extends PsychoCallBack<T>{
     }
 
     @Override
-    public void onFailure(Call<T> call, Throwable t) {
-        ShowErrorDialog();
+    protected void handleFailure(Call<T> call, Throwable t) {
+        ShowErrorDialog(R.string.networkError);
     }
 
     @Override
     protected void handleServerError(Response<T> response) {
-        ShowErrorDialog();
+        ShowErrorDialog(R.string.serverError);
     }
 
-    private void ShowErrorDialog() {
+    private void ShowErrorDialog(int errorResource) {
+        long currentTime = System.currentTimeMillis();
+        synchronized (lastErrorTime){
+            if (currentTime - lastErrorTime < 1000){
+                return;
+            }
+
+            lastErrorTime = currentTime;
+        }
+
         dialog = new AlertDialog.Builder(context)
                 .setTitle(R.string.error)
-                .setMessage(R.string.networkError)
+                .setMessage(errorResource)
                 .setPositiveButton(R.string.ok, new CloseClickListener())
                 .create();
 

@@ -1,4 +1,4 @@
-package com.anashidgames.gerdoo.view.validation;
+package com.anashidgames.gerdoo.pages.auth.view;
 
 import android.text.Editable;
 import android.text.TextWatcher;
