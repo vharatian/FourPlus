@@ -47,16 +47,6 @@ public abstract class PsychoAdapter<T> extends RecyclerView.Adapter<PsychoViewHo
         notifyDataSetChanged();
     }
 
-    public void addToStart(T item){
-        dataBucket.addToStart(item);
-        notifyItemInserted(0);
-    }
-
-    public void addToEnd(T item){
-        int index = dataBucket.addToEnd(item);
-        notifyItemInserted(index);
-    }
-
     @Override
     public long getItemId(int position) {
         if (isLoadingView(position))
@@ -136,36 +126,19 @@ public abstract class PsychoAdapter<T> extends RecyclerView.Adapter<PsychoViewHo
     }
 
     private void addDataToUI() {
-        final boolean[] done = {false};
-        while (!done[0]) {
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    synchronized (dataBucket) {
-                        if (loading) {
-                            dataBucket.attachNewData();
-                        }
-                        loading = false;
-                        try {
-                            notifyDataSetChanged();
-                        } catch (Exception e) {
-                        }
-                        done[0] = true;
-                    }
-                }
-            });
-
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e1) {
-            }
-        }
-
-        activity.runOnUiThread(new Runnable(){
+        activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-
-
+                synchronized (dataBucket) {
+                    int startCount = dataBucket.getCount();
+                    if (loading) {
+                        dataBucket.attachNewData();
+                    }
+                    loading = false;
+                    int endCount = dataBucket.getCount();
+                    if (startCount != endCount || dataBucket.isFinished())
+                        notifyDataSetChanged();
+                }
             }
         });
     }

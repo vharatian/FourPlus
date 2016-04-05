@@ -30,12 +30,17 @@ public abstract class PsychoDataProvider<T> implements Serializable{
     protected abstract Call<PsychoListResponse<T>> callServer(String nextPage);
 
 
-    public void getList(DataCallback<List<T>> callback){
-        if (firstTime || isFinished()) {
+    public void getList(final DataCallback<List<T>> callback){
+        if (firstTime || !isFinished()) {
             call = callServer(nextPage);
             call.enqueue(new ResponseCallBack(context, callback));
         }else {
-            callback.onData(null, true);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onData(null, true);
+                }
+            }).start();
         }
 
         firstTime = false;

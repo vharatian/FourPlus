@@ -70,6 +70,7 @@ public class TopicActivity extends GerdooActivity {
 
     private RecyclerView recyclerView;
     private RankingAdapter adapter;
+    private RankingFooter footer;
 
     private int currentPage = -1;
 
@@ -105,12 +106,13 @@ public class TopicActivity extends GerdooActivity {
             @Override
             public void onClick(View v) {
                 setPage(MY_RANKING_RANKING_PAGE);
+                footer.disableAll();
             }
         });
     }
 
     private void initFooter() {
-        RankingFooter footer = (RankingFooter) findViewById(R.id.rankingFooter);
+        footer = (RankingFooter) findViewById(R.id.rankingFooter);
         footer.setPageSelectedListener(new InnerPageSelectedListener());
     }
 
