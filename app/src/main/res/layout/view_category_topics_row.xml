@@ -5,16 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.anashidgames.gerdoo.view.font.TextView
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_gravity="right"
-        android:id="@+id/title"
-        android:textColor="@color/colorAccent"
-        android:textSize="16dp"
-        android:layout_marginRight="@dimen/normalBreak"
-        android:layout_marginTop="@dimen/normalBreak"/>
-
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

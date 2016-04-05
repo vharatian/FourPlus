@@ -1,8 +1,10 @@
 package com.anashidgames.gerdoo.core.service;
 
 import com.anashidgames.gerdoo.core.service.model.Category;
-import com.anashidgames.gerdoo.core.service.model.CategoryItem;
+import com.anashidgames.gerdoo.core.service.model.CategoryTopic;
 import com.anashidgames.gerdoo.core.service.model.HomeItem;
+import com.anashidgames.gerdoo.core.service.model.Rank;
+import com.anashidgames.gerdoo.pages.topic.list.PsychoListResponse;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,6 +22,7 @@ import retrofit2.mock.BehaviorDelegate;
 class MockService implements GerdooService {
 
 
+    public static final String MY_RANK = "MyRank,";
     private BehaviorDelegate<GerdooService> behaviorDelegate;
     private Random random;
 
@@ -88,8 +91,8 @@ class MockService implements GerdooService {
     }
 
     @Override
-    public Call<List<CategoryItem>> getCategoryItems(@Url String url) {
-        List<CategoryItem> response = new ArrayList<>();
+    public Call<List<CategoryTopic>> getCategoryItems(@Url String url) {
+        List<CategoryTopic> response = new ArrayList<>();
         List<String> images = Arrays.asList(
                 "https://i.imgsafe.org/1163740.png",
                 "https://i.imgsafe.org/1b41d04.png",
@@ -111,7 +114,8 @@ class MockService implements GerdooService {
 
             itemTitle += i;
 
-            response.add(new CategoryItem(imageUrl, itemTitle, ""));
+            int myRank = random.nextInt(3000);
+            response.add(new CategoryTopic(imageUrl, itemTitle, "", "", MY_RANK + myRank, "https://i.imgsafe.org/68f36a5.jpg", myRank));
         }
 
         return behaviorDelegate.returningResponse(response).getCategoryItems(url);
@@ -144,5 +148,52 @@ class MockService implements GerdooService {
 
 
         return behaviorDelegate.returningResponse(response).getCategories(url);
+    }
+
+    @Override
+    public Call<PsychoListResponse<Rank>> getRanking(@Url String url) {
+        List<Rank> ranking = new ArrayList<>();
+        String name = "اسم فامیل ";
+
+        String nextPage = "";
+        int rank = 1;
+        int size = 20;
+        if(url.contains(MY_RANK)){
+            size = 5;
+            nextPage = null;
+            rank = Integer.parseInt(url.replace(MY_RANK, "")) - 2;
+            if (rank < 0)
+                rank = 0;
+        }else if(url != null && !url.isEmpty()) {
+            rank = Integer.parseInt(url);
+        }
+
+        if (nextPage != null){
+            if (random.nextInt()%8 == 0)
+                nextPage = null;
+            else
+                nextPage += (rank + size);
+        }
+
+
+        for(int i = 0; i< size; i++, rank++){
+
+            String rankName = name;
+            while(random.nextBoolean()) {
+                rankName += name;
+            }
+
+            int rankChange = 0;
+            if (random.nextBoolean())
+                rankChange = random.nextInt(1000) - 500;
+
+            ranking.add(new Rank(rank, Math.abs(random.nextInt(10000000)), rankName, "" , rankChange));
+        }
+
+
+
+        PsychoListResponse<Rank> response = new PsychoListResponse<>(ranking, nextPage);
+
+        return behaviorDelegate.returningResponse(response).getRanking(url);
     }
 }

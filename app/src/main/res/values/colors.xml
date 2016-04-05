@@ -15,4 +15,14 @@
     <color name="categoryItemsRowColor2">@color/colorPrimarySide</color>
     <color name="categoryBackgroundClose">@color/colorPrimarySide</color>
     <color name="categoryBackgroundOpen">@color/colorPrimary</color>
+    <color name="topicBackground">#ebf3f6</color>
+    <color name="black">#000000</color>
+
+    <color name="rankingBackground1">#ebf3f6</color>
+    <color name="rankingBackground2">#c3ced3</color>
+    <color name="rankingBackground3">#c2c2c2</color>
+    <color name="topic_decrease" >@color/errorColor</color>
+    <color name="topic_increase" >#41d47b</color>
+    <color name="topicIconEnable" >#ed3f36</color>
+    <color name="topicIconDisable" >#56cdd5</color>
 </resources>

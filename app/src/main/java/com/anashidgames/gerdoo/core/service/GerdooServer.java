@@ -1,8 +1,10 @@
 package com.anashidgames.gerdoo.core.service;
 
 import com.anashidgames.gerdoo.core.service.model.Category;
-import com.anashidgames.gerdoo.core.service.model.CategoryItem;
+import com.anashidgames.gerdoo.core.service.model.CategoryTopic;
 import com.anashidgames.gerdoo.core.service.model.HomeItem;
+import com.anashidgames.gerdoo.core.service.model.Rank;
+import com.anashidgames.gerdoo.pages.topic.list.PsychoListResponse;
 import com.anashidgames.gerdoo.utils.PsychoUtils;
 
 import java.util.List;
@@ -60,11 +62,15 @@ public class GerdooServer{
         return service.getHome();
     }
 
-    public Call<List<CategoryItem>> getCategoryItems(String url) {
+    public Call<List<CategoryTopic>> getCategoryItems(String url) {
         return service.getCategoryItems(PsychoUtils.fixUrl(url));
     }
 
     public Call<List<Category>> getCategories(String url) {
         return service.getCategories(PsychoUtils.fixUrl(url));
+    }
+
+    public Call<PsychoListResponse<Rank>> getRanking(String url) {
+        return service.getRanking(url);
     }
 }

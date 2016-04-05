@@ -15,6 +15,7 @@ public class GerdooApplication extends Application {
             @Override
             public void uncaughtException(Thread thread, Throwable ex) {
                 Log.e("psycho", "error", ex);
+                throw new RuntimeException(ex);
             }
         });
 

@@ -1,6 +1,5 @@
 package com.anashidgames.gerdoo.pages.home;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,7 +14,7 @@ import com.anashidgames.gerdoo.core.service.GerdooServer;
 import com.anashidgames.gerdoo.core.service.callback.CallbackWithErrorDialog;
 import com.anashidgames.gerdoo.core.service.model.Category;
 import com.anashidgames.gerdoo.pages.FragmentContainerActivity;
-import com.anashidgames.gerdoo.pages.home.view.CategoryViewHolder;
+import com.anashidgames.gerdoo.pages.home.view.CategoryView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,25 +98,38 @@ public class CategoryFragment extends Fragment{
         }
 
         @Override
-        protected void handleSuccessful(List<Category> data) {
+        public void handleSuccessful(List<Category> data) {
             addCategories(data);
         }
     }
 
     private class CategoryAdapter extends RecyclerView.Adapter<CategoryViewHolder> {
 
-        private final List<CategoryWrapper> data;
+        private List<Category> data;
+        private List<CategoryView> views;
+        private CategoryView.OnExpansionListener listener;
 
         public CategoryAdapter(List<Category> data) {
             if (data == null)
                 data = new ArrayList<>();
 
-            this.data = CategoryWrapper.convert(data);
+            this.data = data;
+            views = new ArrayList<>();
+            listener = new ExpansionListener(views);
+
         }
 
         @Override
         public CategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return CategoryViewHolder.newInstance((FragmentContainerActivity) getActivity(), parent);
+            CategoryView view = new CategoryView((FragmentContainerActivity) getActivity());
+            RecyclerView.LayoutParams layoutParams = new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
+                    RecyclerView.LayoutParams.WRAP_CONTENT);
+            view.setLayoutParams(new RecyclerView.LayoutParams(layoutParams));
+            CategoryViewHolder holder = new CategoryViewHolder(view);
+            views.add(view);
+
+            view.setExpansionListener(listener);
+            return holder;
         }
 
         @Override
@@ -128,6 +140,38 @@ public class CategoryFragment extends Fragment{
         @Override
         public int getItemCount() {
             return data.size();
+        }
+    }
+
+    private class ExpansionListener implements CategoryView.OnExpansionListener {
+        private List<CategoryView> holders;
+
+        public ExpansionListener(List<CategoryView> holders) {
+            this.holders = holders;
+        }
+
+
+
+        @Override
+        public void expanded(View view) {
+            for (CategoryView v: holders){
+                if (v != view){
+                    v.close(true);
+                }
+            }
+        }
+    }
+
+    private class CategoryViewHolder extends RecyclerView.ViewHolder {
+        private CategoryView view;
+
+        public CategoryViewHolder(CategoryView view) {
+            super(view);
+            this.view = view;
+        }
+
+        public void setCategory(Category category){
+            view.setCategory(category);
         }
     }
 }

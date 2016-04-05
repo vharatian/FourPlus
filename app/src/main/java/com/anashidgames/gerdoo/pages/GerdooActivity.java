@@ -2,6 +2,7 @@ package com.anashidgames.gerdoo.pages;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -20,6 +21,7 @@ public class GerdooActivity extends AppCompatActivity {
             @Override
             public void uncaughtException(Thread thread, Throwable ex) {
                 Log.e("gerdoo", "error", ex);
+                throw new RuntimeException(ex);
             }
         });
     }

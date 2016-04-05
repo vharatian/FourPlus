@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/mainLayout">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rankTableRowHeight"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="10"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/rankMargin"
+            android:layout_marginBottom="@dimen/rankMargin">
+
+            <com.anashidgames.gerdoo.view.FitToHeightImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/largeBreak"
+                android:layout_gravity="center"
+                android:paddingTop="@dimen/smallBreak"
+                android:paddingBottom="@dimen/smallBreak"
+                android:src="@drawable/cup"/>
+
+            <com.anashidgames.gerdoo.view.basic.TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@color/black"
+                android:lines="1"
+                android:gravity="left"
+                android:layout_marginLeft="@dimen/normalBreak"
+                android:textSize="17dp"
+                android:id="@+id/scoreView"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="@dimen/topicLineSize"
+            android:layout_height="match_parent"
+            android:background="@color/white"/>
+
+        <com.anashidgames.gerdoo.view.basic.TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="11"
+            android:layout_gravity="center"
+            android:gravity="right"
+            android:textColor="@color/black"
+            android:textSize="17dp"
+            android:lines="1"
+            android:layout_marginRight="@dimen/largeBreak"
+            android:ellipsize="end"
+            android:id="@+id/nameView"
+            android:layout_marginTop="@dimen/rankMargin"
+            android:layout_marginBottom="@dimen/rankMargin"/>
+
+        <View
+            android:layout_width="@dimen/topicLineSize"
+            android:layout_height="match_parent"
+            android:background="@color/white"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginLeft="@dimen/smallBreak"
+            android:layout_marginTop="@dimen/rankMargin"
+            android:layout_marginBottom="@dimen/rankMargin">
+
+            <com.anashidgames.gerdoo.view.FitToWidthImageView
+                android:layout_width="13dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/rankChangeDirection"
+                android:src="@drawable/equal"
+                android:layout_gravity="center"/>
+
+            <com.anashidgames.gerdoo.view.basic.TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:id="@+id/rankChangeAmount"
+                android:lines="1"
+                android:textSize="12dp"/>
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="2"
+            android:layout_marginRight="@dimen/smallBreak"
+            android:layout_marginTop="@dimen/rankMargin"
+            android:layout_marginBottom="@dimen/rankMargin">
+
+            <com.anashidgames.gerdoo.view.basic.TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="17dp"
+                android:id="@+id/rankTextView"/>
+
+            <com.anashidgames.gerdoo.view.FitToHeightImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:id="@+id/rankImageView"/>
+
+        </FrameLayout>
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/topicLineSize"
+        android:background="@color/white"/>
+
+</LinearLayout>

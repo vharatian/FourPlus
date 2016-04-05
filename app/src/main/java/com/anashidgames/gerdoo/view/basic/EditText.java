@@ -1,8 +1,7 @@
-package com.anashidgames.gerdoo.view.font;
+package com.anashidgames.gerdoo.view.basic;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.util.AttributeSet;
 

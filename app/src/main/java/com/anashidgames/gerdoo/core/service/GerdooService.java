@@ -1,8 +1,10 @@
 package com.anashidgames.gerdoo.core.service;
 
 import com.anashidgames.gerdoo.core.service.model.Category;
-import com.anashidgames.gerdoo.core.service.model.CategoryItem;
+import com.anashidgames.gerdoo.core.service.model.CategoryTopic;
 import com.anashidgames.gerdoo.core.service.model.HomeItem;
+import com.anashidgames.gerdoo.core.service.model.Rank;
+import com.anashidgames.gerdoo.pages.topic.list.PsychoListResponse;
 
 import java.util.List;
 
@@ -31,8 +33,11 @@ interface GerdooService {
     Call<List<HomeItem>> getHome();
 
     @GET
-    Call<List<CategoryItem>> getCategoryItems(@Url String url);
+    Call<List<CategoryTopic>> getCategoryItems(@Url String url);
 
     @GET
     Call<List<Category>> getCategories(@Url String url);
+
+    @GET
+    Call<PsychoListResponse<Rank>> getRanking(@Url String url);
 }

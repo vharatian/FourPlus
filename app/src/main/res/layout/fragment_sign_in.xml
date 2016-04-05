@@ -15,7 +15,7 @@
         android:layout_marginTop="@dimen/longBreak"
         android:orientation="vertical">
 
-        <com.anashidgames.gerdoo.view.font.TextView
+        <com.anashidgames.gerdoo.view.basic.TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/message"
@@ -36,7 +36,7 @@
             android:id="@+id/password"/>
 
 
-        <com.anashidgames.gerdoo.view.font.Button
+        <com.anashidgames.gerdoo.view.basic.Button
             android:layout_width="@dimen/signUpBtnWidth"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

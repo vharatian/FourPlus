@@ -139,7 +139,7 @@ public class SplashActivity extends GerdooActivity {
         }
 
         @Override
-        protected void handleSuccessful(Boolean data) {
+        public void handleSuccessful(Boolean data) {
             authenticated = data;
             checkState();
         }

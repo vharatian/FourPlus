@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.anashidgames.gerdoo.R;
 import com.anashidgames.gerdoo.core.service.GerdooServer;
 import com.anashidgames.gerdoo.core.service.callback.CallbackWithErrorDialog;
-import com.anashidgames.gerdoo.core.service.model.CategoryItem;
+import com.anashidgames.gerdoo.core.service.model.CategoryTopic;
 
 import java.util.List;
 
@@ -24,7 +24,6 @@ import retrofit2.Call;
  */
 public class CategoryTopicsRow extends LinearLayout {
 
-    private TextView titleView;
     private LinearLayout itemsLayout;
     private View progressView;
     private HorizontalScrollView scrollView;
@@ -32,6 +31,8 @@ public class CategoryTopicsRow extends LinearLayout {
 
 
     private GerdooServer server;
+    private String iconUrl;
+    private String title;
 
     public CategoryTopicsRow(Context context) {
         super(context);
@@ -57,7 +58,6 @@ public class CategoryTopicsRow extends LinearLayout {
     private void init(Context context) {
         inflate(context, R.layout.view_category_topics_row, this);
 
-        titleView = (TextView) findViewById(R.id.title);
         itemsLayout = (LinearLayout) findViewById(R.id.itemsLayout);
         progressView = findViewById(R.id.progress);
         scrollView = (HorizontalScrollView) findViewById(R.id.scrollView);
@@ -68,21 +68,18 @@ public class CategoryTopicsRow extends LinearLayout {
     }
 
 
-    public void setData(String title, String dataUrl){
+    public void setData(String title, String iconUrl, String dataUrl){
+        this.iconUrl = iconUrl;
+        this.title = title;
 
         itemsLayout.removeAllViews();
         showLoading();
-
-        if (title != null)
-            titleView.setText(title + ":");
-        else
-            titleView.setVisibility(GONE);
 
         loadData(dataUrl);
     }
 
     private void loadData(String dataUrl) {
-        Call<List<CategoryItem>> call = server.getCategoryItems(dataUrl);
+        Call<List<CategoryTopic>> call = server.getCategoryItems(dataUrl);
         call.enqueue(new ItemsCallBack());
     }
 
@@ -97,11 +94,11 @@ public class CategoryTopicsRow extends LinearLayout {
         progressView.setVisibility(GONE);
     }
 
-    private void addItems(List<CategoryItem> items) {
+    private void addItems(List<CategoryTopic> items) {
         for (int i = items.size() - 1; i >= 0; i--){
-            CategoryItem item = items.get(i);
+            CategoryTopic item = items.get(i);
             CategoryItemView view = new CategoryItemView(getContext());
-            view.setItem(item);
+            view.setItem(item, title, iconUrl);
             view.setLayoutParams(layoutParams);
             itemsLayout.addView(view);
         }
@@ -115,7 +112,7 @@ public class CategoryTopicsRow extends LinearLayout {
     }
 
 
-    private class ItemsCallBack extends CallbackWithErrorDialog<List<CategoryItem>> {
+    private class ItemsCallBack extends CallbackWithErrorDialog<List<CategoryTopic>> {
 
         public ItemsCallBack() {
             super(getContext());
@@ -128,7 +125,7 @@ public class CategoryTopicsRow extends LinearLayout {
         }
 
         @Override
-        protected void handleSuccessful(List<CategoryItem> data) {
+        public void handleSuccessful(List<CategoryTopic> data) {
             addItems(data);
         }
     }

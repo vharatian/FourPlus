@@ -25,5 +25,14 @@
     <dimen name="progressWheelSize">50dp</dimen>
     <dimen name="categoryItemsRow">120dp</dimen>
     <dimen name="categoryIconSize">30dp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="playButtonSize">90dp</dimen>
+    <dimen name="myRankButtonSize">60dp</dimen>
+    <dimen name="topicLineSize">1dp</dimen>
+    <dimen name="rankMargin">@dimen/smallBreak</dimen>
+    <dimen name="rankTableRowHeight">50dp</dimen>
+    <dimen name="rankingIconMargin">7dp</dimen>
+    <dimen name="topicBannerHeight">200dp</dimen>
+    <dimen name="rankingFooterHeight">50dp</dimen>
 
 </resources>

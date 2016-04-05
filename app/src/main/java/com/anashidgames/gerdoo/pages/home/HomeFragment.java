@@ -17,6 +17,7 @@ import com.anashidgames.gerdoo.core.service.callback.CallbackWithErrorDialog;
 import com.anashidgames.gerdoo.core.service.model.HomeItem;
 import com.anashidgames.gerdoo.pages.FragmentContainerActivity;
 import com.anashidgames.gerdoo.pages.home.view.CategoryTopicsRow;
+import com.anashidgames.gerdoo.pages.home.view.CategoryView;
 import com.anashidgames.gerdoo.utils.PsychoUtils;
 import com.anashidgames.gerdoo.view.FitToWidthWithAspectRatioImageView;
 import com.bumptech.glide.Glide;
@@ -96,8 +97,8 @@ public class HomeFragment extends Fragment {
     }
 
     private void addCategory(String title, String dataUrl, int colorResource) {
-        CategoryTopicsRow row = new CategoryTopicsRow(getContext());
-        row.setData(title, dataUrl);
+        CategoryView row = new CategoryView((FragmentContainerActivity) getActivity());
+        row.setCategory(title, dataUrl);
         row.setBackgroundResource(colorResource);
         addRow(row);
     }

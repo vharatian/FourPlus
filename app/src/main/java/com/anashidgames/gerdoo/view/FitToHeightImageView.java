@@ -30,7 +30,7 @@ public class FitToHeightImageView extends ImageView {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         else {
             int width;
-            int height = MeasureSpec.getSize(heightMeasureSpec);
+            int height = MeasureSpec.getSize(heightMeasureSpec) - getPaddingTop() - getPaddingBottom();
             if(getLayoutParams().width != ViewGroup.LayoutParams.WRAP_CONTENT && getLayoutParams().width != ViewGroup.LayoutParams.MATCH_PARENT) {
                 width = MeasureSpec.getSize(widthMeasureSpec);
                 setScaleType(ScaleType.CENTER_CROP);

@@ -171,7 +171,7 @@ public abstract class FormFragment extends KeyboardHiderFragment {
         }
 
         @Override
-        protected void handleSuccessful(Object data) {
+        public void handleSuccessful(Object data) {
             submitted(data);
         }
     }

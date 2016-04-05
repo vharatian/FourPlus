@@ -3,6 +3,7 @@ package com.anashidgames.gerdoo.pages.home.view;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -10,7 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.anashidgames.gerdoo.R;
-import com.anashidgames.gerdoo.core.service.model.CategoryItem;
+import com.anashidgames.gerdoo.core.service.model.CategoryTopic;
 import com.anashidgames.gerdoo.pages.topic.TopicActivity;
 import com.bumptech.glide.Glide;
 
@@ -49,23 +50,29 @@ public class CategoryItemView extends LinearLayout{
         imageView = (ImageView) findViewById(R.id.image);
     }
 
-    public void setItem(CategoryItem item){
+    public void setItem(CategoryTopic item, String categoryTitle, @Nullable String categoryIconUrl){
         titleView.setText(item.getTitle());
         Glide.with(getContext()).load(item.getImageUrl()).crossFade().into(imageView);
-        setOnClickListener(new OpenTopicListener(item.getDataUrl()));
+        setOnClickListener(new OpenTopicListener(item, categoryTitle, categoryIconUrl));
     }
 
     private class OpenTopicListener implements OnClickListener {
 
-        private String dataUrl;
+        private CategoryTopic categoryItem;
+        private String categoryTitle;
+        private String categoryIconUrl;
 
-        public OpenTopicListener(String dataUrl) {
-            this.dataUrl = dataUrl;
+        public OpenTopicListener(CategoryTopic categoryItem, String categoryTitle, String categoryIconUrl) {
+            this.categoryItem = categoryItem;
+            this.categoryTitle = categoryTitle;
+            this.categoryIconUrl = categoryIconUrl;
         }
 
         @Override
         public void onClick(View v) {
-            getContext().startActivity(TopicActivity.newIntent(getContext(), dataUrl));
+            getContext().startActivity(TopicActivity.newIntent(
+                    getContext(), categoryItem,
+                    categoryTitle, categoryIconUrl));
         }
     }
 }

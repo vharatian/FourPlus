@@ -1,11 +1,11 @@
-package com.anashidgames.gerdoo.view.font;
+package com.anashidgames.gerdoo.view.basic;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.view.Gravity;
+
+import com.anashidgames.gerdoo.utils.PsychoUtils;
 
 /**
  * Created by psycho on 3/17/16.
@@ -36,5 +36,12 @@ public class TextView extends android.widget.TextView {
 //        Typeface tf = Typeface.createFromAsset(getContext().getAssets(),
 //                "irsans.ttf");
 //        setTypeface(tf);
+    }
+
+    @Override
+    public void setText(CharSequence text, BufferType type) {
+        if (text != null)
+            text = PsychoUtils.toPersianNumber(text.toString());
+        super.setText(text, type);
     }
 }

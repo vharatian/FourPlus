@@ -10,7 +10,7 @@
         android:layout_weight="1"
         android:id="@+id/gif"/>
 
-    <com.anashidgames.gerdoo.view.font.TextView
+    <com.anashidgames.gerdoo.view.basic.TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/colorAccent"
@@ -21,7 +21,7 @@
         android:gravity="center"
         android:layout_marginBottom="@dimen/xlargeBreak"/>
 
-    <com.anashidgames.gerdoo.view.font.TextView
+    <com.anashidgames.gerdoo.view.basic.TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/white"
