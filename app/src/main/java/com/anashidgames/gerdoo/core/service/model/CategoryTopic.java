@@ -6,15 +6,17 @@ package com.anashidgames.gerdoo.core.service.model;
 public class CategoryTopic {
     private String imageUrl;
     private String title;
+    private String categoryTitle;
     private String generalRankingUrl;
     private String followingRankingUrl;
     private String myRankingUrl;
     private String bannerUrl;
     private int myRank;
 
-    public CategoryTopic(String imageUrl, String title, String generalRankingUrl, String followingRankingUrl, String myRankingUrl, String bannerUrl, int myRank) {
+    public CategoryTopic(String imageUrl, String title, String categoryTitle, String generalRankingUrl, String followingRankingUrl, String myRankingUrl, String bannerUrl, int myRank) {
         this.imageUrl = imageUrl;
         this.title = title;
+        this.categoryTitle = categoryTitle;
         this.generalRankingUrl = generalRankingUrl;
         this.followingRankingUrl = followingRankingUrl;
         this.myRankingUrl = myRankingUrl;
@@ -48,5 +50,9 @@ public class CategoryTopic {
 
     public int getMyRank() {
         return myRank;
+    }
+
+    public String getCategoryTitle() {
+        return categoryTitle;
     }
 }

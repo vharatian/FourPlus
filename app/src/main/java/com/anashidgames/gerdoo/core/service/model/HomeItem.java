@@ -15,6 +15,14 @@ public class HomeItem {
     private double aspectRatio;
     private String clickUrl;
 
+    public HomeItem(int type, String dataUrl, String title, double aspectRatio, String clickUrl) {
+        this.type = type;
+        this.dataUrl = dataUrl;
+        this.aspectRatio = aspectRatio;
+        this.clickUrl = clickUrl;
+        this.title = title;
+    }
+
     public HomeItem(int type, String dataUrl, double aspectRatio, String clickUrl) {
         this.type = type;
         this.dataUrl = dataUrl;

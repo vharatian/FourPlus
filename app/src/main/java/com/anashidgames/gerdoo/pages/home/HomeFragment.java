@@ -16,7 +16,6 @@ import com.anashidgames.gerdoo.core.service.GerdooServer;
 import com.anashidgames.gerdoo.core.service.callback.CallbackWithErrorDialog;
 import com.anashidgames.gerdoo.core.service.model.HomeItem;
 import com.anashidgames.gerdoo.pages.FragmentContainerActivity;
-import com.anashidgames.gerdoo.pages.home.view.CategoryTopicsRow;
 import com.anashidgames.gerdoo.pages.home.view.CategoryView;
 import com.anashidgames.gerdoo.utils.PsychoUtils;
 import com.anashidgames.gerdoo.view.FitToWidthWithAspectRatioImageView;
@@ -57,6 +56,8 @@ public class HomeFragment extends Fragment {
 
         server = new GerdooServer();
 
+        ((HomeActivity) getActivity()).setTitle(null);
+
         initViews(rootView);
         rowColors = Arrays.asList(R.color.categoryItemsRowColor1, R.color.categoryItemsRowColor2);
 
@@ -68,7 +69,7 @@ public class HomeFragment extends Fragment {
         progressView = rootView.findViewById(R.id.progress);
         layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-        rootView.findViewById(R.id.allCategories).setOnClickListener(new BannerOnCLickListener(true, null));
+        rootView.findViewById(R.id.allCategories).setOnClickListener(new BannerOnCLickListener(true, null, getString(R.string.allTopics)));
     }
 
     @Override
@@ -84,15 +85,20 @@ public class HomeFragment extends Fragment {
     }
 
     private void addItems(List<HomeItem> items) {
+        int lastItem = -1;
         for(int i=0; i<items.size(); i++){
             HomeItem item = items.get(i);
             if(item.getType() == HomeItem.TYPE_BANNER_CATEGORY){
-                addBanner(item.getAspectRatio(), item.getDataUrl(), true, item.getClickUrl());
+                addBanner(item.getAspectRatio(), item.getDataUrl(), true, item.getClickUrl(), item.getTitle());
             }else if (item.getType() == HomeItem.TYPE_BANNER_URL){
-                addBanner(item.getAspectRatio(), item.getDataUrl(), false, item.getClickUrl());
+                addBanner(item.getAspectRatio(), item.getDataUrl(), false, item.getClickUrl(), null);
             }else if (item.getType() == HomeItem.TYPE_CATEGORY){
+                if (lastItem == HomeItem.TYPE_CATEGORY){
+                    addLine();
+                }
                 addCategory(item.getTitle(), item.getDataUrl(), rowColors.get(i%rowColors.size()));
             }
+            lastItem = item.getType();
         }
     }
 
@@ -103,13 +109,13 @@ public class HomeFragment extends Fragment {
         addRow(row);
     }
 
-    private void addBanner(double aspectRatio, String dataUrl, boolean category, String clickUrl) {
+    private void addBanner(double aspectRatio, String dataUrl, boolean category, String clickUrl, String title) {
         FitToWidthWithAspectRatioImageView banner = new FitToWidthWithAspectRatioImageView(getContext());
         banner.setAspectRatio(aspectRatio);
         addRow(banner);
         Glide.with(this).load(dataUrl).placeholder(R.drawable.banner_place_holder).crossFade().into(banner);
 
-        banner.setOnClickListener(new BannerOnCLickListener(category, clickUrl));
+        banner.setOnClickListener(new BannerOnCLickListener(category, clickUrl, title));
     }
 
     private void addRow(View view) {
@@ -117,8 +123,16 @@ public class HomeFragment extends Fragment {
         mainLayout.addView(view);
     }
 
-    private void openCategoryPage(@Nullable String categoryUrl) {
-        ((FragmentContainerActivity) getActivity()).changeFragment(CategoryFragment.newInstance(categoryUrl));
+    private void addLine() {
+        View line = new Line(getContext());
+        int height = (int) getContext().getResources().getDimension(R.dimen.homeLineSize);
+        line.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, height));
+        mainLayout.addView(line);
+    }
+
+    private void openCategoryPage(@Nullable String categoryUrl, @Nullable String categoryTitle) {
+        ((FragmentContainerActivity) getActivity()).changeFragment(CategoryFragment.newInstance(
+                categoryUrl, categoryTitle));
     }
 
     private void hideLoading() {
@@ -146,17 +160,18 @@ public class HomeFragment extends Fragment {
     private class BannerOnCLickListener implements View.OnClickListener {
         private boolean category;
         private String clickUrl;
+        private String title;
 
-        public BannerOnCLickListener(boolean category, @Nullable String clickUrl) {
+        public BannerOnCLickListener(boolean category, @Nullable String clickUrl, @Nullable String title) {
             this.category = category;
             this.clickUrl = clickUrl;
-
+            this.title = title;
         }
 
         @Override
         public void onClick(View v) {
             if (category){
-                openCategoryPage(clickUrl);
+                openCategoryPage(clickUrl, title);
             }else{
                 openUrl();
             }

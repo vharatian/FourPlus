@@ -21,7 +21,7 @@ public class GerdooActivity extends AppCompatActivity {
             @Override
             public void uncaughtException(Thread thread, Throwable ex) {
                 Log.e("gerdoo", "error", ex);
-                throw new RuntimeException(ex);
+                finish();
             }
         });
     }

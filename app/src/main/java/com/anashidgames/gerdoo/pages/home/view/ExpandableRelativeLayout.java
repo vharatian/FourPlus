@@ -18,6 +18,7 @@ public class ExpandableRelativeLayout extends RelativeLayout {
 
     private boolean expanded = false;
     private Animation animation;
+    private OnExpansionListener expansionListener;
 
     public ExpandableRelativeLayout(Context context) {
         super(context);
@@ -75,6 +76,9 @@ public class ExpandableRelativeLayout extends RelativeLayout {
         if (isExpanded() || isAnimating())
             return;
 
+        if (expansionListener != null)
+            expansionListener.onExpansion(this);
+
         measure(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         final int targetHeight = getMeasuredHeight() + getPaddingBottom() + getPaddingTop();
 
@@ -87,8 +91,12 @@ public class ExpandableRelativeLayout extends RelativeLayout {
                 getLayoutParams().height = (int)(targetHeight * interpolatedTime);
                 requestLayout();
 
-                if (interpolatedTime == 1)
+                if (interpolatedTime == 1){
                     animation = null;
+
+                    if (expansionListener != null)
+                        expansionListener.expanded(ExpandableRelativeLayout.this);
+                }
             }
 
             @Override
@@ -146,5 +154,15 @@ public class ExpandableRelativeLayout extends RelativeLayout {
             collapse();
         else
             expand();
+    }
+
+
+    public void setExpansionListener(OnExpansionListener expansionListener) {
+        this.expansionListener = expansionListener;
+    }
+
+    public interface OnExpansionListener{
+        void expanded(View view);
+        void onExpansion(View view);
     }
 }

@@ -3,7 +3,6 @@ package com.anashidgames.gerdoo.pages.home.view;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
-import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -21,6 +20,7 @@ import com.bumptech.glide.Glide;
  */
 public class CategoryView extends LinearLayout {
 
+
     private FragmentContainerActivity activity;
 
     private TextView titleView;
@@ -28,8 +28,10 @@ public class CategoryView extends LinearLayout {
     private ExpandableRelativeLayout expandableLayout;
     private CategoryTopicsRow topicsRow;
     private View headerView;
+    private View lineView;
+    private ImageView arrowView;
 
-    protected OnExpansionListener expansionListener;
+    protected ExpandableRelativeLayout.OnExpansionListener listenerWrapper;
 
 
     private boolean firstExpansion;
@@ -65,8 +67,13 @@ public class CategoryView extends LinearLayout {
         iconView = (ImageView) findViewById(R.id.iconView);
         expandableLayout = (ExpandableRelativeLayout) findViewById(R.id.expandable);
         topicsRow = (CategoryTopicsRow) findViewById(R.id.topicsRow);
-
+        lineView =  findViewById(R.id.lineView);
         headerView = findViewById(R.id.titleLayout);
+        arrowView = (ImageView) findViewById(R.id.arrowView);
+    }
+
+    public Category getCategory() {
+        return category;
     }
 
     public void setCategory(Category category){
@@ -74,7 +81,7 @@ public class CategoryView extends LinearLayout {
     }
 
     public void setCategory(String title, String dataUrl){
-        setCategory(new Category(title, null, dataUrl, false), true, false);
+        setCategory(new Category(title, null, dataUrl, false, -1), true, false);
     }
 
 
@@ -82,15 +89,48 @@ public class CategoryView extends LinearLayout {
         this.category = category;
 
         firstExpansion = true;
-        titleView.setText(category.getTitle());
-        Glide.with(iconView.getContext()).load(category.getIconUrl()).into(iconView);
         expandableLayout.setExpanded(expanded);
         checkTopicsState();
-        checkBackgroundColor();
+        checkColor(category.getColor());
+        setHeader(category, clickable);
+    }
 
+    private void setIcon(Category category) {
+        if (category.getIconUrl() != null){
+            iconView.setVisibility(VISIBLE);
+            Glide.with(iconView.getContext()).load(category.getIconUrl()).into(iconView);
+        }else{
+            iconView.setVisibility(GONE);
+        }
+    }
+
+    private void setHeader(Category category, boolean clickable) {
+        setIcon(category);
+
+        titleView.setText(category.getTitle());
         if (clickable) {
             initClickBehavior(category);
+            arrowView.setImageResource(R.drawable.open);
+        }else {
+            headerView.setOnClickListener(null);
+            arrowView.setImageResource(R.drawable.back);
         }
+    }
+
+    private void checkColor(int color) {
+        if(color < 0){
+            lineView.setVisibility(GONE);
+            return;
+        }
+
+
+        if (color < 0x1000000)
+            color += 0xff000000;
+
+        arrowView.setColorFilter(color);
+        iconView.setColorFilter(color);
+
+        lineView.setVisibility(VISIBLE);
     }
 
     private void initClickBehavior(Category category) {
@@ -103,7 +143,7 @@ public class CategoryView extends LinearLayout {
 
     private void checkTopicsState() {
         if(expandableLayout.isExpanded() && firstExpansion){
-            topicsRow.setData(category.getTitle(), category.getDataUrl(), category.getIconUrl());
+            topicsRow.setData(category.getTitle(), category.getIconUrl(), category.getDataUrl());
             firstExpansion = false;
         }
     }
@@ -116,8 +156,14 @@ public class CategoryView extends LinearLayout {
         }
     }
 
-    public void setExpansionListener(OnExpansionListener expansionListener) {
-        this.expansionListener = expansionListener;
+    public void setExpansionListener(ExpandableRelativeLayout.OnExpansionListener expansionListener) {
+        if (expansionListener == null){
+            this.listenerWrapper = null;
+        }else {
+            this.listenerWrapper = new InnerExpansionListener(expansionListener);
+        }
+
+        expandableLayout.setExpansionListener(this.listenerWrapper);
     }
 
     public void close(boolean animate){
@@ -142,26 +188,37 @@ public class CategoryView extends LinearLayout {
     private class ToggleClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
+            if (!isEnabled())
+                return;
+
             expandableLayout.toggle();
 
             checkTopicsState();
             checkBackgroundColor();
-
-            if (expansionListener != null)
-                expansionListener.expanded(CategoryView.this);
         }
     }
 
     private class OpenSubCategoryClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            activity.changeFragment(CategoryFragment.newInstance(category.getDataUrl()));
+            activity.changeFragment(CategoryFragment.newInstance(category.getDataUrl(), category.getTitle()));
         }
     }
 
-    public interface OnExpansionListener{
-        void expanded(View view);
+    private class InnerExpansionListener implements ExpandableRelativeLayout.OnExpansionListener {
+        private ExpandableRelativeLayout.OnExpansionListener innerListener;
+        public InnerExpansionListener(ExpandableRelativeLayout.OnExpansionListener innerListener) {
+            this.innerListener = innerListener;
+        }
+
+        @Override
+        public void expanded(View view) {
+            innerListener.expanded(CategoryView.this);
+        }
+
+        @Override
+        public void onExpansion(View view) {
+            innerListener.onExpansion(CategoryView.this);
+        }
     }
-
-
 }

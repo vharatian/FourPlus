@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.anashidgames.gerdoo.R;
 import com.anashidgames.gerdoo.core.service.GerdooServer;
@@ -79,7 +78,7 @@ public class CategoryTopicsRow extends LinearLayout {
     }
 
     private void loadData(String dataUrl) {
-        Call<List<CategoryTopic>> call = server.getCategoryItems(dataUrl);
+        Call<List<CategoryTopic>> call = server.getCategoryTopics(dataUrl);
         call.enqueue(new ItemsCallBack());
     }
 
@@ -97,7 +96,7 @@ public class CategoryTopicsRow extends LinearLayout {
     private void addItems(List<CategoryTopic> items) {
         for (int i = items.size() - 1; i >= 0; i--){
             CategoryTopic item = items.get(i);
-            CategoryItemView view = new CategoryItemView(getContext());
+            CategoryTopicView view = new CategoryTopicView(getContext());
             view.setItem(item, title, iconUrl);
             view.setLayoutParams(layoutParams);
             itemsLayout.addView(view);

@@ -51,7 +51,7 @@ public class ValidatableInput extends LinearLayout implements PsychoChangeable {
     }
 
     private void init(Context context) {
-        inflate(context, R.layout.input_layout_with_status_icon, this);
+        inflate(context, R.layout.view_input_layout_with_status_icon, this);
 
         editText = (EditText) findViewById(R.id.input);
         statusIcon = (GifImageView) findViewById(R.id.statusIcon);

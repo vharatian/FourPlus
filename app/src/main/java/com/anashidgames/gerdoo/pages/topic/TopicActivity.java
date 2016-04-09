@@ -34,8 +34,6 @@ public class TopicActivity extends GerdooActivity {
 
     public static final String TITLE = "title";
     public static final String BANNER_URL = "bannerUrl";
-    public static final String CATEGORY_TITLE = "categoryTitle";
-    public static final String CATEGORY_ICON_URL = "categoryIconUrl";
     public static final String GENERAL_RANKING_URL = "generalRankingUrl";
     public static final String FOLLOWING_RANKING_URL = "followingRankingUrl";
     public static final String MY_RANKING_URL = "MyRankingUrl";
@@ -45,7 +43,7 @@ public class TopicActivity extends GerdooActivity {
     public static final int FOLLOWING_RANKING_PAGE = 1;
     public static final int MY_RANKING_RANKING_PAGE = 2;
 
-    public static Intent newIntent(Context context, CategoryTopic topic, String categoryTitle, String categoryIconUrl) {
+    public static Intent newIntent(Context context, CategoryTopic topic) {
 
         Intent intent = new Intent(context, TopicActivity.class);
         intent.putExtra(GENERAL_RANKING_URL, topic.getGeneralRankingUrl());
@@ -53,8 +51,6 @@ public class TopicActivity extends GerdooActivity {
         intent.putExtra(MY_RANKING_URL, topic.getMyRankingUrl());
         intent.putExtra(TITLE, topic.getTitle());
         intent.putExtra(BANNER_URL, topic.getBannerUrl());
-        intent.putExtra(CATEGORY_TITLE, categoryTitle);
-        intent.putExtra(CATEGORY_ICON_URL, categoryIconUrl);
         intent.putExtra(MY_RANK, topic.getMyRank());
         return intent;
     }
@@ -63,14 +59,13 @@ public class TopicActivity extends GerdooActivity {
     private String followingRankingUrl;
     private String title;
     private String bannerUrl;
-    private String categoryTitle;
-    private String categoryIconUrl;
     private String myRankingUrl;
     private int myRank;
 
     private RecyclerView recyclerView;
     private RankingAdapter adapter;
     private RankingFooter footer;
+    private View myRankButton;
 
     private int currentPage = -1;
 
@@ -82,11 +77,10 @@ public class TopicActivity extends GerdooActivity {
 
         initData();
 
+        initMyRankButton();
         initToolbar();
-        initHeader();
         initRecyclerView();
         initFooter();
-        initMyRankButton();
     }
 
     private void initData() {
@@ -96,13 +90,12 @@ public class TopicActivity extends GerdooActivity {
         myRankingUrl = bundle.getString(MY_RANKING_URL);
         title = bundle.getString(TITLE);
         bannerUrl = bundle.getString(BANNER_URL);
-        categoryIconUrl = bundle.getString(CATEGORY_ICON_URL, null);
-        categoryTitle = bundle.getString(CATEGORY_TITLE);
         myRank = bundle.getInt(MY_RANK);
     }
 
     private void initMyRankButton() {
-        findViewById(R.id.myRankButton).setOnClickListener(new View.OnClickListener() {
+        myRankButton = findViewById(R.id.myRankButton);
+        myRankButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setPage(MY_RANKING_RANKING_PAGE);
@@ -141,32 +134,27 @@ public class TopicActivity extends GerdooActivity {
             adapter.cancelLoading();
         adapter = new RankingAdapter(this, dataUrl);
         recyclerView.setAdapter(adapter);
+
+        if (page == MY_RANKING_RANKING_PAGE)
+            myRankButton.setVisibility(View.GONE);
+        else
+            myRankButton.setVisibility(View.VISIBLE);
     }
 
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("");
+        toolbar.setTitle(title);
         setSupportActionBar(toolbar);
 
         initBackButton();
-        initCategory();
+        initHeader();
     }
 
-    private void initCategory() {
-        ImageView categoryIconView = (ImageView) findViewById(R.id.categoryIcon);
-        TextView categoryTitleView = (TextView) findViewById(R.id.categoryTitle);
-
-        categoryTitleView.setText(categoryTitle);
-        if (categoryIconUrl != null)
-            Glide.with(this).load(categoryIconUrl).into(categoryIconView);
-    }
 
     private void initHeader() {
         ImageView bannerView = (ImageView) findViewById(R.id.bannerView);
         Glide.with(this).load(bannerUrl).crossFade().into(bannerView);
 
-        TextView titleView = (TextView) findViewById(R.id.titleView);
-        titleView.setText(title);
 
         findViewById(R.id.playButton).setOnClickListener(new View.OnClickListener() {
             @Override

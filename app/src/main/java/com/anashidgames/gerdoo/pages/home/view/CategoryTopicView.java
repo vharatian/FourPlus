@@ -18,61 +18,64 @@ import com.bumptech.glide.Glide;
 /**
  * Created by psycho on 3/29/16.
  */
-public class CategoryItemView extends LinearLayout{
-    public CategoryItemView(Context context) {
+public class CategoryTopicView extends LinearLayout{
+    public CategoryTopicView(Context context) {
         super(context);
         init(context);
     }
 
-    public CategoryItemView(Context context, AttributeSet attrs) {
+    public CategoryTopicView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
-    public CategoryItemView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CategoryTopicView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public CategoryItemView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public CategoryTopicView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context);
     }
 
     private TextView titleView;
+    private TextView categoryTitleView;
     private ImageView imageView;
 
     private void init(Context context) {
-        inflate(context, R.layout.view_category_item, this);
+        inflate(context, R.layout.view_category_topic, this);
 
         titleView = (TextView) findViewById(R.id.title);
+        categoryTitleView = (TextView) findViewById(R.id.categoryTitle);
         imageView = (ImageView) findViewById(R.id.image);
     }
 
     public void setItem(CategoryTopic item, String categoryTitle, @Nullable String categoryIconUrl){
         titleView.setText(item.getTitle());
-        Glide.with(getContext()).load(item.getImageUrl()).crossFade().into(imageView);
-        setOnClickListener(new OpenTopicListener(item, categoryTitle, categoryIconUrl));
+        Glide.with(getContext()).load(item.getImageUrl()).placeholder(R.drawable.home_topic_place_holder).crossFade().into(imageView);
+        if (item.getCategoryTitle() != null){
+            categoryTitleView.setVisibility(VISIBLE);
+            categoryTitleView.setText(item.getCategoryTitle());
+        }else {
+            categoryTitleView.setVisibility(INVISIBLE);
+        }
+        setOnClickListener(new OpenTopicListener(item));
     }
 
     private class OpenTopicListener implements OnClickListener {
 
-        private CategoryTopic categoryItem;
-        private String categoryTitle;
-        private String categoryIconUrl;
+        private CategoryTopic categoryTopic;
 
-        public OpenTopicListener(CategoryTopic categoryItem, String categoryTitle, String categoryIconUrl) {
-            this.categoryItem = categoryItem;
-            this.categoryTitle = categoryTitle;
-            this.categoryIconUrl = categoryIconUrl;
+        public OpenTopicListener(CategoryTopic categoryItem) {
+            this.categoryTopic = categoryItem;
         }
 
         @Override
         public void onClick(View v) {
             getContext().startActivity(TopicActivity.newIntent(
-                    getContext(), categoryItem,
-                    categoryTitle, categoryIconUrl));
+                    getContext(), categoryTopic));
         }
     }
 }

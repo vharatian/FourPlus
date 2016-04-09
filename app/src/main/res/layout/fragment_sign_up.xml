@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".auth.SignUpFragment"
     android:orientation="vertical">
 
     <View
@@ -26,21 +25,21 @@
         android:layout_weight="2"/>
 
     <com.anashidgames.gerdoo.pages.auth.view.ValidatableInput
-        android:layout_width="@dimen/signUpMainWidth"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/normalBreak"
         android:id="@+id/mail"/>
 
     <com.anashidgames.gerdoo.pages.auth.view.ValidatableInput
-        android:layout_width="@dimen/signUpMainWidth"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/normalBreak"
         android:id="@+id/password"/>
 
     <com.anashidgames.gerdoo.pages.auth.view.ValidatableInput
-        android:layout_width="@dimen/signUpMainWidth"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:id="@+id/passwordRepeat"/>
@@ -52,7 +51,7 @@
 
 
     <com.anashidgames.gerdoo.view.basic.Button
-        android:layout_width="@dimen/signUpBtnWidth"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="@drawable/dark_button_background_invalid"
@@ -60,6 +59,8 @@
         android:textColor="@color/colorAccent"
         android:textSize="20dp"
         android:textStyle="bold"
+        android:layout_marginLeft="@dimen/formButtonMargin"
+        android:layout_marginRight="@dimen/formButtonMargin"
         android:id="@+id/signUpBtn"/>
 
     <View
@@ -108,7 +109,7 @@
 
 
         <com.anashidgames.gerdoo.view.basic.Button
-            android:layout_width="@dimen/signUpBtnWidth"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@drawable/button_background_normal"
@@ -117,6 +118,8 @@
             android:textColor="@color/colorAccent"
             android:textSize="20dp"
             android:textStyle="bold"
+            android:layout_marginLeft="@dimen/formButtonMargin"
+            android:layout_marginRight="@dimen/formButtonMargin"
             android:id="@+id/signInBtn"/>
 
         <LinearLayout

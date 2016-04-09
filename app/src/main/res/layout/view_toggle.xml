@@ -6,7 +6,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:orientation="horizontal"
         android:gravity="center">
 
@@ -19,10 +20,12 @@
             android:textSize="17dp"
             android:id="@+id/textView"/>
 
-        <com.anashidgames.gerdoo.view.FitToWidthImageView
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
+        <com.anashidgames.gerdoo.view.FitToHeightImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
+            android:layout_marginTop="@dimen/normalBreak"
+            android:layout_marginBottom="@dimen/normalBreak"
             android:id="@+id/iconView"/>
 
     </LinearLayout>

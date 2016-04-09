@@ -8,12 +8,15 @@ public class Category {
     private String iconUrl;
     private String dataUrl;
     private boolean hasSubCategory;
+    private int color;
 
-    public Category(String title, String iconUrl, String dataUrl, boolean hasSubCategory) {
+
+    public Category(String title, String iconUrl, String dataUrl, boolean hasSubCategory, int color) {
         this.title = title;
         this.iconUrl = iconUrl;
         this.dataUrl = dataUrl;
         this.hasSubCategory = hasSubCategory;
+        this.color = color;
     }
 
     public String getTitle() {
@@ -30,5 +33,9 @@ public class Category {
 
     public boolean hasSubCategory() {
         return hasSubCategory;
+    }
+
+    public int getColor() {
+        return color;
     }
 }

@@ -15,7 +15,6 @@ import pl.droidsonroids.gif.AnimationListener;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Call;
-import retrofit2.Response;
 
 public class SplashActivity extends GerdooActivity {
 

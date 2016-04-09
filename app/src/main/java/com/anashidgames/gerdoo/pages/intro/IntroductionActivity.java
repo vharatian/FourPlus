@@ -30,6 +30,7 @@ public class IntroductionActivity extends GerdooActivity {
     private InnerAdapter adapter;
     private ViewPager pager;
     private View doneButton;
+    private View mainLayout;
 
 
     @Override
@@ -40,6 +41,8 @@ public class IntroductionActivity extends GerdooActivity {
         initViewPager();
         initIndicator(pager);
         initDoneButton();
+
+        mainLayout = findViewById(R.id.mainLayout);
     }
 
     private void initDoneButton() {
@@ -114,6 +117,12 @@ public class IntroductionActivity extends GerdooActivity {
                 @Override
                 public void run() {
                     ((IntroductionFragment) adapter.getItem(position)).resetAnimation();
+
+                    if (position == 0){
+                        mainLayout.setBackgroundResource(R.color.colorPrimary);
+                    }else{
+                        mainLayout.setBackgroundResource(R.color.introPageBackgroundSecond);
+                    }
                 }
             });
 

@@ -4,6 +4,7 @@ import com.anashidgames.gerdoo.core.service.model.Category;
 import com.anashidgames.gerdoo.core.service.model.CategoryTopic;
 import com.anashidgames.gerdoo.core.service.model.HomeItem;
 import com.anashidgames.gerdoo.core.service.model.Rank;
+import com.anashidgames.gerdoo.core.service.model.SignInParameters;
 import com.anashidgames.gerdoo.pages.topic.list.PsychoListResponse;
 import com.anashidgames.gerdoo.utils.PsychoUtils;
 
@@ -20,7 +21,7 @@ import retrofit2.mock.MockRetrofit;
  */
 public class GerdooServer{
 
-    public static final String HOST = "https://api.github.com";
+    public static final String HOST = "http://192.168.0.99:8043";
     private GerdooService mockService;
     private GerdooService realService;
     private GerdooService service;
@@ -55,15 +56,20 @@ public class GerdooServer{
     }
 
     public Call<String> signIn(String email, String password) {
-        return service.signIn(email, password);
+        try {
+            return service.signIn(new SignInParameters(email, password));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
     public Call<List<HomeItem>> getHome() {
         return service.getHome();
     }
 
-    public Call<List<CategoryTopic>> getCategoryItems(String url) {
-        return service.getCategoryItems(PsychoUtils.fixUrl(url));
+    public Call<List<CategoryTopic>> getCategoryTopics(String url) {
+        return service.getCategoryTopics(PsychoUtils.fixUrl(url));
     }
 
     public Call<List<Category>> getCategories(String url) {

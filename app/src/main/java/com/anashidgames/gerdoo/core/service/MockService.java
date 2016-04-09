@@ -4,6 +4,7 @@ import com.anashidgames.gerdoo.core.service.model.Category;
 import com.anashidgames.gerdoo.core.service.model.CategoryTopic;
 import com.anashidgames.gerdoo.core.service.model.HomeItem;
 import com.anashidgames.gerdoo.core.service.model.Rank;
+import com.anashidgames.gerdoo.core.service.model.SignInParameters;
 import com.anashidgames.gerdoo.pages.topic.list.PsychoListResponse;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ class MockService implements GerdooService {
 
 
     public static final String MY_RANK = "MyRank,";
+    public static final String HOME = "home";
     private BehaviorDelegate<GerdooService> behaviorDelegate;
     private Random random;
 
@@ -53,21 +55,25 @@ class MockService implements GerdooService {
     }
 
     @Override
-    public Call<String> signIn(String email, String password) {
+    public Call<String> signIn(SignInParameters parameters) {
         String sessionKey = null;
-        if(email.equals("test@test.com") && password.equals("test")){
+        if(parameters.getEmail().equals("test@test.com") && parameters.getPassword().equals("test")){
             sessionKey = UUID.randomUUID().toString();
         }
 
-        return behaviorDelegate.returningResponse(sessionKey).signIn(email, password);
+        return behaviorDelegate.returningResponse(sessionKey).signIn(parameters);
     }
 
     @Override
     public Call<List<HomeItem>> getHome() {
         List<HomeItem> response = new ArrayList<>();
+        List<String> banners = Arrays.asList(
+                "https://i.imgsafe.org/c26dc81.jpg",
+                "https://i.imgsafe.org/c6595c3.jpg"
+        );
 
-        String categoryBannerImageUrl = "https://pixabay.com/static/uploads/photo/2015/11/10/08/31/banner-1036483_960_720.jpg";
-        double categoryBannerImageAspectRatio = 3.189;
+
+        double categoryBannerImageAspectRatio = 3;
         String urlBannerImageUrl = "https://i.imgsafe.org/5b75feb.jpg";
         double urlBannerImageAspectRatio = 8.372;
         String title = "عنوان   ";
@@ -77,11 +83,12 @@ class MockService implements GerdooService {
             HomeItem item;
             int rand = random.nextInt(4);
             if (rand == 0){
-                item = new HomeItem(HomeItem.TYPE_BANNER_CATEGORY, categoryBannerImageUrl, categoryBannerImageAspectRatio, categoryBannerImageUrl);
+                String bannerUrl = banners.get(random.nextInt(banners.size()));
+                item = new HomeItem(HomeItem.TYPE_BANNER_CATEGORY, bannerUrl, title + i, categoryBannerImageAspectRatio, bannerUrl);
             }else if (rand == 1){
                 item = new HomeItem(HomeItem.TYPE_BANNER_URL, urlBannerImageUrl, urlBannerImageAspectRatio, urlBannerImageUrl);
             }else {
-                item = new HomeItem(HomeItem.TYPE_CATEGORY, "", title + i);
+                item = new HomeItem(HomeItem.TYPE_CATEGORY, HOME, title + i);
             }
 
             response.add(item);
@@ -91,15 +98,14 @@ class MockService implements GerdooService {
     }
 
     @Override
-    public Call<List<CategoryTopic>> getCategoryItems(@Url String url) {
+    public Call<List<CategoryTopic>> getCategoryTopics(@Url String url) {
         List<CategoryTopic> response = new ArrayList<>();
         List<String> images = Arrays.asList(
-                "https://i.imgsafe.org/1163740.png",
-                "https://i.imgsafe.org/1b41d04.png",
-                "https://i.imgsafe.org/1e5ef6d.png",
-                "https://i.imgsafe.org/2269d44.png",
-                "https://i.imgsafe.org/20698a8.png",
-                "https://i.imgsafe.org/190c8ee.png"
+                "https://i.imgsafe.org/2fb7d09.png",
+                "https://i.imgsafe.org/3059ad7.png",
+                "https://i.imgsafe.org/3118243.png",
+                "https://i.imgsafe.org/31aff12.png",
+                "https://i.imgsafe.org/32c6fc4.png"
         );
         String title = "عنوان  ";
 
@@ -112,23 +118,41 @@ class MockService implements GerdooService {
                 itemTitle += title;
             }
 
+            String categoryTitle = null;
+            if (url != null && url.contains(HOME)) {
+                categoryTitle = title;
+                while (random.nextBoolean()) {
+                    categoryTitle += title;
+                }
+            }
+
             itemTitle += i;
 
             int myRank = random.nextInt(3000);
-            response.add(new CategoryTopic(imageUrl, itemTitle, "", "", MY_RANK + myRank, "https://i.imgsafe.org/68f36a5.jpg", myRank));
+            response.add(new CategoryTopic(imageUrl, "احسان خواجه امیری", categoryTitle, "", "", MY_RANK + myRank, "https://i.imgsafe.org/c77e5e5.jpg", myRank));
         }
 
-        return behaviorDelegate.returningResponse(response).getCategoryItems(url);
+        return behaviorDelegate.returningResponse(response).getCategoryTopics(url);
     }
 
     @Override
     public Call<List<Category>> getCategories(@Url String url) {
         List<Category> response = new ArrayList<>();
         List<String> images = Arrays.asList(
-                "https://i.imgsafe.org/1ad850b.png",
-                "https://i.imgsafe.org/1babef5.png",
-                "https://i.imgsafe.org/1c744e3.png",
-                "https://i.imgsafe.org/1d47d98.png"
+                "https://i.imgsafe.org/c2218e1.png",
+                "https://i.imgsafe.org/c2642df.png",
+                "https://i.imgsafe.org/c31308b.png",
+                "https://i.imgsafe.org/c734641.png",
+                "https://i.imgsafe.org/c4853e0.png",
+                "https://i.imgsafe.org/c8a4323.png",
+                "https://i.imgsafe.org/c7d4087.png"
+        );
+        List<Integer> colors = Arrays.asList(
+            0x248a8a,
+            0x16bfbf,
+            0xa0e5e3,
+            0x238080,
+            0xd2f2ed
         );
         String title = "عنوان  ";
 
@@ -143,7 +167,8 @@ class MockService implements GerdooService {
 
             categoryTitle += i;
 
-            response.add(new Category(categoryTitle, imageUrl, "", random.nextInt()%4 == 0));
+            Integer color = colors.get(random.nextInt(colors.size()));
+            response.add(new Category(categoryTitle, imageUrl, "", random.nextInt()%4 == 0, color));
         }
 
 

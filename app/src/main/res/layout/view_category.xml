@@ -1,31 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/categoryHeaderHeight"
         android:orientation="horizontal"
         android:id="@+id/titleLayout"
+        android:background="@color/colorPrimaryDark"
+        android:paddingTop="@dimen/smallBreak"
+        android:paddingBottom="@dimen/smallBreak"
+        android:paddingRight="@dimen/normalBreak"
         android:gravity="right">
 
-        <com.anashidgames.gerdoo.view.basic.TextView
+        <com.anashidgames.gerdoo.view.FitToHeightImageView
             android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/largeBreak"
+            android:src="@drawable/back"
+            android:id="@+id/arrowView"/>
+
+        <com.anashidgames.gerdoo.view.basic.BoldTextView
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:lines="1"
             android:ellipsize="end"
             android:id="@+id/titleView"
-            android:textSize="16dp"
+            android:textStyle="bold"
+            android:textSize="17dp"
             android:layout_marginLeft="@dimen/normalBreak"
+            android:gravity="right"
             android:textColor="@color/white"
             android:layout_gravity="center"/>
 
-        <ImageView
-            android:layout_width="@dimen/categoryIconSize"
-            android:layout_height="@dimen/categoryIconSize"
+        <com.anashidgames.gerdoo.view.FitToHeightImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="@dimen/normalBreak"
             android:layout_gravity="center"
             android:id="@+id/iconView"/>
@@ -36,7 +50,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/expandable"
-        android:layout_marginBottom="@dimen/normalBreak">
+        android:background="@color/colorPrimary">
 
         <com.anashidgames.gerdoo.pages.home.view.CategoryTopicsRow
             android:layout_width="match_parent"
@@ -47,8 +61,8 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/lineHeight"
+        android:layout_height="@dimen/homeLineSize"
         android:background="@color/colorPrimary"
-        android:id="@+id/separatorLine"/>
+        android:id="@+id/lineView"/>
 
 </LinearLayout>

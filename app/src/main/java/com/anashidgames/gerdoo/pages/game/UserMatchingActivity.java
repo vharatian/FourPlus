@@ -25,7 +25,7 @@ public class UserMatchingActivity extends GerdooActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         animationView = new GifImageView(this);
-        animationView.setImageResource(R.drawable.splash_logo);
+        animationView.setImageResource(R.drawable.user_matching);
         setContentView(animationView);
     }
 }

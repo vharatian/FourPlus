@@ -15,6 +15,7 @@ import com.anashidgames.gerdoo.core.service.callback.CallbackWithErrorDialog;
 import com.anashidgames.gerdoo.core.service.model.Category;
 import com.anashidgames.gerdoo.pages.FragmentContainerActivity;
 import com.anashidgames.gerdoo.pages.home.view.CategoryView;
+import com.anashidgames.gerdoo.pages.home.view.ExpandableRelativeLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,16 +29,19 @@ public class CategoryFragment extends Fragment{
 
     public static final String DATA_URL = "dataUrl";
     public static final String ALL_CATEGORIES_URL = "dataUrl";
+    private static final String TITLE = "title";
     private LinearLayoutManager layoutManager;
 
 
-    public static Fragment newInstance(@Nullable String dataUrl) {
-        if (dataUrl == null)
+    public static Fragment newInstance(@Nullable String dataUrl, String title) {
+        if (dataUrl == null) {
             dataUrl = ALL_CATEGORIES_URL;
+        }
 
 
         Bundle bundle = new Bundle();
         bundle.putString(DATA_URL, dataUrl);
+        bundle.putString(TITLE, title);
         Fragment fragment = new CategoryFragment();
         fragment.setArguments(bundle);
         return fragment;
@@ -49,6 +53,8 @@ public class CategoryFragment extends Fragment{
 
     private GerdooServer server;
 
+    private Category openedCategory = null;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -56,10 +62,15 @@ public class CategoryFragment extends Fragment{
 
         server = new GerdooServer();
 
+
+
         initViews(rootView);
 
         Bundle bundle = getArguments();
         String dataUrl = bundle.getString(DATA_URL, ALL_CATEGORIES_URL);
+        String title = bundle.getString(TITLE);
+
+        ((HomeActivity) getActivity()).setTitle(title);
         loadData(dataUrl);
 
         return rootView;
@@ -107,7 +118,7 @@ public class CategoryFragment extends Fragment{
 
         private List<Category> data;
         private List<CategoryView> views;
-        private CategoryView.OnExpansionListener listener;
+        private ExpandableRelativeLayout.OnExpansionListener listener;
 
         public CategoryAdapter(List<Category> data) {
             if (data == null)
@@ -143,20 +154,28 @@ public class CategoryFragment extends Fragment{
         }
     }
 
-    private class ExpansionListener implements CategoryView.OnExpansionListener {
-        private List<CategoryView> holders;
+    private class ExpansionListener implements ExpandableRelativeLayout.OnExpansionListener {
+        private List<CategoryView> views;
 
         public ExpansionListener(List<CategoryView> holders) {
-            this.holders = holders;
+            this.views = holders;
         }
-
 
 
         @Override
         public void expanded(View view) {
-            for (CategoryView v: holders){
+            for (CategoryView v: views){
+                v.setEnabled(true);
+            }
+        }
+
+        @Override
+        public void onExpansion(View view) {
+            openedCategory = ((CategoryView) view).getCategory();
+            for (CategoryView v: views){
                 if (v != view){
                     v.close(true);
+                    v.setEnabled(false);
                 }
             }
         }
@@ -171,7 +190,7 @@ public class CategoryFragment extends Fragment{
         }
 
         public void setCategory(Category category){
-            view.setCategory(category);
+            view.setCategory(category, category == openedCategory, true);
         }
     }
 }

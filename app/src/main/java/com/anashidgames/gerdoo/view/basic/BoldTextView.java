@@ -11,31 +11,31 @@ import com.anashidgames.gerdoo.utils.PsychoUtils;
 /**
  * Created by psycho on 3/17/16.
  */
-public class TextView extends android.widget.TextView {
-    public TextView(Context context) {
+public class BoldTextView extends android.widget.TextView {
+    public BoldTextView(Context context) {
         super(context);
         init();
     }
 
-    public TextView(Context context, AttributeSet attrs) {
+    public BoldTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public TextView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public BoldTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public TextView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public BoldTextView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init();
     }
 
     private void init() {
         Typeface tf = Typeface.createFromAsset(getContext().getAssets(),
-                "fonts/IRANSansMobile_Light.ttf");
+                "fonts/IRANSansMobile_Medium.ttf");
         setTypeface(tf);
     }
 

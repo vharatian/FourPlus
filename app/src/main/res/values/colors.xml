@@ -25,4 +25,8 @@
     <color name="topic_increase" >#41d47b</color>
     <color name="topicIconEnable" >#ed3f36</color>
     <color name="topicIconDisable" >#56cdd5</color>
+    <color name="introPageBackgroundSecond">#273440</color>
+    <color name="lineHome">@color/errorColor</color>
+    <color name="lineHomeEnd">#55ed3f36</color>
+    <color name="topicScreamColor">#99000000</color>
 </resources>
