@@ -4,7 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -66,6 +67,12 @@ public class TopicActivity extends GerdooActivity {
     private RankingAdapter adapter;
     private RankingFooter footer;
     private View myRankButton;
+    private AppBarLayout appBar;
+    private Toolbar toolbar;
+    private View titleBar;
+    private TextView toolbarTitleView;
+    private TextView titleView;
+    private ImageView backButton;
 
     private int currentPage = -1;
 
@@ -142,12 +149,21 @@ public class TopicActivity extends GerdooActivity {
     }
 
     private void initToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(title);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        titleBar = findViewById(R.id.titleBar);
 
+        initTitle();
         initBackButton();
         initHeader();
+    }
+
+    private void initTitle() {
+        getSupportActionBar().setTitle("");
+        toolbarTitleView = (TextView) findViewById(R.id.toolbarTitleView);
+        toolbarTitleView.setText(title);
+        titleView = (TextView) findViewById(R.id.titleView);
+        titleView.setText(title);
     }
 
 
@@ -162,10 +178,14 @@ public class TopicActivity extends GerdooActivity {
                 startActivity(UserMatchingActivity.newIntent(TopicActivity.this));
             }
         });
+
+        appBar = (AppBarLayout) findViewById(R.id.appBar);
+        appBar.addOnOffsetChangedListener(new ToolbarThemListener());
     }
 
     private void initBackButton() {
-        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+        backButton = (ImageView) findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
@@ -211,6 +231,74 @@ public class TopicActivity extends GerdooActivity {
         @Override
         public void pageSelected(int index) {
             setPage(index);
+        }
+    }
+
+    private class ToolbarThemListener implements AppBarLayout.OnOffsetChangedListener {
+        @Override
+        public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+            int max = appBarLayout.getTotalScrollRange();
+            verticalOffset = Math.abs(verticalOffset);
+            double index = (max - verticalOffset * 1.0) / (max);
+
+            index *= 3;
+            if (index > 1)
+                index = 1;
+
+            fixTitleBarPosition(verticalOffset, max);
+            setTitleBarColor(index);
+            setBackButtonColor(index);
+            checkToolbarState(index);
+        }
+
+        private void checkToolbarState(double index) {
+            if (index == 0){
+                toolbar.setBackgroundColor(getBarColor(index));
+                toolbarTitleView.setVisibility(View.VISIBLE);
+            }else{
+                toolbarTitleView.setVisibility(View.INVISIBLE);
+                toolbar.setBackgroundResource(android.R.color.transparent);
+            }
+        }
+
+        private void setBackButtonColor(double index) {
+            float alpha;
+            if (index > 0.5){
+                alpha = (float) ((index - 0.5)*2);
+            }else{
+                alpha = 0;
+            }
+
+            backButton.setAlpha(alpha);
+        }
+
+        private void fixTitleBarPosition(int verticalOffset, int max) {
+            CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) titleBar.getLayoutParams();
+            int margin = max - verticalOffset;
+            layoutParams.topMargin = margin;
+            titleBar.requestLayout();
+        }
+
+        private void setTitleBarColor(double index) {
+            titleBar.setBackgroundColor(getBarColor(index));
+            titleView.setTextColor(getTitleColor(index));
+        }
+
+        private int getBarColor(double index){
+            int alpha;
+            if (index > 0.5) {
+                alpha = 100 + (int) (155 * (index - 0.5)*2);
+            }else{
+                alpha = 100 + (int) (155 * (0.5 - index)*1.2);
+            }
+
+            int color = (int) (0xff * index);
+            return color + color * 0x100 + color * 0x10000 + alpha * 0x1000000;
+        }
+
+        private int getTitleColor(double index){
+            int color = (int) (0xff * (1 - index));
+            return color + color * 0x100 + color * 0x10000 + 0xff000000;
         }
     }
 }

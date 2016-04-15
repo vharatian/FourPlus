@@ -26,8 +26,8 @@
     <dimen name="categoryItemsRow">140dp</dimen>
     <dimen name="categoryIconSize">25dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
-    <dimen name="playButtonSize">70dp</dimen>
-    <dimen name="myRankButtonSize">70dp</dimen>
+    <dimen name="playButtonSize">@dimen/toolbarHeight</dimen>
+    <dimen name="myRankButtonSize">60dp</dimen>
     <dimen name="topicLineSize">1dp</dimen>
     <dimen name="rankMargin">@dimen/smallBreak</dimen>
     <dimen name="rankTableRowHeight">50dp</dimen>
@@ -40,5 +40,6 @@
     <dimen name="categoryTopicPadding">7dp</dimen>
     <dimen name="categoryHeaderHeight">50dp</dimen>
     <dimen name="categoryTopicText">11dp</dimen>
+    <dimen name="topicToolbarHeight">60dp</dimen>
 
 </resources>

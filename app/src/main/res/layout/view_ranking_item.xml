@@ -24,8 +24,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/largeBreak"
                 android:layout_gravity="center"
-                android:paddingTop="@dimen/smallBreak"
-                android:paddingBottom="@dimen/smallBreak"
+                android:paddingTop="@dimen/normalBreak"
+                android:paddingBottom="@dimen/normalBreak"
                 android:src="@drawable/cup"/>
 
             <com.anashidgames.gerdoo.view.basic.TextView
