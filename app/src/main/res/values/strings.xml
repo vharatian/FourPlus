@@ -30,4 +30,17 @@
     <string name="generalRanking">رده بندی کلی</string>
     <string name="followerRanking">دنبال شوندگان</string>
     <string name="allTopics">تمام موضوعات</string>
+    <string name="profile">پروفایل</string>
+    <string name="gifts">جوایز</string>
+    <string name="shop">فروشگاه</string>
+    <string name="settings">تنظیمات</string>
+    <string name="messages">پیام ها</string>
+    <string name="vote">رای به چهار پلاس</string>
+    <string name="about_us">درباره ما</string>
+    <string name="playedCount">بازی انجام شده</string>
+    <string name="friends">دوستان</string>
+    <string name="follow">دنبال کردن</string>
+    <string name="unfollow">دنبال نکردن</string>
+    <string name="couldNotPerform">با عرض پوزش عملیات امکان پذیر نیست</string>
+    <string name="changeImage">تغییر عکس</string>
 </resources>

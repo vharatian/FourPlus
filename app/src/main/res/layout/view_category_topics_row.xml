@@ -14,7 +14,7 @@
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/categoryItemsRow"
+            android:layout_height="match_parent"
             android:id="@+id/itemsLayout"
             android:orientation="horizontal"
             android:gravity="center"

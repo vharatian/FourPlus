@@ -19,7 +19,6 @@ public class AuthenticationActivity extends FragmentContainerActivity {
         return new Intent(context, AuthenticationActivity.class);
     }
 
-    private DataHelper dataHelper;
 
     public AuthenticationActivity() {
         super(R.id.fragment);
@@ -30,16 +29,10 @@ public class AuthenticationActivity extends FragmentContainerActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
 
-        dataHelper = new DataHelper(this);
-
         changeFragment(SignUpFragment.newInstance());
     }
 
-    public void enter(String sessionKey) {
-        if (sessionKey == null)
-            return;
-
-        dataHelper.setSessionKey(sessionKey);
+    public void enter() {
         finish();
         startActivity(HomeActivity.newIntent(this));
     }

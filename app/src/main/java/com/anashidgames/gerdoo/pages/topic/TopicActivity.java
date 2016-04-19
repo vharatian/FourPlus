@@ -200,7 +200,7 @@ public class TopicActivity extends GerdooActivity {
 
         public RankingDataProvider(Context context, String rankingUrl) {
             super(context);
-            server = new GerdooServer();
+            server = GerdooServer.INSTANCE;
             this.rankingUrl = rankingUrl;
         }
 

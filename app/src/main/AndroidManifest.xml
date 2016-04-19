@@ -25,7 +25,8 @@
         <activity android:name=".pages.game.UserMatchingActivity" />
         <activity
             android:name=".pages.topic.TopicActivity"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".pages.profile.ProfileActivity"></activity>
     </application>
 
 </manifest>

@@ -1,9 +1,9 @@
-package com.anashidgames.gerdoo.pages.home.view;
+package com.anashidgames.gerdoo.view.row;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,31 +11,29 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.anashidgames.gerdoo.R;
-import com.anashidgames.gerdoo.core.service.model.CategoryTopic;
-import com.anashidgames.gerdoo.pages.topic.TopicActivity;
 import com.bumptech.glide.Glide;
 
 /**
  * Created by psycho on 3/29/16.
  */
-public class CategoryTopicView extends LinearLayout{
-    public CategoryTopicView(Context context) {
+public class RowItemView extends LinearLayout{
+    public RowItemView(Context context) {
         super(context);
         init(context);
     }
 
-    public CategoryTopicView(Context context, AttributeSet attrs) {
+    public RowItemView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
-    public CategoryTopicView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public RowItemView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public CategoryTopicView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public RowItemView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context);
     }
@@ -52,30 +50,29 @@ public class CategoryTopicView extends LinearLayout{
         imageView = (ImageView) findViewById(R.id.image);
     }
 
-    public void setItem(CategoryTopic item, String categoryTitle, @Nullable String categoryIconUrl){
+    public void setItem(RowItem item){
         titleView.setText(item.getTitle());
         Glide.with(getContext()).load(item.getImageUrl()).placeholder(R.drawable.home_topic_place_holder).crossFade().into(imageView);
-        if (item.getCategoryTitle() != null){
+        if (item.getSubTitle() != null){
             categoryTitleView.setVisibility(VISIBLE);
-            categoryTitleView.setText(item.getCategoryTitle());
+            categoryTitleView.setText(item.getSubTitle());
         }else {
-            categoryTitleView.setVisibility(INVISIBLE);
+            categoryTitleView.setVisibility(GONE);
         }
-        setOnClickListener(new OpenTopicListener(item));
+        setOnClickListener(new ActivityStarter(item.getIntent()));
     }
 
-    private class OpenTopicListener implements OnClickListener {
+    private class ActivityStarter implements OnClickListener {
 
-        private CategoryTopic categoryTopic;
+        private Intent intent;
 
-        public OpenTopicListener(CategoryTopic categoryItem) {
-            this.categoryTopic = categoryItem;
+        public ActivityStarter(Intent intent) {
+            this.intent = intent;
         }
 
         @Override
         public void onClick(View v) {
-            getContext().startActivity(TopicActivity.newIntent(
-                    getContext(), categoryTopic));
+            getContext().startActivity(intent);
         }
     }
 }

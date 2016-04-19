@@ -1,4 +1,4 @@
-package com.anashidgames.gerdoo.pages.home.view;
+package com.anashidgames.gerdoo.view.row;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -6,6 +6,7 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.LinearLayout;
@@ -19,6 +20,7 @@ public class ExpandableRelativeLayout extends RelativeLayout {
     private boolean expanded = false;
     private Animation animation;
     private OnExpansionListener expansionListener;
+    private Integer expandHeight = null;
 
     public ExpandableRelativeLayout(Context context) {
         super(context);
@@ -80,7 +82,11 @@ public class ExpandableRelativeLayout extends RelativeLayout {
             expansionListener.onExpansion(this);
 
         measure(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-        final int targetHeight = getMeasuredHeight() + getPaddingBottom() + getPaddingTop();
+        int measuredHeight = getMeasuredHeight();
+        if (expandHeight != null)
+            measuredHeight = expandHeight;
+
+        final int targetHeight = measuredHeight + getPaddingBottom() + getPaddingTop();
 
         getLayoutParams().height = 0;
         setVisibility(View.VISIBLE);
@@ -143,7 +149,7 @@ public class ExpandableRelativeLayout extends RelativeLayout {
     }
 
     private int getDurationMillis(int height) {
-       return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, getResources().getDisplayMetrics());
+       return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, getResources().getDisplayMetrics())/5;
     }
 
     public void toggle() {

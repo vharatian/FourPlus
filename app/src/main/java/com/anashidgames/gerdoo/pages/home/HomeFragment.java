@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import com.anashidgames.gerdoo.R;
 import com.anashidgames.gerdoo.core.service.GerdooServer;
 import com.anashidgames.gerdoo.core.service.callback.CallbackWithErrorDialog;
+import com.anashidgames.gerdoo.core.service.model.Category;
 import com.anashidgames.gerdoo.core.service.model.HomeItem;
 import com.anashidgames.gerdoo.pages.FragmentContainerActivity;
 import com.anashidgames.gerdoo.pages.home.view.CategoryView;
@@ -54,7 +55,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
-        server = new GerdooServer();
+        server = GerdooServer.INSTANCE;
 
         ((HomeActivity) getActivity()).setTitle(null);
 
@@ -80,8 +81,10 @@ public class HomeFragment extends Fragment {
 
     private void loadData() {
         Call<List<HomeItem>> call = server.getHome();
-        calls.add(call);
-        call.enqueue(new HomeInformationCallBack(getContext()));
+        if (call != null) {
+            calls.add(call);
+            call.enqueue(new HomeInformationCallBack(getContext()));
+        }
     }
 
     private void addItems(List<HomeItem> items) {
@@ -103,9 +106,11 @@ public class HomeFragment extends Fragment {
     }
 
     private void addCategory(String title, String dataUrl, int colorResource) {
-        CategoryView row = new CategoryView((FragmentContainerActivity) getActivity());
+        CategoryView row = new CategoryView(getContext());
         row.setCategory(title, dataUrl);
         row.setBackgroundResource(colorResource);
+        row.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
         addRow(row);
     }
 

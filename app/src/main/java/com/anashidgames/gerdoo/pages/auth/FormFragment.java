@@ -12,6 +12,7 @@ import com.anashidgames.gerdoo.core.service.callback.CallbackWithErrorDialog;
 import com.anashidgames.gerdoo.pages.auth.view.PsychoChangeable;
 import com.anashidgames.gerdoo.pages.auth.view.ValidatableInput;
 import retrofit2.Call;
+import retrofit2.Callback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +41,7 @@ public abstract class FormFragment extends KeyboardHiderFragment {
         stateChangeListener = new AuthStateChangeListener(new InputStateChangeListener());
     }
 
-    protected abstract Call callServer();
+    protected abstract void callServer(Callback callback);
     protected abstract void submitted(Object result);
 
 
@@ -110,8 +111,7 @@ public abstract class FormFragment extends KeyboardHiderFragment {
                 }
         );
 
-        requestCall = callServer();
-        requestCall.enqueue(new SubmitCallBack());
+        callServer(new SubmitCallBack());
     }
 
 

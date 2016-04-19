@@ -4,28 +4,33 @@
     <color name="colorPrimarySide">#1C232D</color>
     <color name="colorPrimaryDark">#131a20</color>
     <color name="colorAccent">#56cdd5</color>
-    <color name="errorColor">#ed3f36</color>
+    <color name="red">#ed3f36</color>
+    <color name="green">#41d47b</color>
     <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="yellow">#ffc400</color>
+    <color name="gray">#706f6f</color>
 
     <color name="input_background">#85888a</color>
-    <color name="input_invalid">@color/errorColor</color>
-    <color name="input_valid">#41d47b</color>
-    <color name="errorMessageColor">@color/errorColor</color>
+    <color name="input_invalid">@color/red</color>
+    <color name="input_valid">@color/green</color>
+    <color name="errorMessageColor">@color/red</color>
     <color name="categoryItemsRowColor1">@color/colorPrimary</color>
     <color name="categoryItemsRowColor2">@color/colorPrimarySide</color>
     <color name="categoryBackgroundClose">@color/colorPrimarySide</color>
     <color name="categoryBackgroundOpen">@color/colorPrimary</color>
     <color name="topicBackground">#ebf3f6</color>
-    <color name="black">#000000</color>
-
     <color name="rankingBackground1">#ffffff</color>
     <color name="rankingBackground2">#e5e5e5</color>
-    <color name="topic_decrease" >@color/errorColor</color>
-    <color name="topic_increase" >#41d47b</color>
+    <color name="topic_decrease" >@color/red</color>
+    <color name="topic_increase" >@color/green</color>
     <color name="topicIconEnable" >#ed3f36</color>
     <color name="topicIconDisable" >#56cdd5</color>
     <color name="introPageBackgroundSecond">#273440</color>
-    <color name="lineHome">@color/errorColor</color>
+    <color name="lineHome">@color/red</color>
     <color name="lineHomeEnd">#55ed3f36</color>
     <color name="topicScreamColor">#99000000</color>
+    <color name="drawerGray">#9c9c9c</color>
+
+
 </resources>

@@ -21,12 +21,9 @@ public class SplashActivity extends GerdooActivity {
     private GifImageView imageView;
 
     private boolean animationFinished = false;
-    private Boolean authenticated = null;
     private Boolean firstTime = null;
 
     private DataHelper dataHelper;
-    private GerdooServer server;
-    private Call<Boolean> sessionCheckCall;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,11 +31,9 @@ public class SplashActivity extends GerdooActivity {
         setContentView(R.layout.activity_splash);
 
         dataHelper = new DataHelper(this);
-        server = new GerdooServer();
 
         imageView = (GifImageView) findViewById(R.id.imageView);
         new Thread(new FirstTimeChecker()).start();
-        new Thread(new AuthenticationChecker()).start();
     }
 
     @Override
@@ -60,10 +55,6 @@ public class SplashActivity extends GerdooActivity {
         this.firstTime = firstTime;
     }
 
-    public void setAuthenticated(boolean authenticated) {
-        this.authenticated = authenticated;
-    }
-
     public void setAnimationFinished(boolean animationFinished) {
         this.animationFinished = animationFinished;
     }
@@ -78,10 +69,6 @@ public class SplashActivity extends GerdooActivity {
                 intent = null;
             else if(firstTime)
                 intent = IntroductionActivity.newIntent(this);
-            else if(authenticated == null)
-                intent = null;
-            else if(!authenticated)
-                intent = AuthenticationActivity.newIntent(this);
             else
                 intent = HomeActivity.newIntent(this);
 
@@ -89,9 +76,6 @@ public class SplashActivity extends GerdooActivity {
             if (intent != null){
                 finish();
                 startActivity(intent);
-
-                if(sessionCheckCall != null)
-                    sessionCheckCall.cancel();
             }
         }
     }
@@ -115,39 +99,5 @@ public class SplashActivity extends GerdooActivity {
             setFirstTime(dataHelper.isFirstTime());
             checkState();
         }
-    }
-
-    private class AuthenticationChecker implements Runnable {
-        @Override
-        public void run() {
-            String sessionKey = dataHelper.getSessionKey();
-            if (sessionKey == null){
-                setAuthenticated(false);
-                checkState();
-            }else{
-                sessionCheckCall = server.checkSession(sessionKey);
-                sessionCheckCall.enqueue(new SessionKeyCheckCallback());
-            }
-        }
-    }
-
-    private class SessionKeyCheckCallback extends CallbackWithErrorDialog<Boolean> {
-
-        public SessionKeyCheckCallback() {
-            super(SplashActivity.this);
-        }
-
-        @Override
-        public void handleSuccessful(Boolean data) {
-            authenticated = data;
-            checkState();
-        }
-
-        @Override
-        protected void postError() {
-            super.postError();
-            finish();
-        }
-
     }
 }

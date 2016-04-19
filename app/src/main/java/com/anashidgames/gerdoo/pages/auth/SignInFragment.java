@@ -9,11 +9,13 @@ import android.view.ViewGroup;
 
 import com.anashidgames.gerdoo.core.service.GerdooServer;
 import com.anashidgames.gerdoo.R;
+import com.anashidgames.gerdoo.core.service.model.AuthenticationInfo;
 import com.anashidgames.gerdoo.pages.auth.view.ValidatableInput;
 import com.anashidgames.gerdoo.pages.auth.view.validator.EmailValidator;
 import com.anashidgames.gerdoo.pages.auth.view.validator.PasswordValidator;
 
 import retrofit2.Call;
+import retrofit2.Callback;
 
 public class SignInFragment extends FormFragment {
 
@@ -38,7 +40,7 @@ public class SignInFragment extends FormFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_sign_in, container, false);
 
-        server = new GerdooServer();
+        server = GerdooServer.INSTANCE;
 
         initViews(rootView);
 
@@ -46,19 +48,19 @@ public class SignInFragment extends FormFragment {
     }
 
     @Override
-    protected Call callServer() {
+    protected void callServer(Callback callback) {
         String email = mailInput.getText();
         String password = passwordInput.getText();
-        return server.signIn(email, password);
+        server.signIn(email, password, callback);
     }
 
     @Override
     protected void submitted(Object result) {
-        String sessionKey = (String) result;
-        if(sessionKey == null){
+        AuthenticationInfo info = (AuthenticationInfo) result;
+        if(info == null || !info.isValid()){
             showWrongInputError();
         }else{
-            ((AuthenticationActivity) getActivity()).enter(sessionKey);
+            ((AuthenticationActivity) getActivity()).enter();
         }
 
         passwordInput.clearText();

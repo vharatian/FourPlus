@@ -24,12 +24,12 @@ public abstract class CallbackWithErrorDialog<T> extends PsychoCallBack<T>{
     }
 
     @Override
-    protected void handleFailure(Call<T> call, Throwable t) {
+    public void handleFailure(Call<T> call, Throwable t) {
         ShowErrorDialog(R.string.networkError);
     }
 
     @Override
-    protected void handleServerError(Response<T> response) {
+    public void handleServerError(Response<T> response) {
         ShowErrorDialog(R.string.serverError);
     }
 

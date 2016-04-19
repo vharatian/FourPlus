@@ -1,10 +1,18 @@
 package com.anashidgames.gerdoo.core.service;
 
+import com.anashidgames.gerdoo.core.service.model.AuthenticationInfo;
 import com.anashidgames.gerdoo.core.service.model.Category;
 import com.anashidgames.gerdoo.core.service.model.CategoryTopic;
+import com.anashidgames.gerdoo.core.service.model.ChangeImageResponse;
+import com.anashidgames.gerdoo.core.service.model.FollowToggleResponse;
+import com.anashidgames.gerdoo.core.service.model.Friend;
+import com.anashidgames.gerdoo.core.service.model.Gift;
 import com.anashidgames.gerdoo.core.service.model.HomeItem;
+import com.anashidgames.gerdoo.core.service.model.ProfileInfo;
 import com.anashidgames.gerdoo.core.service.model.Rank;
-import com.anashidgames.gerdoo.core.service.model.SignInParameters;
+import com.anashidgames.gerdoo.core.service.model.SignUpInfo;
+import com.anashidgames.gerdoo.core.service.model.SignUpParameters;
+import com.anashidgames.gerdoo.core.service.model.UserInfo;
 import com.anashidgames.gerdoo.pages.topic.list.PsychoListResponse;
 
 import java.util.ArrayList;
@@ -13,7 +21,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.http.Part;
 import retrofit2.http.Url;
 import retrofit2.mock.BehaviorDelegate;
 
@@ -33,35 +43,33 @@ class MockService implements GerdooService {
         random = new Random(System.currentTimeMillis());
     }
 
-
     @Override
-    public Call<Boolean> checkSession(String sessionKey) {
-        return behaviorDelegate.returningResponse(random.nextBoolean()).checkSession(sessionKey);
-    }
-
-    @Override
-    public Call<String> signUp(String email, String password) {
-        String sessionKey = null;
-        if(email.equals("test@test.com") && password.equals("test")){
-            sessionKey = UUID.randomUUID().toString();
+    public Call<SignUpInfo> signUp(String authenticationId, String authenticationKey, SignUpParameters parameters) {
+        SignUpInfo info;
+        if(parameters.getEmail().equals("test@test.com") && parameters.getPassword().equals("test")){
+            info = new SignUpInfo(parameters.getEmail());
+        }else{
+            info = new SignUpInfo(null);
         }
 
-        return behaviorDelegate.returningResponse(sessionKey).signUp(email, password);
+        return behaviorDelegate.returningResponse(info).signUp(authenticationId, authenticationKey, parameters);
     }
 
     @Override
     public Call<Boolean> sendForgetPasswordMail(String email) {
-        return behaviorDelegate.returningResponse(random.nextBoolean()).checkSession(email);
+        return behaviorDelegate.returningResponse(random.nextBoolean()).sendForgetPasswordMail(email);
     }
 
     @Override
-    public Call<String> signIn(SignInParameters parameters) {
-        String sessionKey = null;
-        if(parameters.getEmail().equals("test@test.com") && parameters.getPassword().equals("test")){
-            sessionKey = UUID.randomUUID().toString();
+    public Call<AuthenticationInfo> signIn(String authenticationId, String authenticationKey, String email, String password) {
+        AuthenticationInfo info;
+        if(email.equals("test@test.com") && password.equals("test")){
+            info = new AuthenticationInfo(UUID.randomUUID().toString(), UUID.randomUUID().toString(), 4000);
+        }else{
+            info = new AuthenticationInfo(null, null, 0);
         }
 
-        return behaviorDelegate.returningResponse(sessionKey).signIn(parameters);
+        return behaviorDelegate.returningResponse(info).signIn(authenticationId, authenticationKey, email, password);
     }
 
     @Override
@@ -118,7 +126,7 @@ class MockService implements GerdooService {
                 itemTitle += title;
             }
 
-            String categoryTitle = null;
+            String categoryTitle = "";
             if (url != null && url.contains(HOME)) {
                 categoryTitle = title;
                 while (random.nextBoolean()) {
@@ -220,5 +228,95 @@ class MockService implements GerdooService {
         PsychoListResponse<Rank> response = new PsychoListResponse<>(ranking, nextPage);
 
         return behaviorDelegate.returningResponse(response).getRanking(url);
+    }
+
+    @Override
+    public Call<UserInfo> getUserInfo() {
+        UserInfo response = new UserInfo("http://indiabright.com/wp-content/uploads/2015/11/profile_picture_by_kyo_tux-d4hrimy.png", "اسم و فامیل");
+        return behaviorDelegate.returningResponse(response).getUserInfo();
+    }
+
+    @Override
+    public Call<ProfileInfo> getProfile(Long userId) {
+        String proPicUrl = "http://indiabright.com/wp-content/uploads/2015/11/profile_picture_by_kyo_tux-d4hrimy.png";
+        String coverUrl = "https://i.imgsafe.org/c77e5e5.jpg";
+
+        String followToggleUrl = "url";
+        Boolean following = random.nextBoolean();
+        if (userId == null){
+            followToggleUrl = null;
+            following = null;
+        }
+
+        Boolean online = (userId == null) || random.nextBoolean();
+
+        int loss = random.nextInt(100);
+        int tie = random.nextInt(100-loss);
+        int win = 100-loss-tie;
+
+        ProfileInfo info = new ProfileInfo("اسم فامیل", proPicUrl, coverUrl, followToggleUrl, following, proPicUrl, coverUrl, online, "", "", "", "", win, loss, tie, random.nextInt(10000));
+
+        return behaviorDelegate.returningResponse(info).getProfile(userId);
+    }
+
+    @Override
+    public Call<List<Friend>> getFriends(Long userId) {
+        List<Friend> response = new ArrayList<>();
+        List<String> images = Arrays.asList(
+                "https://i.imgsafe.org/2fb7d09.png",
+                "https://i.imgsafe.org/3059ad7.png",
+                "https://i.imgsafe.org/3118243.png",
+                "https://i.imgsafe.org/31aff12.png",
+                "https://i.imgsafe.org/32c6fc4.png"
+        );
+        String name = "احسان خواجه امیری";
+
+        int dataSize = 5 + random.nextInt(15);
+        for(int i = 0; i< dataSize; i++){
+            String imageUrl = images.get(random.nextInt(images.size()));
+            response.add(new Friend(imageUrl, name, Math.abs(random.nextLong())));
+        }
+
+        return behaviorDelegate.returningResponse(response).getFriends(userId);
+    }
+
+    @Override
+    public Call<List<Gift>> getGifts(Long userId) {
+        List<Gift> response = new ArrayList<>();
+        List<String> images = Arrays.asList(
+                "https://i.imgsafe.org/2fb7d09.png",
+                "https://i.imgsafe.org/3059ad7.png",
+                "https://i.imgsafe.org/3118243.png",
+                "https://i.imgsafe.org/31aff12.png",
+                "https://i.imgsafe.org/32c6fc4.png"
+        );
+        String name = "احسان خواجه امیری";
+
+        int dataSize = 5 + random.nextInt(15);
+        for(int i = 0; i< dataSize; i++){
+            String imageUrl = images.get(random.nextInt(images.size()));
+            response.add(new Gift(name, imageUrl));
+        }
+
+        return behaviorDelegate.returningResponse(response).getGifts(userId);
+    }
+
+    @Override
+    public Call<FollowToggleResponse> toggleFollow(@Url String followToggleUrl) {
+        FollowToggleResponse response = new FollowToggleResponse(random.nextBoolean(), "url");
+        return behaviorDelegate.returningResponse(response).toggleFollow(followToggleUrl);
+    }
+
+    @Override
+    public Call<ChangeImageResponse> changeImage(@Url String url, @Part("image") RequestBody body) {
+        boolean done = random.nextBoolean();
+        String newUrl = null;
+        if (done)
+            newUrl = url;
+
+        ChangeImageResponse response = new ChangeImageResponse(done, newUrl);
+
+        return behaviorDelegate.returningResponse(response).changeImage(url, body);
+
     }
 }

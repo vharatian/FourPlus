@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 
 import com.anashidgames.gerdoo.core.DataHelper;
 import com.anashidgames.gerdoo.core.service.GerdooServer;
+import com.anashidgames.gerdoo.core.service.callback.PsychoCallBack;
+import com.anashidgames.gerdoo.core.service.model.AuthenticationInfo;
+import com.anashidgames.gerdoo.core.service.model.SignUpInfo;
 import com.anashidgames.gerdoo.pages.auth.view.validator.EmailValidator;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -24,6 +27,8 @@ import com.anashidgames.gerdoo.pages.auth.view.validator.RepeatPasswordValidator
 
 import br.com.dina.oauth.instagram.InstagramApp;
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class SignUpFragment extends FormFragment {
@@ -58,7 +63,7 @@ public class SignUpFragment extends FormFragment {
         View rootView = inflater.inflate(R.layout.fragment_sign_up, container, false);
 
         dataHelper = new DataHelper(getActivity());
-        server = new GerdooServer();
+        server = GerdooServer.INSTANCE;
 
         initViews(rootView);
         return rootView;
@@ -82,11 +87,11 @@ public class SignUpFragment extends FormFragment {
     }
 
     @Override
-    protected Call callServer() {
+    protected void callServer(Callback callback) {
         String email = mailInput.getText();
         String password = passwordInput.getText();
-
-        return server.signUp(email, password);
+        Call<SignUpInfo> call = server.signUp(email, password);
+        call.enqueue(new SignUpCallBack((PsychoCallBack) callback, email, password));
     }
 
     @Override
@@ -95,11 +100,12 @@ public class SignUpFragment extends FormFragment {
         passwordRepeatInput.clearText();
 
 
-        String sessionKey = (String) result;
-        if(sessionKey == null){
+        AuthenticationInfo info = (AuthenticationInfo) result;
+        if(info == null || !info.isValid()){
             showRepeatedMailError();
         }else{
-            ((AuthenticationActivity) getActivity()).enter(sessionKey);
+
+            ((AuthenticationActivity) getActivity()).enter();
         }
     }
 
@@ -159,8 +165,8 @@ public class SignUpFragment extends FormFragment {
     }
 
     private void enterAnonymous() {
-        String sessionKey = dataHelper.createAnonymousSessionKey();
-        ((AuthenticationActivity) getActivity()).enter(sessionKey);
+        dataHelper.setAnonymousAuthenticationInfo();
+        ((AuthenticationActivity) getActivity()).enter();
     }
 
     private void initSignInBtn(View rootView) {
@@ -220,14 +226,14 @@ public class SignUpFragment extends FormFragment {
     private void handleGoogleSignInResult(GoogleSignInResult result) {
         if (result.isSuccess()) {
             GoogleSignInAccount acct = result.getSignInAccount();
-            ((AuthenticationActivity) getActivity()).enter(acct.getId());
+            ((AuthenticationActivity) getActivity()).enter();
         }
 
     }
 
     private void handleInstagramSigInResult(boolean success) {
         if(success){
-            ((AuthenticationActivity) getActivity()).enter(instagramApp.getId());
+            ((AuthenticationActivity) getActivity()).enter();
         }
     }
 
@@ -247,6 +253,34 @@ public class SignUpFragment extends FormFragment {
         @Override
         public void onFail(String error) {
             handleInstagramSigInResult(false);
+        }
+    }
+
+    private class SignUpCallBack extends PsychoCallBack<SignUpInfo> {
+
+        private final PsychoCallBack callback;
+        private String email;
+        private String password;
+
+        public SignUpCallBack(PsychoCallBack callback, String email, String password) {
+            this.callback = callback;
+            this.email = email;
+            this.password = password;
+        }
+
+        @Override
+        public void handleSuccessful(SignUpInfo data) {
+            GerdooServer.INSTANCE.signIn(email, password, callback);
+        }
+
+        @Override
+        public void handleFailure(Call<SignUpInfo> call, Throwable t) {
+            callback.handleFailure(call, t);
+        }
+
+        @Override
+        public void handleServerError(Response<SignUpInfo> response) {
+            callback.handleServerError(response);
         }
     }
 }

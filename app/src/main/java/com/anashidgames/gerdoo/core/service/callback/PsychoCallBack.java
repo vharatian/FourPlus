@@ -30,8 +30,8 @@ public abstract class PsychoCallBack<T> implements Callback<T> {
     protected void postExecution(){}
 
     public abstract void handleSuccessful(T data);
-    protected abstract void handleFailure(Call<T> call, Throwable t);
-    protected abstract void handleServerError(Response<T> response);
+    public abstract void handleFailure(Call<T> call, Throwable t);
+    public abstract void handleServerError(Response<T> response);
 
 
 

@@ -15,7 +15,8 @@ import com.anashidgames.gerdoo.core.service.callback.CallbackWithErrorDialog;
 import com.anashidgames.gerdoo.core.service.model.Category;
 import com.anashidgames.gerdoo.pages.FragmentContainerActivity;
 import com.anashidgames.gerdoo.pages.home.view.CategoryView;
-import com.anashidgames.gerdoo.pages.home.view.ExpandableRelativeLayout;
+import com.anashidgames.gerdoo.view.row.ExpandableRelativeLayout;
+import com.anashidgames.gerdoo.view.row.ItemsRow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,9 +61,7 @@ public class CategoryFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView  = inflater.inflate(R.layout.fragment_category, container, false);
 
-        server = new GerdooServer();
-
-
+        server = GerdooServer.INSTANCE;
 
         initViews(rootView);
 
@@ -132,10 +131,10 @@ public class CategoryFragment extends Fragment{
 
         @Override
         public CategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            CategoryView view = new CategoryView((FragmentContainerActivity) getActivity());
+            CategoryView view = new CategoryView(getContext());
             RecyclerView.LayoutParams layoutParams = new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
                     RecyclerView.LayoutParams.WRAP_CONTENT);
-            view.setLayoutParams(new RecyclerView.LayoutParams(layoutParams));
+            view.setLayoutParams(layoutParams);
             CategoryViewHolder holder = new CategoryViewHolder(view);
             views.add(view);
 
@@ -190,7 +189,27 @@ public class CategoryFragment extends Fragment{
         }
 
         public void setCategory(Category category){
-            view.setCategory(category, category == openedCategory, true);
+            view.setCategory(category, category == openedCategory, !category.hasSubCategory());
+
+            if (category.hasSubCategory()){
+                view.setShowAllListener(new ShowSubCategory(category));
+            }else {
+                view.setShowAllListener(null);
+            }
+        }
+    }
+
+    private class ShowSubCategory implements ItemsRow.ShowAllListener {
+        private final Category category;
+
+        public ShowSubCategory(Category category) {
+            this.category = category;
+        }
+
+        @Override
+        public void showAll(ItemsRow view) {
+            ((FragmentContainerActivity) getActivity()).changeFragment(
+                    CategoryFragment.newInstance(category.getDataUrl(), category.getTitle()));
         }
     }
 }

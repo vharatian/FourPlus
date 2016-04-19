@@ -2,19 +2,30 @@ package com.anashidgames.gerdoo.pages.home;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.anashidgames.gerdoo.R;
 import com.anashidgames.gerdoo.core.service.GerdooServer;
+import com.anashidgames.gerdoo.core.service.callback.CallbackWithErrorDialog;
+import com.anashidgames.gerdoo.core.service.model.UserInfo;
 import com.anashidgames.gerdoo.pages.FragmentContainerActivity;
-import com.anashidgames.gerdoo.pages.GerdooActivity;
+import com.anashidgames.gerdoo.pages.home.view.DrawerItemView;
+import com.anashidgames.gerdoo.pages.profile.ProfileActivity;
+import com.bumptech.glide.Glide;
+
+import java.util.Arrays;
+import java.util.List;
+
+import retrofit2.Call;
 
 public class HomeActivity extends FragmentContainerActivity {
 
@@ -26,17 +37,78 @@ public class HomeActivity extends FragmentContainerActivity {
         return new Intent(context, HomeActivity.class);
     }
 
+    private List<DrawerItemView.DrawerItem> drawerItems;
+
     private View logoView;
     private TextView titleView;
+    private View menuIcon;
+
+    private ImageView userPictureView;
+    private TextView userNameView;
+    private LinearLayout optionLayout;
+    private DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        initDrawer();
         initToolbar();
 
+
         changeFragment(HomeFragment.newInstance());
+    }
+
+    private void initDrawer() {
+        userPictureView = (ImageView) findViewById(R.id.pictureView);
+        userNameView = (TextView) findViewById(R.id.nameView);
+        optionLayout = (LinearLayout) findViewById(R.id.optionLayout);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+
+        loadUserInfo();
+        initDrawerItems();
+        initDrawerOptions();
+    }
+
+    private void initDrawerItems() {
+        drawerItems = Arrays.asList(
+                new DrawerItemView.DrawerItem(R.string.profile, R.drawable.profile_icon, ProfileActivity.newIntent(this, null)),
+                new DrawerItemView.DrawerItem(R.string.gifts, R.drawable.gifts_icon, null),
+                new DrawerItemView.DrawerItem(R.string.shop, R.drawable.shop_icon, null),
+                new DrawerItemView.DrawerItem(R.string.settings, R.drawable.settings_icon, null),
+                new DrawerItemView.DrawerItem(R.string.messages, R.drawable.messages_icon, null),
+                new DrawerItemView.DrawerItem(R.string.vote, R.drawable.vote_icon, null),
+                new DrawerItemView.DrawerItem(R.string.about_us, R.drawable.about_us_icon, null)
+        );
+    }
+
+    private void initDrawerOptions() {
+        addLineToDrawer();
+        for (DrawerItemView.DrawerItem item : drawerItems){
+            DrawerItemView view = new DrawerItemView(this);
+            view.setData(item);
+            optionLayout.addView(view);
+            addLineToDrawer();
+        }
+    }
+
+    private void addLineToDrawer() {
+        View view = new View(this);
+        view.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT
+                , (int) getResources().getDimension(R.dimen.homeLineSize)));
+        view.setBackgroundResource(R.color.colorPrimary);
+        optionLayout.addView(view);
+    }
+
+    private void loadUserInfo() {
+        Call<UserInfo> call = GerdooServer.INSTANCE.getUserInfo();
+        call.enqueue(new UserInfoCallBack(this));
+    }
+
+    private void setUserInfo(UserInfo data) {
+        userNameView.setText(data.getName());
+        Glide.with(this).load(data.getImageUrl()).crossFade().into(userPictureView);
     }
 
 
@@ -52,8 +124,6 @@ public class HomeActivity extends FragmentContainerActivity {
         }
     }
 
-
-
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
@@ -61,5 +131,32 @@ public class HomeActivity extends FragmentContainerActivity {
 
         logoView = findViewById(R.id.logoView);
         titleView = (TextView) findViewById(R.id.titleView);
+        menuIcon = findViewById(R.id.menu);
+        menuIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleDrawer();
+            }
+        });
     }
+
+    private void toggleDrawer() {
+        if (drawerLayout.isDrawerOpen(Gravity.RIGHT))
+            drawerLayout.closeDrawer(Gravity.RIGHT);
+        else
+            drawerLayout.openDrawer(Gravity.RIGHT);
+    }
+
+
+    private class UserInfoCallBack extends CallbackWithErrorDialog<UserInfo> {
+        public UserInfoCallBack(Context context) {
+            super(context);
+        }
+
+        @Override
+        public void handleSuccessful(UserInfo data) {
+            setUserInfo(data);
+        }
+    }
+
 }

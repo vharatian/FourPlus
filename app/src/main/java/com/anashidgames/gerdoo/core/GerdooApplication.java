@@ -3,6 +3,8 @@ package com.anashidgames.gerdoo.core;
 import android.app.Application;
 import android.util.Log;
 
+import com.anashidgames.gerdoo.core.service.GerdooServer;
+
 /**
  * Created by psycho on 3/14/16.
  */
@@ -18,6 +20,8 @@ public class GerdooApplication extends Application {
                 throw new RuntimeException(ex);
             }
         });
+
+        GerdooServer.INSTANCE.setContext(this);
 
 //        FontsOverride.setDefaultFont(this, "DEFAULT", "irsans.ttf");
     }
