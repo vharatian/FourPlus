@@ -96,7 +96,7 @@ public class HomeActivity extends FragmentContainerActivity {
     private void addLineToDrawer() {
         View view = new View(this);
         view.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT
-                , (int) getResources().getDimension(R.dimen.homeLineSize)));
+                , (int) getResources().getDimension(R.dimen.lineHeight)));
         view.setBackgroundResource(R.color.colorPrimary);
         optionLayout.addView(view);
     }

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <com.anashidgames.gerdoo.pages.game.view.PlayerView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:id="@+id/firstPlayerView"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/lineHeight"
+            android:background="@color/colorAccent"/>
+
+        <com.anashidgames.gerdoo.pages.game.view.PlayerView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:id="@+id/secondPlayerView"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/lineHeight"
+            android:background="@color/colorAccent"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/xxlargeBreak"
+        android:layout_marginBottom="@dimen/xxlargeBreak"
+        android:orientation="vertical"
+        android:layout_gravity="center">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/resultPageButtonHeight"
+            android:id="@+id/doneButton"
+            android:background="@drawable/dark_button_background_valid"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginBottom="@dimen/normalBreak">
+
+            <com.anashidgames.gerdoo.view.FitToHeightImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/check"
+                android:layout_gravity="center"/>
+
+        </LinearLayout>
+        
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/resultPageButtonHeight"
+            android:id="@+id/soresPageButton"
+            android:text="@string/scores"
+            android:textColor="@color/white"
+            android:textSize="@dimen/resultPageButtonTextSize"
+            android:gravity="center"
+            android:layout_marginBottom="@dimen/normalBreak"
+            android:background="@drawable/dark_button_background_normal"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/resultPageButtonHeight"
+            android:orientation="horizontal">
+
+            <com.anashidgames.gerdoo.view.FitToHeightImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/replayButton"
+                android:src="@drawable/replay"
+                android:layout_marginRight="@dimen/normalBreak"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/allTopicsButton"
+                android:text="@string/topics"
+                android:textColor="@color/white"
+                android:textSize="@dimen/resultPageButtonTextSize"
+                android:gravity="center"
+                android:background="@drawable/dark_button_background_normal"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

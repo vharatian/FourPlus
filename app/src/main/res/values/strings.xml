@@ -46,4 +46,6 @@
     <string name="win">برد</string>
     <string name="tie">تساوی</string>
     <string name="loss">باخت</string>
+    <string name="scores">امتیازات</string>
+    <string name="topics">موضوعات</string>
 </resources>

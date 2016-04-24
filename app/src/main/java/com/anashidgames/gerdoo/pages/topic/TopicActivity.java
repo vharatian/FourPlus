@@ -20,7 +20,7 @@ import com.anashidgames.gerdoo.core.service.GerdooServer;
 import com.anashidgames.gerdoo.core.service.model.CategoryTopic;
 import com.anashidgames.gerdoo.core.service.model.Rank;
 import com.anashidgames.gerdoo.pages.GerdooActivity;
-import com.anashidgames.gerdoo.pages.game.UserMatchingActivity;
+import com.anashidgames.gerdoo.pages.game.GameActivity;
 import com.anashidgames.gerdoo.pages.topic.list.PsychoAdapter;
 import com.anashidgames.gerdoo.pages.topic.list.PsychoDataProvider;
 import com.anashidgames.gerdoo.pages.topic.list.PsychoListResponse;
@@ -175,7 +175,7 @@ public class TopicActivity extends GerdooActivity {
         findViewById(R.id.playButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(UserMatchingActivity.newIntent(TopicActivity.this));
+                startActivity(GameActivity.newIntent(TopicActivity.this));
             }
         });
 

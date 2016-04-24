@@ -19,7 +19,7 @@
     <dimen name="inputWithStatusLeftMargin">70dp</dimen>
     <dimen name="signUpBtnWidth">270dp</dimen>
     <dimen name="largeText">20dp</dimen>
-    <dimen name="lineHeight">2dp</dimen>
+    <dimen name="underLineHeight">2dp</dimen>
     <dimen name="autoSignInItemsSize">70dp</dimen>
     <dimen name="toolbarHeight">48dp</dimen>
     <dimen name="progressWheelSize">50dp</dimen>
@@ -28,14 +28,13 @@
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="playButtonSize">@dimen/toolbarHeight</dimen>
     <dimen name="myRankButtonSize">60dp</dimen>
-    <dimen name="topicLineSize">1dp</dimen>
+    <dimen name="lineHeight">1dp</dimen>
     <dimen name="rankMargin">@dimen/smallBreak</dimen>
     <dimen name="rankTableRowHeight">50dp</dimen>
     <dimen name="rankingIconMargin">7dp</dimen>
     <dimen name="topicHeaderHeight">250dp</dimen>
     <dimen name="rankingFooterHeight">70dp</dimen>
     <dimen name="formButtonMargin">70dp</dimen>
-    <dimen name="homeLineSize">1dp</dimen>
     <dimen name="categoryTopicTitlePadding">@dimen/xsmallBreak</dimen>
     <dimen name="categoryTopicPadding">7dp</dimen>
     <dimen name="categoryHeaderHeight">50dp</dimen>
@@ -48,11 +47,15 @@
     <dimen name="profilePictureSize">80dp</dimen>
     <dimen name="profilePictureMarginTop">250dp</dimen>
     <dimen name="onlineStatusSize">20dp</dimen>
-    <dimen name="profileLineSize">1dp</dimen>
     <dimen name="profileStatusChartHeight">170dp</dimen>
     <dimen name="profileItemsRowHeight">200dp</dimen>
     <dimen name="profileCoverShadowHeight">50dp</dimen>
     <dimen name="pieChartTextSize">14dp</dimen>
     <dimen name="pieChartBulletSize">20dp</dimen>
+    <dimen name="resultPageButtonHeight">42dp</dimen>
+    <dimen name="resultPageButtonTextSize">17dp</dimen>
+    <dimen name="playerViewAvatarImageSize">100dp</dimen>
+    <dimen name="playerViewWinImageSize">180dp</dimen>
+    <dimen name="playerViewTextSize">16dp</dimen>
 
 </resources>

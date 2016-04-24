@@ -129,7 +129,7 @@ public class HomeFragment extends Fragment {
 
     private void addLine() {
         View line = new Line(getContext());
-        int height = (int) getContext().getResources().getDimension(R.dimen.homeLineSize);
+        int height = (int) getContext().getResources().getDimension(R.dimen.lineHeight);
         line.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, height));
         mainLayout.addView(line);
     }

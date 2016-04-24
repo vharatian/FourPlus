@@ -23,10 +23,9 @@
         <activity android:name=".pages.intro.IntroductionActivity" />
         <activity android:name=".pages.home.HomeActivity" />
         <activity android:name=".pages.game.UserMatchingActivity" />
-        <activity
-            android:name=".pages.topic.TopicActivity"
-            android:theme="@style/AppTheme" />
-        <activity android:name=".pages.profile.ProfileActivity"></activity>
+        <activity android:name=".pages.topic.TopicActivity"/>
+        <activity android:name=".pages.profile.ProfileActivity"/>
+        <activity android:name=".pages.game.GameActivity"/>
     </application>
 
 </manifest>
