@@ -1,10 +1,11 @@
 package com.anashidgames.gerdoo.core.service;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 
-import com.anashidgames.gerdoo.core.DataHelper;
+import com.anashidgames.gerdoo.core.service.auth.AuthenticationInterceptor;
+import com.anashidgames.gerdoo.core.service.auth.AuthenticationManager;
+import com.anashidgames.gerdoo.core.service.call.ConverterCall;
 import com.anashidgames.gerdoo.core.service.model.AuthenticationInfo;
 import com.anashidgames.gerdoo.core.service.model.Category;
 import com.anashidgames.gerdoo.core.service.model.CategoryTopic;
@@ -13,15 +14,17 @@ import com.anashidgames.gerdoo.core.service.model.FollowToggleResponse;
 import com.anashidgames.gerdoo.core.service.model.Friend;
 import com.anashidgames.gerdoo.core.service.model.Gift;
 import com.anashidgames.gerdoo.core.service.model.HomeItem;
+import com.anashidgames.gerdoo.core.service.model.parameters.LeaderBoardParams;
 import com.anashidgames.gerdoo.core.service.model.ProfileInfo;
 import com.anashidgames.gerdoo.core.service.model.Rank;
 import com.anashidgames.gerdoo.core.service.model.SignUpInfo;
-import com.anashidgames.gerdoo.core.service.model.SignUpParameters;
 import com.anashidgames.gerdoo.core.service.model.UserInfo;
-import com.anashidgames.gerdoo.pages.auth.AuthenticationActivity;
+import com.anashidgames.gerdoo.core.service.model.server.LeaderBoardItem;
+import com.anashidgames.gerdoo.core.service.model.server.LeaderBoardResponse;
 import com.anashidgames.gerdoo.pages.topic.list.PsychoListResponse;
 import com.anashidgames.gerdoo.utils.PsychoUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -29,8 +32,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.mock.BehaviorDelegate;
@@ -41,32 +42,30 @@ import retrofit2.mock.MockRetrofit;
  */
 public class GerdooServer{
 
-    public static final String AUTHENTICATION_ID = "570523cde4b036bd289cc8ae";
-    public static final String AUTHENTICATION_KEY = "570523cde4b08821522baab3";
+    public static final String AUTHENTICATION_ID = "57163ee5e4b0cad8c4dd1844";
+    public static final String AUTHENTICATION_KEY = "57163ee5e4b093ed2821a011";
 
     public static final GerdooServer INSTANCE = new GerdooServer(AUTHENTICATION_ID, AUTHENTICATION_KEY);
 
-    public static final String HOST = "http://192.168.0.99:8585";
+    public static final String HOST = "http://api1.backtory.com/";
+    public static final String GAME_ID = "57163f07e4b0cad8c4dd184c";
     private GerdooService mockService;
     private GerdooService realService;
     private GerdooService service;
 
-    private Context context;
-    private String authenticationKey;
-    private String authenticationId;
-    private DataHelper dataHelper;
+    private AuthenticationManager authenticationManager;
 
 
     private GerdooServer(String authenticationId, String authenticationKey) {
 
-        this.authenticationId = authenticationId;
-        this.authenticationKey = authenticationKey;
+        authenticationManager = new AuthenticationManager(HOST, authenticationId, authenticationKey);
 
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-        OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
-        clientBuilder.addInterceptor(logging);
+        OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder()
+                .addInterceptor(new AuthenticationInterceptor(authenticationManager))
+                .addInterceptor(logging);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(HOST)
@@ -84,42 +83,23 @@ public class GerdooServer{
     }
 
     public void setContext(Context context) {
-        this.context = context;
-        dataHelper = new DataHelper(context);
-    }
-
-    public boolean checkSession() {
-        AuthenticationInfo info = dataHelper.getAuthenticationInfo();
-        if (info == null || !info.isValid()) {
-            Intent intent = AuthenticationActivity.newIntent(context);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
-            return false;
-        }else if (info.expired()){
-            return false;
-        }
-
-        return true;
+        authenticationManager.setContext(context);
     }
 
     public Call<SignUpInfo> signUp(String email, String password) {
-        return realService.signUp(authenticationId, authenticationKey, new SignUpParameters(email, password));
+        return authenticationManager.signUp(email, password);
     }
 
     public Call<Boolean> sendForgetPasswordMail(String email) {
-        return service.sendForgetPasswordMail(email);
+        return authenticationManager.sendForgetPasswordMail(email);
     }
 
-    public void signIn(String email, String password, Callback<AuthenticationInfo> callback) {
-        Call<AuthenticationInfo> call = realService.signIn(authenticationId, authenticationKey, email, password);
-        call.enqueue(new AuthenticationCallback(callback));
+    public Call<AuthenticationInfo>  signIn(String email, String password) {
+        return authenticationManager.signIn(email, password);
     }
 
     public Call<List<HomeItem>> getHome() {
-//        if (checkSession())
-            return service.getHome();
-
-//        return null;
+        return service.getHome();
     }
 
     public Call<List<CategoryTopic>> getCategoryTopics(String url) {
@@ -131,7 +111,20 @@ public class GerdooServer{
     }
 
     public Call<PsychoListResponse<Rank>> getRanking(String url) {
-        return service.getRanking(url);
+        return new ConverterCall<PsychoListResponse<Rank>, LeaderBoardResponse>(realService.getRanking(GAME_ID, new LeaderBoardParams())) {
+            @Override
+            public PsychoListResponse<Rank> convert(LeaderBoardResponse data) {
+                List<Rank> ranks = new ArrayList<>();
+                List<LeaderBoardItem> items = data.getUsersProfile();
+
+                if (items != null)
+                    for (int i=0; i<items.size(); i++){
+                        ranks.add(new Rank(items.get(i), i+1));
+                    }
+
+                return new PsychoListResponse<>(ranks, null);
+            }
+        };
     }
 
     public Call<UserInfo> getUserInfo() {
@@ -157,27 +150,5 @@ public class GerdooServer{
     public Call<ChangeImageResponse> changeImage(String url, Uri selectedImage) {
         RequestBody body = RequestBody.create(MediaType.parse("image/*"), selectedImage.getPath());
         return service.changeImage(url, body);
-    }
-
-    private class AuthenticationCallback implements Callback<AuthenticationInfo> {
-
-        private final Callback<AuthenticationInfo> callBack;
-
-        public AuthenticationCallback(Callback<AuthenticationInfo> callback) {
-            this.callBack = callback;
-        }
-
-        @Override
-        public void onResponse(Call<AuthenticationInfo> call, Response<AuthenticationInfo> response) {
-            callBack.onResponse(call, response);
-
-            if (response.isSuccessful() && response.body().isValid())
-                dataHelper.setAuthenticationInfo(response.body());
-        }
-
-        @Override
-        public void onFailure(Call<AuthenticationInfo> call, Throwable t) {
-            callBack.onFailure(call, t);
-        }
     }
 }

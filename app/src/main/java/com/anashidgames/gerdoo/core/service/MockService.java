@@ -1,6 +1,5 @@
 package com.anashidgames.gerdoo.core.service;
 
-import com.anashidgames.gerdoo.core.service.model.AuthenticationInfo;
 import com.anashidgames.gerdoo.core.service.model.Category;
 import com.anashidgames.gerdoo.core.service.model.CategoryTopic;
 import com.anashidgames.gerdoo.core.service.model.ChangeImageResponse;
@@ -8,11 +7,12 @@ import com.anashidgames.gerdoo.core.service.model.FollowToggleResponse;
 import com.anashidgames.gerdoo.core.service.model.Friend;
 import com.anashidgames.gerdoo.core.service.model.Gift;
 import com.anashidgames.gerdoo.core.service.model.HomeItem;
+import com.anashidgames.gerdoo.core.service.model.parameters.LeaderBoardParams;
 import com.anashidgames.gerdoo.core.service.model.ProfileInfo;
 import com.anashidgames.gerdoo.core.service.model.Rank;
-import com.anashidgames.gerdoo.core.service.model.SignUpInfo;
-import com.anashidgames.gerdoo.core.service.model.SignUpParameters;
 import com.anashidgames.gerdoo.core.service.model.UserInfo;
+import com.anashidgames.gerdoo.core.service.model.server.LeaderBoardItem;
+import com.anashidgames.gerdoo.core.service.model.server.LeaderBoardResponse;
 import com.anashidgames.gerdoo.pages.topic.list.PsychoListResponse;
 
 import java.util.ArrayList;
@@ -41,35 +41,6 @@ class MockService implements GerdooService {
     public MockService(BehaviorDelegate<GerdooService> behaviorDelegate) {
         this.behaviorDelegate = behaviorDelegate;
         random = new Random(System.currentTimeMillis());
-    }
-
-    @Override
-    public Call<SignUpInfo> signUp(String authenticationId, String authenticationKey, SignUpParameters parameters) {
-        SignUpInfo info;
-        if(parameters.getEmail().equals("test@test.com") && parameters.getPassword().equals("test")){
-            info = new SignUpInfo(parameters.getEmail());
-        }else{
-            info = new SignUpInfo(null);
-        }
-
-        return behaviorDelegate.returningResponse(info).signUp(authenticationId, authenticationKey, parameters);
-    }
-
-    @Override
-    public Call<Boolean> sendForgetPasswordMail(String email) {
-        return behaviorDelegate.returningResponse(random.nextBoolean()).sendForgetPasswordMail(email);
-    }
-
-    @Override
-    public Call<AuthenticationInfo> signIn(String authenticationId, String authenticationKey, String email, String password) {
-        AuthenticationInfo info;
-        if(email.equals("test@test.com") && password.equals("test")){
-            info = new AuthenticationInfo(UUID.randomUUID().toString(), UUID.randomUUID().toString(), 4000);
-        }else{
-            info = new AuthenticationInfo(null, null, 0);
-        }
-
-        return behaviorDelegate.returningResponse(info).signIn(authenticationId, authenticationKey, email, password);
     }
 
     @Override
@@ -184,50 +155,19 @@ class MockService implements GerdooService {
     }
 
     @Override
-    public Call<PsychoListResponse<Rank>> getRanking(@Url String url) {
-        List<Rank> ranking = new ArrayList<>();
-        String name = "اسم فامیل ";
+    public Call<LeaderBoardResponse> getRanking(String gameId, LeaderBoardParams params) {
+        List<LeaderBoardItem> items = new ArrayList<>();
+        String firstName = "اسم";
+        String lastName = "فامیل";
 
-        String nextPage = "";
-        int rank = 1;
-        int size = 20;
-        if(url.contains(MY_RANK)){
-            size = 5;
-            nextPage = null;
-            rank = Integer.parseInt(url.replace(MY_RANK, "")) - 2;
-            if (rank < 0)
-                rank = 0;
-        }else if(url != null && !url.isEmpty()) {
-            rank = Integer.parseInt(url);
-        }
 
-        if (nextPage != null){
-            if (random.nextInt()%8 == 0)
-                nextPage = null;
-            else
-                nextPage += (rank + size);
+        for(int i = 0; i< 20; i++, i++){
+            items.add(new LeaderBoardItem(firstName, lastName, UUID.randomUUID().toString(), random.nextInt(1000000)));
         }
 
 
-        for(int i = 0; i< size; i++, rank++){
-
-            String rankName = name;
-            while(random.nextBoolean()) {
-                rankName += name;
-            }
-
-            int rankChange = 0;
-            if (random.nextBoolean())
-                rankChange = random.nextInt(1000) - 500;
-
-            ranking.add(new Rank(rank, Math.abs(random.nextInt(10000000)), rankName, "" , rankChange));
-        }
-
-
-
-        PsychoListResponse<Rank> response = new PsychoListResponse<>(ranking, nextPage);
-
-        return behaviorDelegate.returningResponse(response).getRanking(url);
+        LeaderBoardResponse response = new LeaderBoardResponse(items, "OK");
+        return behaviorDelegate.returningResponse(response).getRanking(gameId, params);
     }
 
     @Override
@@ -269,11 +209,19 @@ class MockService implements GerdooService {
                 "https://i.imgsafe.org/31aff12.png",
                 "https://i.imgsafe.org/32c6fc4.png"
         );
-        String name = "احسان خواجه امیری";
+        String title = "عنوان  ";
 
         int dataSize = 5 + random.nextInt(15);
         for(int i = 0; i< dataSize; i++){
             String imageUrl = images.get(random.nextInt(images.size()));
+
+            String name = title;
+            while(random.nextBoolean()) {
+                name += title;
+            }
+
+            name += i;
+
             response.add(new Friend(imageUrl, name, Math.abs(random.nextLong())));
         }
 

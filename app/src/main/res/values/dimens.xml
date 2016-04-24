@@ -44,10 +44,15 @@
     <dimen name="drawerWidth">300dp</dimen>
     <dimen name="drawerPictureSize">120dp</dimen>
     <dimen name="drawerItemIconSize">30dp</dimen>
-    <dimen name="profileCoverHeight">300dp</dimen>
+    <dimen name="profileCoverHeight">170dp</dimen>
     <dimen name="profilePictureSize">80dp</dimen>
     <dimen name="profilePictureMarginTop">250dp</dimen>
-    <dimen name="onlineStatusSize">15dp</dimen>
+    <dimen name="onlineStatusSize">20dp</dimen>
     <dimen name="profileLineSize">1dp</dimen>
+    <dimen name="profileStatusChartHeight">170dp</dimen>
+    <dimen name="profileItemsRowHeight">200dp</dimen>
+    <dimen name="profileCoverShadowHeight">50dp</dimen>
+    <dimen name="pieChartTextSize">14dp</dimen>
+    <dimen name="pieChartBulletSize">20dp</dimen>
 
 </resources>

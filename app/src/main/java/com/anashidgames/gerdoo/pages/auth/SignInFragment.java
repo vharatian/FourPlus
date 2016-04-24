@@ -51,7 +51,8 @@ public class SignInFragment extends FormFragment {
     protected void callServer(Callback callback) {
         String email = mailInput.getText();
         String password = passwordInput.getText();
-        server.signIn(email, password, callback);
+        Call<AuthenticationInfo> call = server.signIn(email, password);
+        call.enqueue(callback);
     }
 
     @Override

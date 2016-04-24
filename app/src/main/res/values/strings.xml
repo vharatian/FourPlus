@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">گردو</string>
+    <string name="app_name">چهار +</string>
     <string name="signUp">ثبت نام</string>
     <string name="anonymousLogin">می خوای به عنوان مهمان وارد شی ؟</string>
     <string name="emailIsNeeded">وارد کردن ایمیل ضروری است</string>
@@ -43,4 +43,7 @@
     <string name="unfollow">دنبال نکردن</string>
     <string name="couldNotPerform">با عرض پوزش عملیات امکان پذیر نیست</string>
     <string name="changeImage">تغییر عکس</string>
+    <string name="win">برد</string>
+    <string name="tie">تساوی</string>
+    <string name="loss">باخت</string>
 </resources>

@@ -9,9 +9,7 @@ import java.util.List;
  */
 public class PsychoListResponse<T> {
 
-    @SerializedName("list")
     private List<T> list;
-    @SerializedName("next_page")
     private String nextPage = null;
 
     public PsychoListResponse(List<T> list) {

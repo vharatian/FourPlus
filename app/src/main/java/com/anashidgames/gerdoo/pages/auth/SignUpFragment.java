@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.anashidgames.gerdoo.core.DataHelper;
 import com.anashidgames.gerdoo.core.service.GerdooServer;
-import com.anashidgames.gerdoo.core.service.callback.PsychoCallBack;
+import com.anashidgames.gerdoo.core.service.call.PsychoCallBack;
 import com.anashidgames.gerdoo.core.service.model.AuthenticationInfo;
 import com.anashidgames.gerdoo.core.service.model.SignUpInfo;
 import com.anashidgames.gerdoo.pages.auth.view.validator.EmailValidator;
@@ -270,7 +270,8 @@ public class SignUpFragment extends FormFragment {
 
         @Override
         public void handleSuccessful(SignUpInfo data) {
-            GerdooServer.INSTANCE.signIn(email, password, callback);
+            Call<AuthenticationInfo> call = GerdooServer.INSTANCE.signIn(email, password);
+            call.enqueue(callback);
         }
 
         @Override

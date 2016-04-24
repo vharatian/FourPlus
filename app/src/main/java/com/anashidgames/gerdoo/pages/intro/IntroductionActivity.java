@@ -51,7 +51,7 @@ public class IntroductionActivity extends GerdooActivity {
             @Override
             public void onClick(View v) {
                 finish();
-                startActivity(AuthenticationActivity.newIntent(IntroductionActivity.this));
+                startActivity(AuthenticationActivity.newIntent(IntroductionActivity.this, true));
             }
         });
     }

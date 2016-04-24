@@ -10,7 +10,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 
 import com.anashidgames.gerdoo.R;
-import com.anashidgames.gerdoo.core.service.callback.CallbackWithErrorDialog;
+import com.anashidgames.gerdoo.core.service.call.CallbackWithErrorDialog;
 
 import java.util.List;
 

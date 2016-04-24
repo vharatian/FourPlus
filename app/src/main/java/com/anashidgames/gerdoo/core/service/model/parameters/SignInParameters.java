@@ -1,4 +1,4 @@
-package com.anashidgames.gerdoo.core.service.model;
+package com.anashidgames.gerdoo.core.service.model.parameters;
 
 import com.google.gson.annotations.SerializedName;
 

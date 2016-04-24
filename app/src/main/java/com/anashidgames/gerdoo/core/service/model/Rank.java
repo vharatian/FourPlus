@@ -1,5 +1,9 @@
 package com.anashidgames.gerdoo.core.service.model;
 
+import com.anashidgames.gerdoo.core.service.model.server.LeaderBoardItem;
+
+import java.util.List;
+
 /**
  * Created by psycho on 3/31/16.
  */
@@ -8,15 +12,32 @@ public class Rank {
     private int rank;
     private int score;
     private String name;
-    private String userProfileUrl;
+    private String userId;
     private int rankChange;
 
-    public Rank(int rank, int score, String name, String userProfileUrl, int rankChange) {
+    public Rank(int rank, int score, String name, String userId, int rankChange) {
         this.rank = rank;
         this.score = score;
         this.name = name;
-        this.userProfileUrl = userProfileUrl;
+        this.userId = userId;
         this.rankChange = rankChange;
+    }
+
+    public Rank(LeaderBoardItem item, int rank) {
+        int score = 0;
+        List<Integer> scores = item.getScores();
+        if(scores != null && !scores.isEmpty())
+            score = scores.get(0);
+
+        this.rank = rank;
+        this.score = score;
+        this.rankChange = 0;
+
+        LeaderBoardItem.UserBriefProfile profile = item.getUserBriefProfile();
+        if (profile != null) {
+            this.name = profile.getFirstName() + " " + profile.getLastName();
+            this.userId = profile.getUserId();
+        }
     }
 
     public int getRank() {
@@ -31,8 +52,8 @@ public class Rank {
         return name;
     }
 
-    public String getUserProfileUrl() {
-        return userProfileUrl;
+    public String getUserId() {
+        return userId;
     }
 
     public int getRankChange() {

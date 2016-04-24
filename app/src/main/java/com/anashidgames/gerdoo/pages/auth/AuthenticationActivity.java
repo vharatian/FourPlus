@@ -15,10 +15,16 @@ import com.anashidgames.gerdoo.pages.home.HomeActivity;
 
 public class AuthenticationActivity extends FragmentContainerActivity {
 
-    public static Intent newIntent(Context context) {
-        return new Intent(context, AuthenticationActivity.class);
+    public static final String START_HOME = "startHome";
+
+
+    public static Intent newIntent(Context context, boolean startHome) {
+        Intent intent = new Intent(context, AuthenticationActivity.class);
+        intent.putExtra(START_HOME, startHome);
+        return intent;
     }
 
+    private boolean startHome;
 
     public AuthenticationActivity() {
         super(R.id.fragment);
@@ -29,11 +35,14 @@ public class AuthenticationActivity extends FragmentContainerActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
 
+        startHome = getIntent().getBooleanExtra(START_HOME, true);
+
         changeFragment(SignUpFragment.newInstance());
     }
 
     public void enter() {
         finish();
-        startActivity(HomeActivity.newIntent(this));
+        if (startHome)
+            startActivity(HomeActivity.newIntent(this));
     }
 }

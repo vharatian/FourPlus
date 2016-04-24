@@ -13,8 +13,7 @@ import android.widget.LinearLayout;
 
 import com.anashidgames.gerdoo.R;
 import com.anashidgames.gerdoo.core.service.GerdooServer;
-import com.anashidgames.gerdoo.core.service.callback.CallbackWithErrorDialog;
-import com.anashidgames.gerdoo.core.service.model.Category;
+import com.anashidgames.gerdoo.core.service.call.CallbackWithErrorDialog;
 import com.anashidgames.gerdoo.core.service.model.HomeItem;
 import com.anashidgames.gerdoo.pages.FragmentContainerActivity;
 import com.anashidgames.gerdoo.pages.home.view.CategoryView;

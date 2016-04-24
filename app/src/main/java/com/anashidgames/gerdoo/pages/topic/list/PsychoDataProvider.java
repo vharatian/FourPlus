@@ -2,14 +2,12 @@ package com.anashidgames.gerdoo.pages.topic.list;
 
 import android.content.Context;
 
-import com.anashidgames.gerdoo.core.service.callback.CallbackWithErrorDialog;
-import com.anashidgames.gerdoo.core.service.callback.PsychoCallBack;
+import com.anashidgames.gerdoo.core.service.call.CallbackWithErrorDialog;
 
 import java.io.Serializable;
 import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.Callback;
 
 /**
  * Created by psycho on 7/21/15.

@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 import com.anashidgames.gerdoo.pages.KeyboardHiderFragment;
 import com.anashidgames.gerdoo.R;
-import com.anashidgames.gerdoo.core.service.callback.CallbackWithErrorDialog;
+import com.anashidgames.gerdoo.core.service.call.CallbackWithErrorDialog;
 import com.anashidgames.gerdoo.pages.auth.view.PsychoChangeable;
 import com.anashidgames.gerdoo.pages.auth.view.ValidatableInput;
 import retrofit2.Call;
@@ -99,7 +99,7 @@ public abstract class FormFragment extends KeyboardHiderFragment {
     protected void submitForm(){
         cancelRequesting();
         progressDialog = ProgressDialog.show(getActivity(),
-                getString(R.string.sendMail),
+                "",
                 getString(R.string.pleaseWait),
                 false,
                 true,

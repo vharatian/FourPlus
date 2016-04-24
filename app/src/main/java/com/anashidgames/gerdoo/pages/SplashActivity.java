@@ -4,9 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.anashidgames.gerdoo.core.DataHelper;
-import com.anashidgames.gerdoo.core.service.GerdooServer;
-import com.anashidgames.gerdoo.core.service.callback.CallbackWithErrorDialog;
-import com.anashidgames.gerdoo.pages.auth.AuthenticationActivity;
 import com.anashidgames.gerdoo.pages.intro.IntroductionActivity;
 import com.anashidgames.gerdoo.R;
 import com.anashidgames.gerdoo.pages.home.HomeActivity;
@@ -14,7 +11,6 @@ import com.anashidgames.gerdoo.pages.home.HomeActivity;
 import pl.droidsonroids.gif.AnimationListener;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
-import retrofit2.Call;
 
 public class SplashActivity extends GerdooActivity {
 

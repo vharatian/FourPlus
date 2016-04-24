@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.anashidgames.gerdoo.R;
 import com.anashidgames.gerdoo.core.service.GerdooServer;
-import com.anashidgames.gerdoo.core.service.callback.CallbackWithErrorDialog;
+import com.anashidgames.gerdoo.core.service.call.CallbackWithErrorDialog;
 import com.anashidgames.gerdoo.core.service.model.ChangeImageResponse;
 import com.anashidgames.gerdoo.core.service.model.FollowToggleResponse;
 import com.anashidgames.gerdoo.core.service.model.ProfileInfo;
@@ -70,6 +70,12 @@ public class ProfileActivity extends AppCompatActivity {
 
     private ImageView coverEditView;
 
+    private View userDataLayout;
+
+    private TextView winText;
+    private TextView tieText;
+    private TextView lossText;
+
     private ProgressDialog progressDialog;
     private Call<ChangeImageResponse> call;
 
@@ -112,6 +118,12 @@ public class ProfileActivity extends AppCompatActivity {
                 toggleFollow();
             }
         });
+
+        userDataLayout = findViewById(R.id.userDataLayout);
+
+        winText = (TextView) findViewById(R.id.winText);
+        tieText = (TextView) findViewById(R.id.tieText);
+        lossText = (TextView) findViewById(R.id.lossText);
 
         coverEditView = (ImageView) findViewById(R.id.coverEditButton);
         if(userId != null)
@@ -214,7 +226,13 @@ public class ProfileActivity extends AppCompatActivity {
         statusChart.setDescription("");
         statusChart.getLegend().setEnabled(false);
         statusChart.setHoleColor(getResources().getColor(android.R.color.transparent));
+        statusChart.setDrawSliceText(false);
+        statusChart.setUsePercentValues(false);
         statusChart.setHoleRadius(70f);
+
+        winText.setText(getString(R.string.win) + " %" + info.getWin());
+        tieText.setText(getString(R.string.tie) + " %" + info.getTie());
+        lossText.setText(getString(R.string.loss) + " %" + info.getLoss());
 
         matchesCountView.setText("" + info.getMatchesCount());
 
@@ -224,8 +242,8 @@ public class ProfileActivity extends AppCompatActivity {
         new Handler().post(new Runnable() {
             @Override
             public void run() {
-                ((ViewGroup.MarginLayoutParams)profilePictureView.getLayoutParams()).topMargin =
-                        coverView.getHeight() - profilePictureView.getHeight()/2;
+                ((ViewGroup.MarginLayoutParams)userDataLayout.getLayoutParams()).topMargin =
+                        coverView.getHeight() - (profilePictureView.getHeight()/2);
             }
         });
 

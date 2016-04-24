@@ -1,6 +1,4 @@
-package com.anashidgames.gerdoo.core.service.callback;
-
-import android.util.Log;
+package com.anashidgames.gerdoo.core.service.call;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,8 +28,8 @@ public abstract class PsychoCallBack<T> implements Callback<T> {
     protected void postExecution(){}
 
     public abstract void handleSuccessful(T data);
-    public abstract void handleFailure(Call<T> call, Throwable t);
-    public abstract void handleServerError(Response<T> response);
+    public void handleFailure(Call<T> call, Throwable t){};
+    public void handleServerError(Response<T> response){};
 
 
 
