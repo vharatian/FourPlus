@@ -5,6 +5,8 @@ package com.anashidgames.gerdoo.utils;
  */
 public class PsychoUtils {
 
+    public static final float COMPLETE_CIRCLE = 360;
+
     public static String fixUrl(String url){
         if (url == null)
             return null;
@@ -45,5 +47,26 @@ public class PsychoUtils {
                 result += s.charAt(i);
         }
         return result;
+    }
+
+    public static float getNormalAngle(float angle) {
+        while (angle < 0) {
+            angle += COMPLETE_CIRCLE;
+        }
+
+        while (angle >  COMPLETE_CIRCLE){
+            angle -= COMPLETE_CIRCLE;
+        }
+        return angle;
+    }
+
+    public static boolean isOnLeft(float angle) {
+        angle = PsychoUtils.getNormalAngle(angle);
+        return angle > COMPLETE_CIRCLE/4 && angle < COMPLETE_CIRCLE*3/4;
+    }
+
+    public static boolean isOnBottom(float angle) {
+        angle = PsychoUtils.getNormalAngle(angle);
+        return angle > 0 && angle < COMPLETE_CIRCLE/2;
     }
 }

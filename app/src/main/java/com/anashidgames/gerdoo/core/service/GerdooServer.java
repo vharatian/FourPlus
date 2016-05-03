@@ -111,7 +111,7 @@ public class GerdooServer{
     }
 
     public Call<PsychoListResponse<Rank>> getRanking(String url) {
-        return new ConverterCall<PsychoListResponse<Rank>, LeaderBoardResponse>(realService.getRanking(GAME_ID, new LeaderBoardParams())) {
+        return new ConverterCall<PsychoListResponse<Rank>, LeaderBoardResponse>(mockService.getRanking(GAME_ID, new LeaderBoardParams())) {
             @Override
             public PsychoListResponse<Rank> convert(LeaderBoardResponse data) {
                 List<Rank> ranks = new ArrayList<>();

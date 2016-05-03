@@ -1,51 +1,47 @@
 package com.anashidgames.gerdoo.pages.game;
 
-import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.anashidgames.gerdoo.R;
+import com.anashidgames.gerdoo.pages.FragmentContainerActivity;
 import com.anashidgames.gerdoo.pages.game.view.PlayerView;
-import com.bumptech.glide.Glide;
+import com.anashidgames.gerdoo.pages.home.HomeActivity;
 
 /**
  * Created by psycho on 4/24/16.
  */
 public class ResultFragment extends Fragment {
 
-    public static final String FIRST_PLAYER = "firstPlayer";
-    public static final String SECOND_PLAYER = "secondPlayer";
+    public static final String OPPONENT = "opponent";
+    public static final String ME = "me";
 
 
     public static Fragment newInstance() {
         String proPicUrl = "http://indiabright.com/wp-content/uploads/2015/11/profile_picture_by_kyo_tux-d4hrimy.png";
-        String coverUrl = "https://i.imgsafe.org/c77e5e5.jpg";
         String firstName = "کیان اشرفی";
         String secondName = "وحید هراتیان";
-        PlayerData firstPlayer = new PlayerData("", proPicUrl, coverUrl, firstName, 782);
-        PlayerData secondPlayer = new PlayerData("", proPicUrl, coverUrl, secondName, 56);
+        PlayerData firstPlayer = new PlayerData("", proPicUrl, firstName, 782);
+        PlayerData secondPlayer = new PlayerData("", proPicUrl, secondName, 56);
 
         Bundle bundle = new Bundle();
-        bundle.putSerializable(FIRST_PLAYER, firstPlayer);
-        bundle.putSerializable(SECOND_PLAYER, secondPlayer);
+        bundle.putSerializable(OPPONENT, firstPlayer);
+        bundle.putSerializable(ME, secondPlayer);
         ResultFragment fragment = new ResultFragment();
         fragment.setArguments(bundle);
         return fragment;
     }
 
-    private PlayerView firstPlayerView;
-    private PlayerView secondPlayerView;
-    private View doneButton;
+    private PlayerView opponentView;
+    private PlayerView meView;
     private View.OnClickListener clickListener;
 
-    private PlayerData firstPlayer;
-    private PlayerData secondPLayer;
+    private PlayerData opponent;
+    private PlayerData me;
 
     @Nullable
     @Override
@@ -60,38 +56,50 @@ public class ResultFragment extends Fragment {
     }
 
     private void initViews(View rootView) {
-        firstPlayerView = (PlayerView) rootView.findViewById(R.id.firstPlayerView);
-        secondPlayerView = (PlayerView) rootView.findViewById(R.id.secondPlayerView);
-        doneButton = rootView.findViewById(R.id.doneButton);
+        opponentView = (PlayerView) rootView.findViewById(R.id.oponnentView);
+        meView = (PlayerView) rootView.findViewById(R.id.meView);
 
         clickListener = new InnerClickListener();
 
-        doneButton.setOnClickListener(clickListener);
+        rootView.findViewById(R.id.doneButton).setOnClickListener(clickListener);
+        rootView.findViewById(R.id.scoresPageButton).setOnClickListener(clickListener);
+        rootView.findViewById(R.id.replayButton).setOnClickListener(clickListener);
+        rootView.findViewById(R.id.homeButton).setOnClickListener(clickListener);
     }
 
     private void setData() {
-        firstPlayerView.setData(firstPlayer);
-        secondPlayerView.setData(secondPLayer);
+        opponentView.setData(opponent);
+        meView.setData(me);
 
-        if (firstPlayer.getScore() > secondPLayer.getScore()){
-            firstPlayerView.setWinner(true);
-        }else if (firstPlayer.getScore() < secondPLayer.getScore()){
-            secondPlayerView.setWinner(true);
+        if (opponent.getScore() > me.getScore()){
+            meView.setBanner(PlayerView.LOOS_BANNER);
+        }else if (opponent.getScore() < me.getScore()){
+            meView.setBanner(PlayerView.WIN_BANNER);
+        }else {
+            meView.setBanner(PlayerView.TIE_BANNER);
         }
     }
 
     private void initData() {
         Bundle bundle = getArguments();
-        firstPlayer = (PlayerData) bundle.getSerializable(FIRST_PLAYER);
-        secondPLayer = (PlayerData) bundle.getSerializable(SECOND_PLAYER);
+        opponent = (PlayerData) bundle.getSerializable(OPPONENT);
+        me = (PlayerData) bundle.getSerializable(ME);
     }
 
     private class InnerClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             switch (v.getId()){
+                case R.id.homeButton:
+                    getActivity().finish();
+                    startActivity(HomeActivity.newIntent(getActivity()));
+                    break;
+                case R.id.replayButton:
                 case R.id.doneButton:
                     getActivity().finish();
+                    break;
+                case R.id.scoresPageButton:
+                    ((FragmentContainerActivity) getActivity()).changeFragment(ScoresFragment.newInstance());
                     break;
             }
         }

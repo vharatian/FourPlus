@@ -5,35 +5,48 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:layout_weight="1">
 
-        <com.anashidgames.gerdoo.pages.game.view.PlayerView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:id="@+id/firstPlayerView"/>
+            android:orientation="vertical">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/lineHeight"
-            android:background="@color/colorAccent"/>
+            <com.anashidgames.gerdoo.pages.game.view.PlayerView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:id="@+id/oponnentView"/>
 
-        <com.anashidgames.gerdoo.pages.game.view.PlayerView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:id="@+id/secondPlayerView"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/lineHeight"
+                android:background="@color/colorAccent"/>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/lineHeight"
-            android:background="@color/colorAccent"/>
+            <com.anashidgames.gerdoo.pages.game.view.PlayerView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:id="@+id/meView"/>
 
-    </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/lineHeight"
+                android:background="@color/colorAccent"/>
+
+        </LinearLayout>
+
+        <com.anashidgames.gerdoo.view.FitToWidthImageView
+            android:layout_width="@dimen/vsIconSize"
+            android:layout_height="wrap_content"
+            android:src="@drawable/vs"
+            android:layout_gravity="center"/>
+
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="200dp"
@@ -63,7 +76,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="@dimen/resultPageButtonHeight"
-            android:id="@+id/soresPageButton"
+            android:id="@+id/scoresPageButton"
             android:text="@string/scores"
             android:textColor="@color/white"
             android:textSize="@dimen/resultPageButtonTextSize"
@@ -74,7 +87,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/resultPageButtonHeight"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center">
 
             <com.anashidgames.gerdoo.view.FitToHeightImageView
                 android:layout_width="wrap_content"
@@ -83,15 +97,12 @@
                 android:src="@drawable/replay"
                 android:layout_marginRight="@dimen/normalBreak"/>
 
-            <Button
-                android:layout_width="match_parent"
+            <com.anashidgames.gerdoo.view.FitToHeightImageView
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:id="@+id/allTopicsButton"
-                android:text="@string/topics"
-                android:textColor="@color/white"
-                android:textSize="@dimen/resultPageButtonTextSize"
-                android:gravity="center"
-                android:background="@drawable/dark_button_background_normal"/>
+                android:id="@+id/homeButton"
+                android:src="@drawable/home"
+                android:layout_marginRight="@dimen/normalBreak"/>
 
         </LinearLayout>
 

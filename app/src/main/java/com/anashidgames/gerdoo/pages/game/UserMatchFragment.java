@@ -20,23 +20,39 @@ public class UserMatchFragment extends Fragment {
         return new UserMatchFragment();
     }
 
-    private GifImageView animationView;
+    private boolean canceled = false;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        animationView = new GifImageView(getActivity());
+        View rootView = inflater.inflate(R.layout.fragment_user_match, container, false);
+
+        GifImageView animationView = (GifImageView) rootView.findViewById(R.id.imageView);
         animationView.setImageResource(R.drawable.user_matching);
 
 
-        animationView.postDelayed(new Runnable() {
+        rootView.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cancel();
+            }
+        });
+
+        rootView.postDelayed(new Runnable() {
             @Override
             public void run() {
+                if (canceled)
+                    return;
+
                 ((FragmentContainerActivity) getActivity()).changeFragment(ResultFragment.newInstance());
             }
         }, 5000);
 
+        return rootView;
+    }
 
-        return animationView;
+    private void cancel() {
+        canceled = true;
+        getActivity().finish();
     }
 }

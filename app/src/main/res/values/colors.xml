@@ -10,6 +10,7 @@
     <color name="black">#000000</color>
     <color name="yellow">#ffc400</color>
     <color name="gray">#706f6f</color>
+    <color name="transparent">#00000000</color>
 
     <color name="input_background">#85888a</color>
     <color name="input_invalid">@color/red</color>
@@ -32,6 +33,7 @@
     <color name="topicScreamColor">#99000000</color>
     <color name="drawerGray">#9c9c9c</color>
     <color name="profileGradientStartColor">#99000000</color>
+
 
 
 </resources>

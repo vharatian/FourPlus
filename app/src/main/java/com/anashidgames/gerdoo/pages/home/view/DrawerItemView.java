@@ -86,8 +86,9 @@ public class DrawerItemView extends LinearLayout {
     private class ActivityRunner implements OnClickListener {
         @Override
         public void onClick(View v) {
-            if (item.getIntent() != null)
+            if (item.getIntent() != null) {
                 getContext().startActivity(item.getIntent());
+            }
         }
     }
 

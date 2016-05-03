@@ -5,65 +5,51 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/coverView"
-        android:scaleType="centerCrop"/>
-
-    <FrameLayout
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal|center_vertical">
+        android:layout_margin="@dimen/xxlargeBreak"
+        android:orientation="vertical"
+        android:layout_gravity="center">
 
-        <LinearLayout
+        <com.anashidgames.gerdoo.view.FitToHeightCircleImageView
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/xlargeBreak"
-            android:orientation="vertical"
-            android:layout_gravity="center">
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:id="@+id/avatarView"
+            app:civ_border_color="@color/colorAccent"
+            app:civ_border_width="@dimen/lineHeight"
+            android:layout_gravity="center"/>
 
-            <com.anashidgames.gerdoo.view.FitToHeightCircleImageView
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:id="@+id/avatarView"
-                app:civ_border_color="@color/colorAccent"
-                app:civ_border_width="@dimen/lineHeight"
-                android:layout_gravity="center"/>
-
-            <com.anashidgames.gerdoo.view.basic.BoldTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textSize="@dimen/playerViewTextSize"
-                android:layout_marginTop="@dimen/normalBreak"
-                android:textColor="@color/white"
-                android:lines="1"
-                android:ellipsize="end"
-                android:id="@+id/nameView"/>
-
-            <com.anashidgames.gerdoo.view.basic.BoldTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textSize="@dimen/playerViewTextSize"
-                android:textColor="@color/white"
-                android:lines="1"
-                android:ellipsize="end"
-                android:id="@+id/scoreView"/>
-
-        </LinearLayout>
-
-        <com.anashidgames.gerdoo.view.FitToWidthImageView
-            android:layout_width="@dimen/playerViewWinImageSize"
+        <com.anashidgames.gerdoo.view.basic.BoldTextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center"
-            android:layout_marginBottom="60dp"
-            android:visibility="gone"
-            android:src="@drawable/win"
-            android:id="@+id/winnerView"/>
+            android:layout_gravity="center"
+            android:textSize="@dimen/playerViewTextSize"
+            android:layout_marginTop="@dimen/normalBreak"
+            android:textColor="@color/white"
+            android:lines="1"
+            android:ellipsize="end"
+            android:id="@+id/nameView"/>
 
-    </FrameLayout>
+        <com.anashidgames.gerdoo.view.basic.BoldTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="@dimen/playerViewTextSize"
+            android:textColor="@color/white"
+            android:lines="1"
+            android:ellipsize="end"
+            android:id="@+id/scoreView"/>
+
+    </LinearLayout>
+
+    <com.anashidgames.gerdoo.view.FitToWidthImageView
+        android:layout_width="@dimen/playerViewWinImageSize"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="75dp"
+        android:visibility="gone"
+        android:id="@+id/bannerView"/>
 
 </FrameLayout>

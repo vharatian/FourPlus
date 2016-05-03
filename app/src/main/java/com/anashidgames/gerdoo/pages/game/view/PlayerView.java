@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,11 +17,14 @@ import com.bumptech.glide.Glide;
  */
 public class PlayerView extends FrameLayout {
 
+    public static final int NO_BANNER = 0;
+    public static final int WIN_BANNER = 1;
+    public static final int LOOS_BANNER = 2;
+    public static final int TIE_BANNER = 3;
     private ImageView avatarView;
-    private ImageView coverView;
     private TextView nameView;
     private TextView scoreView;
-    private View winnerView;
+    private ImageView bannerView;
 
     public PlayerView(Context context) {
         super(context);
@@ -49,18 +51,16 @@ public class PlayerView extends FrameLayout {
         inflate(context, R.layout.view_player, this);
 
         avatarView = (ImageView) findViewById(R.id.avatarView);
-        coverView = (ImageView) findViewById(R.id.coverView);
         nameView = (TextView) findViewById(R.id.nameView);
         scoreView = (TextView) findViewById(R.id.scoreView);
-        winnerView = findViewById(R.id.winnerView);
+        bannerView = (ImageView) findViewById(R.id.bannerView);
 
-        setWinner(false);
+        setBanner(NO_BANNER);
     }
 
     public void setData(PlayerData data){
 
         Glide.with(getContext()).load(data.getAvatarUrl()).placeholder(R.drawable.user_image_place_holder).crossFade().into(avatarView);
-        Glide.with(getContext()).load(data.getCoverUrl()).placeholder(R.drawable.cover_place_holder).crossFade().into(coverView);
 
         nameView.setText(data.getName());
         if (data.hasScore()){
@@ -71,11 +71,18 @@ public class PlayerView extends FrameLayout {
         }
     }
 
-    public void setWinner(boolean isWinner){
-        if (isWinner){
-            winnerView.setVisibility(VISIBLE);
+    public void setBanner(int banner){
+        if (banner == NO_BANNER){
+            bannerView.setVisibility(GONE);
         }else{
-            winnerView.setVisibility(GONE);
+            bannerView.setVisibility(VISIBLE);
+            if (banner == WIN_BANNER){
+                bannerView.setImageResource(R.drawable.win);
+            }else if (banner == LOOS_BANNER){
+                bannerView.setImageResource(R.drawable.loos);
+            }else if (banner == TIE_BANNER){
+                bannerView.setImageResource(R.drawable.tie);
+            }
         }
     }
 }

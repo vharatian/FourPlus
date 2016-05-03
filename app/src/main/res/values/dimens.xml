@@ -50,12 +50,16 @@
     <dimen name="profileStatusChartHeight">170dp</dimen>
     <dimen name="profileItemsRowHeight">200dp</dimen>
     <dimen name="profileCoverShadowHeight">50dp</dimen>
-    <dimen name="pieChartTextSize">14dp</dimen>
+    <dimen name="pieChartDescriptionSize">14dp</dimen>
     <dimen name="pieChartBulletSize">20dp</dimen>
     <dimen name="resultPageButtonHeight">42dp</dimen>
     <dimen name="resultPageButtonTextSize">17dp</dimen>
     <dimen name="playerViewAvatarImageSize">100dp</dimen>
     <dimen name="playerViewWinImageSize">180dp</dimen>
     <dimen name="playerViewTextSize">16dp</dimen>
+    <dimen name="levelPieChartHeight">170dp</dimen>
+    <dimen name="pieChartDescriptionTextSize">15dp</dimen>
+    <dimen name="statusPieChartHeight">180dp</dimen>
+    <dimen name="vsIconSize">35dp</dimen>
 
 </resources>

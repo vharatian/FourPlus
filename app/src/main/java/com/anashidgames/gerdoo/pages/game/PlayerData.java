@@ -13,14 +13,12 @@ public class PlayerData implements Serializable {
 
     private String userId;
     private String avatarUrl;
-    private String coverUrl;
     private String name;
     private int score = DEFAULT_SCORE;
 
-    public PlayerData(String userId, String avatarUrl, String coverUrl, String name, int score) {
+    public PlayerData(String userId, String avatarUrl, String name, int score) {
         this.userId = userId;
         this.avatarUrl = avatarUrl;
-        this.coverUrl = coverUrl;
         this.name = name;
         this.score = score;
     }
@@ -31,10 +29,6 @@ public class PlayerData implements Serializable {
 
     public String getAvatarUrl() {
         return avatarUrl;
-    }
-
-    public String getCoverUrl() {
-        return coverUrl;
     }
 
     public String getName() {

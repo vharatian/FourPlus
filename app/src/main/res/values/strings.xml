@@ -46,6 +46,16 @@
     <string name="win">برد</string>
     <string name="tie">تساوی</string>
     <string name="loss">باخت</string>
-    <string name="scores">امتیازات</string>
+    <string name="scores">امتیازها</string>
     <string name="topics">موضوعات</string>
+    <string name="gameScores">نتیجه بازی</string>
+    <string name="home">خانه</string>
+    <string name="thisRound">این دست</string>
+    <string name="boostFactor">ضریب افزایشی</string>
+    <string name="finishing">تمام کردن</string>
+    <string name="total">مجموع</string>
+    <string name="level">سطح</string>
+    <string name="reportQuestion">گزارش سوال غلط</string>
+    <string name="aboutUsText">درباره ما</string>
+    <string name="cancel">انصراف</string>
 </resources>

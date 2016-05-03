@@ -22,12 +22,11 @@ import com.anashidgames.gerdoo.core.service.model.FollowToggleResponse;
 import com.anashidgames.gerdoo.core.service.model.ProfileInfo;
 import com.anashidgames.gerdoo.pages.profile.view.FriendsRow;
 import com.anashidgames.gerdoo.pages.profile.view.GiftsRow;
+import com.anashidgames.gerdoo.view.chart.pie.PieChart;
+import com.anashidgames.gerdoo.view.chart.pie.PieChartItem;
 import com.bumptech.glide.Glide;
-import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -59,7 +58,6 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageView onlineStatusView;
 
     private PieChart statusChart;
-    private TextView matchesCountView;
 
     private FriendsRow friendsRow;
     private GiftsRow giftsRow;
@@ -71,10 +69,6 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageView coverEditView;
 
     private View userDataLayout;
-
-    private TextView winText;
-    private TextView tieText;
-    private TextView lossText;
 
     private ProgressDialog progressDialog;
     private Call<ChangeImageResponse> call;
@@ -104,7 +98,7 @@ public class ProfileActivity extends AppCompatActivity {
         onlineStatusView = (ImageView) findViewById(R.id.onlineStatusView);
 
         statusChart = (PieChart) findViewById(R.id.statusChart);
-        matchesCountView = (TextView) findViewById(R.id.matchesCountView);
+        statusChart.setCenterColor(getResources().getColor(R.color.colorPrimaryDark));
 
         friendsRow = (FriendsRow) findViewById(R.id.friendRow);
         giftsRow = (GiftsRow) findViewById(R.id.giftsRow);
@@ -120,10 +114,6 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         userDataLayout = findViewById(R.id.userDataLayout);
-
-        winText = (TextView) findViewById(R.id.winText);
-        tieText = (TextView) findViewById(R.id.tieText);
-        lossText = (TextView) findViewById(R.id.lossText);
 
         coverEditView = (ImageView) findViewById(R.id.coverEditButton);
         if(userId != null)
@@ -203,38 +193,12 @@ public class ProfileActivity extends AppCompatActivity {
             onlineStatusView.setColorFilter(getResources().getColor(colorCode));
         }
 
-        List<Entry> entries = Arrays.asList(
-                new Entry(info.getLoss(), 0),
-                new Entry(info.getTie(), 1),
-                new Entry(info.getWin(), 2)
-        );
-        PieDataSet dataSet = new PieDataSet(entries, "");
+        statusChart.addData(new PieChartItem(getString(R.string.loss), info.getLoss(), getResources().getColor(R.color.red)));
+        statusChart.addData(new PieChartItem(getString(R.string.tie), info.getTie(), getResources().getColor(R.color.yellow)));
+        statusChart.addData(new PieChartItem(getString(R.string.win), info.getWin(), getResources().getColor(R.color.green)));
 
-        List<Integer> colors = Arrays.asList(
-                getResources().getColor(R.color.red),
-                getResources().getColor(R.color.yellow),
-                getResources().getColor(R.color.green)
-        );
-
-        dataSet.setColors(colors);
-
-        List<String> labels = Arrays.asList("باخت", "تساوی", "برد");
-
-        PieData pieData = new PieData(labels, dataSet);
-        statusChart.setData(pieData);
-        statusChart.animateY(1000);
-        statusChart.setDescription("");
-        statusChart.getLegend().setEnabled(false);
-        statusChart.setHoleColor(getResources().getColor(android.R.color.transparent));
-        statusChart.setDrawSliceText(false);
-        statusChart.setUsePercentValues(false);
-        statusChart.setHoleRadius(70f);
-
-        winText.setText(getString(R.string.win) + " %" + info.getWin());
-        tieText.setText(getString(R.string.tie) + " %" + info.getTie());
-        lossText.setText(getString(R.string.loss) + " %" + info.getLoss());
-
-        matchesCountView.setText("" + info.getMatchesCount());
+        statusChart.setBoldCenterText("" + info.getMatchesCount());
+        statusChart.setSmallCenterText(getString(R.string.playedCount));
 
         friendsRow.setUserId(userId);
         giftsRow.setUserId(userId);
