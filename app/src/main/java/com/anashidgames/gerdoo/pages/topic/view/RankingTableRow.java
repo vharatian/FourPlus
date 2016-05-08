@@ -82,7 +82,7 @@ public class RankingTableRow extends LinearLayout implements PsychoSettable<Rank
         nameView.setText(rank.getName());
 
         setRank(rank.getRank());
-        setRankChange(rank.getRankChange());
+//        setRankChange(rank.getRankChange());
 
         int textColor = 0;
         if (rank.getRank() != myRank) {
@@ -120,6 +120,10 @@ public class RankingTableRow extends LinearLayout implements PsychoSettable<Rank
             rankImageView.setVisibility(GONE);
             rankTextView.setText("" + rank);
         }
+    }
+
+    public void setMyRank(int myRank) {
+        this.myRank = myRank;
     }
 
     private void setRankChange(int rankChange) {

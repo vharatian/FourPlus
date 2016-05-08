@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by psycho on 3/22/16.
  */
 public class AuthenticationInfo {
-    public static final int ERROR = 1000;
+    public static final int ERROR = 30*60;
     @SerializedName("access_token")
     private String accessToken;
     @SerializedName("refresh_token")
@@ -47,7 +47,7 @@ public class AuthenticationInfo {
     }
 
     public boolean expired(){
-        return (System.currentTimeMillis() > creationTime + (expiresIn*1000 - ERROR));
+        return (System.currentTimeMillis() > creationTime + (expiresIn - ERROR)*1000);
     }
 
     public void setRefreshToken(String refreshToken) {

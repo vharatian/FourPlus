@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gamePageBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/colorPrimary">
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="@dimen/gameUserImageSize"
+            android:layout_height="@dimen/gameUserImageSize"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="@dimen/lineHeight"
+            android:layout_gravity="center"
+            android:id="@+id/opponentImageView"
+            android:layout_margin="@dimen/normalBreak"/>
+        
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_gravity="center">
+            
+            <com.anashidgames.gerdoo.view.basic.TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/red"
+                android:textSize="@dimen/gameInfoBarTextSize"
+                android:layout_gravity="left"
+                android:id="@+id/opponentNameView"/>
+
+            <com.anashidgames.gerdoo.view.basic.TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/red"
+                android:layout_gravity="left"
+                android:textSize="@dimen/gameInfoBarTextSize"
+                android:id="@+id/opponentScoreView"/>
+            
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_gravity="center">
+
+            <com.anashidgames.gerdoo.view.basic.TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/gameInfoBarTextSize"
+                android:layout_gravity="right"
+                android:id="@+id/myNameView"/>
+
+            <com.anashidgames.gerdoo.view.basic.TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorAccent"
+                android:layout_gravity="right"
+                android:textSize="@dimen/gameInfoBarTextSize"
+                android:id="@+id/myScoreView"/>
+
+        </LinearLayout>
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="@dimen/gameUserImageSize"
+            android:layout_height="@dimen/gameUserImageSize"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="@dimen/lineHeight"
+            android:layout_gravity="center"
+            android:id="@+id/myImageView"
+            android:layout_margin="@dimen/normalBreak"/>
+
+
+    </LinearLayout>
+
+    <com.anashidgames.gerdoo.view.basic.TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/gameTimeBarHeight"
+        android:id="@+id/timeBar"
+        android:layout_marginTop="@dimen/smallBreak"
+        android:textColor="@color/black"
+        android:background="@color/green"
+        android:textSize="10dp"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <com.anashidgames.gerdoo.view.basic.TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/questionTextView"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            android:layout_gravity="center"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/questionImageView"
+            android:scaleType="fitCenter"/>
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/optionsLayout"/>
+
+    <pl.droidsonroids.gif.GifImageView
+        android:layout_width="@dimen/gameGuideIconSize"
+        android:layout_height="@dimen/gameGuideIconSize"
+        android:id="@+id/hintButton"
+        android:layout_gravity="center"
+        android:src="@drawable/hint"
+        android:layout_marginTop="@dimen/normalBreak"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15dp"
+        android:textColor="@color/black"
+        android:text="@string/guide"
+        android:id="@+id/hintTextView"
+        android:layout_gravity="center"/>
+
+
+</LinearLayout>

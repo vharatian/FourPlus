@@ -28,20 +28,14 @@ import retrofit2.Call;
  */
 public class CategoryFragment extends Fragment{
 
-    public static final String DATA_URL = "dataUrl";
-    public static final String ALL_CATEGORIES_URL = "dataUrl";
+    public static final String CATEGORY_ID = "categoryId";
     private static final String TITLE = "title";
     private LinearLayoutManager layoutManager;
 
 
-    public static Fragment newInstance(@Nullable String dataUrl, String title) {
-        if (dataUrl == null) {
-            dataUrl = ALL_CATEGORIES_URL;
-        }
-
-
+    public static Fragment newInstance(@Nullable String categoryId, String title) {
         Bundle bundle = new Bundle();
-        bundle.putString(DATA_URL, dataUrl);
+        bundle.putString(CATEGORY_ID, categoryId);
         bundle.putString(TITLE, title);
         Fragment fragment = new CategoryFragment();
         fragment.setArguments(bundle);
@@ -66,11 +60,11 @@ public class CategoryFragment extends Fragment{
         initViews(rootView);
 
         Bundle bundle = getArguments();
-        String dataUrl = bundle.getString(DATA_URL, ALL_CATEGORIES_URL);
+        String categoryId = bundle.getString(CATEGORY_ID, "");
         String title = bundle.getString(TITLE);
 
         ((HomeActivity) getActivity()).setTitle(title);
-        loadData(dataUrl);
+        loadData(categoryId);
 
         return rootView;
     }
@@ -79,8 +73,8 @@ public class CategoryFragment extends Fragment{
         progressView.setVisibility(View.GONE);
     }
 
-    private void loadData(String dataUrl) {
-        Call<List<Category>> call = server.getCategories(dataUrl);
+    private void loadData(String categoryId) {
+        Call<List<Category>> call = server.getSubCategories(categoryId);
         call.enqueue(new CategoriesCallBack());
     }
 
@@ -209,7 +203,7 @@ public class CategoryFragment extends Fragment{
         @Override
         public void showAll(ItemsRow view) {
             ((FragmentContainerActivity) getActivity()).changeFragment(
-                    CategoryFragment.newInstance(category.getDataUrl(), category.getTitle()));
+                    CategoryFragment.newInstance(category.getCategoryId(), category.getTitle()));
         }
     }
 }

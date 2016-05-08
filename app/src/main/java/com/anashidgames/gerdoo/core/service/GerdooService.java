@@ -2,17 +2,17 @@ package com.anashidgames.gerdoo.core.service;
 
 import com.anashidgames.gerdoo.core.service.model.Category;
 import com.anashidgames.gerdoo.core.service.model.CategoryTopic;
-import com.anashidgames.gerdoo.core.service.model.ChangeImageResponse;
-import com.anashidgames.gerdoo.core.service.model.FollowToggleResponse;
+import com.anashidgames.gerdoo.core.service.model.LeaderBoardParams;
+import com.anashidgames.gerdoo.core.service.model.parameters.GetCategoryTopicsParams;
+import com.anashidgames.gerdoo.core.service.model.parameters.GetSubCategoriesParams;
+import com.anashidgames.gerdoo.core.service.model.server.ChangeImageResponse;
+import com.anashidgames.gerdoo.core.service.model.server.FollowToggleResponse;
 import com.anashidgames.gerdoo.core.service.model.Friend;
 import com.anashidgames.gerdoo.core.service.model.Gift;
 import com.anashidgames.gerdoo.core.service.model.HomeItem;
-import com.anashidgames.gerdoo.core.service.model.parameters.LeaderBoardParams;
 import com.anashidgames.gerdoo.core.service.model.ProfileInfo;
-import com.anashidgames.gerdoo.core.service.model.Rank;
 import com.anashidgames.gerdoo.core.service.model.UserInfo;
 import com.anashidgames.gerdoo.core.service.model.server.LeaderBoardResponse;
-import com.anashidgames.gerdoo.pages.topic.list.PsychoListResponse;
 
 import java.util.List;
 
@@ -21,8 +21,11 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
 import retrofit2.http.Url;
 
 /**
@@ -31,17 +34,32 @@ import retrofit2.http.Url;
 
 interface GerdooService {
 
-    @GET("/")
-    Call<List<HomeItem>> getHome();
+    @POST("/api/lambda/{cloudCodeId}/getHome")
+    Call<List<HomeItem>> getHome(@Path("cloudCodeId") String cloudCodeId);
 
-    @GET
-    Call<List<CategoryTopic>> getCategoryTopics(@Url String url);
+    @POST("/api/lambda/{cloudCodeId}/getCategoryTopics")
+    Call<List<CategoryTopic>> getCategoryTopics(
+            @Path("cloudCodeId") String cloudCodeId,
+            @Body GetCategoryTopicsParams params
+    );
 
-    @GET
-    Call<List<Category>> getCategories(@Url String url);
+    @POST("/api/lambda/{cloudCodeId}/getSubCategories")
+    Call<List<Category>> getSubCategories(
+            @Path("cloudCodeId") String cloudCodeId,
+            @Body GetSubCategoriesParams params
+    );
 
-    @POST("/api/game/leaderboards/top")
-    Call<LeaderBoardResponse> getRanking(@Header("X-Backtory-Game-Id") String gameId, @Body LeaderBoardParams params);
+    @POST("/api/lambda/{cloudCodeId}/getTopPlayers")
+    Call<LeaderBoardResponse> getTopPlayers(
+            @Path("cloudCodeId") String cloudId,
+            @Body LeaderBoardParams params
+    );
+
+    @POST("/api/lambda/{cloudCodeId}/getAroundMe")
+    Call<LeaderBoardResponse> getAroundMe(
+            @Path("cloudCodeId") String cloudId,
+            @Body LeaderBoardParams params
+    );
 
     @GET("/")
     Call<UserInfo> getUserInfo();

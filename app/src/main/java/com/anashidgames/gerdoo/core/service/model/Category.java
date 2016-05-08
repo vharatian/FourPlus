@@ -1,22 +1,33 @@
 package com.anashidgames.gerdoo.core.service.model;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by psycho on 3/30/16.
  */
 public class Category {
+    @SerializedName("categoryId")
+    private String categoryId;
+    @SerializedName("title")
     private String title;
+    @SerializedName("iconUrl")
     private String iconUrl;
-    private String dataUrl;
-    private boolean hasSubCategory;
-    private int color;
+    @SerializedName("hasSubCategory")
+    private boolean hasSubCategory = false;
+    @SerializedName("color")
+    private String color;
 
 
-    public Category(String title, String iconUrl, String dataUrl, boolean hasSubCategory, int color) {
+    public Category(String categoryId, String title, String iconUrl, boolean hasSubCategory, String color) {
+        this.categoryId = categoryId;
         this.title = title;
         this.iconUrl = iconUrl;
-        this.dataUrl = dataUrl;
         this.hasSubCategory = hasSubCategory;
         this.color = color;
+    }
+
+    public String getCategoryId() {
+        return categoryId;
     }
 
     public String getTitle() {
@@ -27,15 +38,11 @@ public class Category {
         return iconUrl;
     }
 
-    public String getDataUrl() {
-        return dataUrl;
-    }
-
     public boolean hasSubCategory() {
         return hasSubCategory;
     }
 
-    public int getColor() {
+    public String getColor() {
         return color;
     }
 }

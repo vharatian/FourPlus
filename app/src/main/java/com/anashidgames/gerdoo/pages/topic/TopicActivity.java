@@ -1,6 +1,5 @@
 package com.anashidgames.gerdoo.pages.topic;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +8,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -17,17 +15,19 @@ import android.widget.TextView;
 
 import com.anashidgames.gerdoo.R;
 import com.anashidgames.gerdoo.core.service.GerdooServer;
+import com.anashidgames.gerdoo.core.service.call.CallbackWithErrorDialog;
 import com.anashidgames.gerdoo.core.service.model.CategoryTopic;
 import com.anashidgames.gerdoo.core.service.model.Rank;
+import com.anashidgames.gerdoo.core.service.model.server.LeaderBoardResponse;
 import com.anashidgames.gerdoo.pages.GerdooActivity;
 import com.anashidgames.gerdoo.pages.game.GameActivity;
-import com.anashidgames.gerdoo.pages.topic.list.PsychoAdapter;
-import com.anashidgames.gerdoo.pages.topic.list.PsychoDataProvider;
-import com.anashidgames.gerdoo.pages.topic.list.PsychoListResponse;
 import com.anashidgames.gerdoo.pages.topic.list.PsychoViewHolder;
 import com.anashidgames.gerdoo.pages.topic.view.RankingFooter;
 import com.anashidgames.gerdoo.pages.topic.view.RankingTableRow;
 import com.bumptech.glide.Glide;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 
@@ -35,33 +35,24 @@ public class TopicActivity extends GerdooActivity {
 
     public static final String TITLE = "title";
     public static final String BANNER_URL = "bannerUrl";
-    public static final String GENERAL_RANKING_URL = "generalRankingUrl";
-    public static final String FOLLOWING_RANKING_URL = "followingRankingUrl";
-    public static final String MY_RANKING_URL = "MyRankingUrl";
-    public static final String MY_RANK = "MyRank";
 
     public static final int GENERAL_RANKING_PAGE = 0;
     public static final int FOLLOWING_RANKING_PAGE = 1;
     public static final int MY_RANKING_RANKING_PAGE = 2;
+    public static final String LEADER_BOARD_ID = "LeaderBoardId";
 
     public static Intent newIntent(Context context, CategoryTopic topic) {
 
         Intent intent = new Intent(context, TopicActivity.class);
-        intent.putExtra(GENERAL_RANKING_URL, topic.getGeneralRankingUrl());
-        intent.putExtra(FOLLOWING_RANKING_URL, topic.getFollowingRankingUrl());
-        intent.putExtra(MY_RANKING_URL, topic.getMyRankingUrl());
+        intent.putExtra(LEADER_BOARD_ID, topic.getLeaderBoardId());
         intent.putExtra(TITLE, topic.getTitle());
         intent.putExtra(BANNER_URL, topic.getBannerUrl());
-        intent.putExtra(MY_RANK, topic.getMyRank());
         return intent;
     }
 
-    private String generalRankingUrl;
-    private String followingRankingUrl;
+    private String leaderBoardId;
     private String title;
     private String bannerUrl;
-    private String myRankingUrl;
-    private int myRank;
 
     private RecyclerView recyclerView;
     private RankingAdapter adapter;
@@ -75,6 +66,8 @@ public class TopicActivity extends GerdooActivity {
     private ImageView backButton;
 
     private int currentPage = -1;
+
+    Call<LeaderBoardResponse> leaderBoradCall;
 
 
     @Override
@@ -92,12 +85,9 @@ public class TopicActivity extends GerdooActivity {
 
     private void initData() {
         Bundle bundle = getIntent().getExtras();
-        generalRankingUrl = bundle.getString(GENERAL_RANKING_URL);
-        followingRankingUrl = bundle.getString(FOLLOWING_RANKING_URL);
-        myRankingUrl = bundle.getString(MY_RANKING_URL);
+        leaderBoardId = bundle.getString(LEADER_BOARD_ID);
         title = bundle.getString(TITLE);
         bannerUrl = bundle.getString(BANNER_URL);
-        myRank = bundle.getInt(MY_RANK);
     }
 
     private void initMyRankButton() {
@@ -120,6 +110,9 @@ public class TopicActivity extends GerdooActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
+        adapter = new RankingAdapter();
+        recyclerView.setAdapter(adapter);
+
         setPage(GENERAL_RANKING_PAGE);
     }
 
@@ -129,18 +122,19 @@ public class TopicActivity extends GerdooActivity {
 
         currentPage = page;
 
-        String dataUrl = null;
-        if (page == GENERAL_RANKING_PAGE)
-            dataUrl = generalRankingUrl;
-        else if (page == FOLLOWING_RANKING_PAGE)
-            dataUrl = followingRankingUrl;
-        else if (page == MY_RANKING_RANKING_PAGE)
-            dataUrl = myRankingUrl;
 
-        if (adapter != null)
-            adapter.cancelLoading();
-        adapter = new RankingAdapter(this, dataUrl);
-        recyclerView.setAdapter(adapter);
+        if (leaderBoradCall != null) {
+            leaderBoradCall.cancel();
+            leaderBoradCall = null;
+        }
+
+        if (page == MY_RANKING_RANKING_PAGE) {
+            leaderBoradCall = GerdooServer.INSTANCE.getAroundMe(leaderBoardId);
+            leaderBoradCall.enqueue(new LeaderBoardCallBack(this));
+        }else {
+            leaderBoradCall = GerdooServer.INSTANCE.getTopPlayers(leaderBoardId);
+            leaderBoradCall.enqueue(new LeaderBoardCallBack(this));
+        }
 
         if (page == MY_RANKING_RANKING_PAGE)
             myRankButton.setVisibility(View.GONE);
@@ -193,37 +187,45 @@ public class TopicActivity extends GerdooActivity {
         });
     }
 
-    private class RankingDataProvider extends PsychoDataProvider<Rank> {
+    private class RankingAdapter extends RecyclerView.Adapter<PsychoViewHolder<Rank>> {
 
-        private GerdooServer server;
-        private String rankingUrl;
+        private List<Rank> ranks = new ArrayList<>();
+        private List<RankingTableRow> rows = new ArrayList<>();
+        private int myRank = 0;
 
-        public RankingDataProvider(Context context, String rankingUrl) {
-            super(context);
-            server = GerdooServer.INSTANCE;
-            this.rankingUrl = rankingUrl;
+        @Override
+        public PsychoViewHolder<Rank> onCreateViewHolder(ViewGroup parent, int viewType) {
+            RankingTableRow row = new RankingTableRow(TopicActivity.this, myRank);
+            rows.add(row);
+            row.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
+            return new PsychoViewHolder<>(row);
         }
 
         @Override
-        protected Call<PsychoListResponse<Rank>> callServer(String nextPage) {
-            if (nextPage == null)
-                nextPage = rankingUrl;
-
-            return server.getRanking(nextPage);
-        }
-    }
-
-    private class RankingAdapter extends PsychoAdapter<Rank> {
-
-        public RankingAdapter(Activity activity, String url) {
-            super(activity, new RankingDataProvider(activity, url));
+        public void onBindViewHolder(PsychoViewHolder<Rank> holder, int position) {
+            holder.bind(ranks.get(position));
         }
 
         @Override
-        public PsychoViewHolder<Rank> createViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType) {
-            RankingTableRow view = new RankingTableRow(TopicActivity.this, myRank);
-            view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
-            return new PsychoViewHolder<>(view);
+        public int getItemCount() {
+            return ranks.size();
+        }
+
+        public void setRanks(List<Rank> ranks){
+            if (ranks == null) {
+                ranks = new ArrayList<>();
+            }
+
+            this.ranks = ranks;
+            notifyDataSetChanged();
+        }
+
+        public void setMyRank(int myRank) {
+            this.myRank = myRank;
+
+            for(RankingTableRow row : rows){
+                row.setMyRank(myRank);
+            }
         }
     }
 
@@ -299,6 +301,19 @@ public class TopicActivity extends GerdooActivity {
         private int getTitleColor(double index){
             int color = (int) (0xff * (1 - index));
             return color + color * 0x100 + color * 0x10000 + 0xff000000;
+        }
+    }
+
+    private class LeaderBoardCallBack extends CallbackWithErrorDialog<LeaderBoardResponse> {
+
+        public LeaderBoardCallBack(Context context) {
+            super(context);
+        }
+
+        @Override
+        public void handleSuccessful(LeaderBoardResponse data) {
+            adapter.setMyRank(data.getMyRank());
+            adapter.setRanks(data.getRanks());
         }
     }
 }

@@ -2,6 +2,7 @@ package com.anashidgames.gerdoo.view.row;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
@@ -82,7 +83,7 @@ public abstract class ItemsRow<T> extends LinearLayout implements ScrollableRow.
     }
 
     public void setData(String title){
-        setData(new Row(title, null, -1), true, false);
+        setData(new Row(title, null, null), true, false);
     }
 
 
@@ -122,18 +123,21 @@ public abstract class ItemsRow<T> extends LinearLayout implements ScrollableRow.
             arrowView.setImageResource(R.drawable.open);
     }
 
-    private void checkColor(int color) {
-        if(color <= 0){
+    private void checkColor(String color) {
+        if(color == null || color.isEmpty()){
             lineView.setVisibility(GONE);
             return;
         }
 
+        if (color.charAt(0) != '#'){
+            color = "#" + color;
+        }
 
-        if (color < 0x1000000)
-            color += 0xff000000;
+        int colorValue = Color.parseColor(color);
 
-        arrowView.setColorFilter(color);
-        iconView.setColorFilter(color);
+
+        arrowView.setColorFilter(colorValue);
+        iconView.setColorFilter(colorValue);
 
         lineView.setVisibility(VISIBLE);
     }

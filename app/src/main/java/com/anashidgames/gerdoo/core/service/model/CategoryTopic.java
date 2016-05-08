@@ -1,27 +1,29 @@
 package com.anashidgames.gerdoo.core.service.model;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by psycho on 3/29/16.
  */
 public class CategoryTopic {
-    private String imageUrl;
-    private String title;
-    private String categoryTitle;
-    private String generalRankingUrl;
-    private String followingRankingUrl;
-    private String myRankingUrl;
-    private String bannerUrl;
-    private int myRank;
 
-    public CategoryTopic(String imageUrl, String title, String categoryTitle, String generalRankingUrl, String followingRankingUrl, String myRankingUrl, String bannerUrl, int myRank) {
+    @SerializedName("imageUrl")
+    private String imageUrl;
+    @SerializedName("title")
+    private String title;
+    @SerializedName("categoryTitle")
+    private String categoryTitle;
+    @SerializedName("leaderBoardId")
+    private String leaderBoardId;
+    @SerializedName("bannerUrl")
+    private String bannerUrl;
+
+    public CategoryTopic(String imageUrl, String title, String categoryTitle, String leaderBoardId, String bannerUrl) {
         this.imageUrl = imageUrl;
         this.title = title;
         this.categoryTitle = categoryTitle;
-        this.generalRankingUrl = generalRankingUrl;
-        this.followingRankingUrl = followingRankingUrl;
-        this.myRankingUrl = myRankingUrl;
+        this.leaderBoardId = leaderBoardId;
         this.bannerUrl = bannerUrl;
-        this.myRank = myRank;
     }
 
     public String getImageUrl() {
@@ -32,27 +34,15 @@ public class CategoryTopic {
         return title;
     }
 
-    public String getGeneralRankingUrl() {
-        return generalRankingUrl;
+    public String getCategoryTitle() {
+        return categoryTitle;
     }
 
-    public String getFollowingRankingUrl() {
-        return followingRankingUrl;
+    public String getLeaderBoardId() {
+        return leaderBoardId;
     }
 
     public String getBannerUrl() {
         return bannerUrl;
-    }
-
-    public String getMyRankingUrl() {
-        return myRankingUrl;
-    }
-
-    public int getMyRank() {
-        return myRank;
-    }
-
-    public String getCategoryTitle() {
-        return categoryTitle;
     }
 }

@@ -2,18 +2,18 @@ package com.anashidgames.gerdoo.core.service;
 
 import com.anashidgames.gerdoo.core.service.model.Category;
 import com.anashidgames.gerdoo.core.service.model.CategoryTopic;
-import com.anashidgames.gerdoo.core.service.model.ChangeImageResponse;
-import com.anashidgames.gerdoo.core.service.model.FollowToggleResponse;
+import com.anashidgames.gerdoo.core.service.model.LeaderBoardParams;
+import com.anashidgames.gerdoo.core.service.model.Rank;
+import com.anashidgames.gerdoo.core.service.model.parameters.GetCategoryTopicsParams;
+import com.anashidgames.gerdoo.core.service.model.parameters.GetSubCategoriesParams;
+import com.anashidgames.gerdoo.core.service.model.server.ChangeImageResponse;
+import com.anashidgames.gerdoo.core.service.model.server.FollowToggleResponse;
 import com.anashidgames.gerdoo.core.service.model.Friend;
 import com.anashidgames.gerdoo.core.service.model.Gift;
 import com.anashidgames.gerdoo.core.service.model.HomeItem;
-import com.anashidgames.gerdoo.core.service.model.parameters.LeaderBoardParams;
 import com.anashidgames.gerdoo.core.service.model.ProfileInfo;
-import com.anashidgames.gerdoo.core.service.model.Rank;
 import com.anashidgames.gerdoo.core.service.model.UserInfo;
-import com.anashidgames.gerdoo.core.service.model.server.LeaderBoardItem;
 import com.anashidgames.gerdoo.core.service.model.server.LeaderBoardResponse;
-import com.anashidgames.gerdoo.pages.topic.list.PsychoListResponse;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,7 +44,7 @@ class MockService implements GerdooService {
     }
 
     @Override
-    public Call<List<HomeItem>> getHome() {
+    public Call<List<HomeItem>> getHome(String instanceId) {
         List<HomeItem> response = new ArrayList<>();
         List<String> banners = Arrays.asList(
                 "https://i.imgsafe.org/c26dc81.jpg",
@@ -63,21 +63,21 @@ class MockService implements GerdooService {
             int rand = random.nextInt(4);
             if (rand == 0){
                 String bannerUrl = banners.get(random.nextInt(banners.size()));
-                item = new HomeItem(HomeItem.TYPE_BANNER_CATEGORY, bannerUrl, title + i, categoryBannerImageAspectRatio, bannerUrl);
+                item = new HomeItem(title + i, bannerUrl, categoryBannerImageAspectRatio, "");
             }else if (rand == 1){
-                item = new HomeItem(HomeItem.TYPE_BANNER_URL, urlBannerImageUrl, urlBannerImageAspectRatio, urlBannerImageUrl);
+                item = new HomeItem(urlBannerImageUrl, urlBannerImageAspectRatio, urlBannerImageUrl);
             }else {
-                item = new HomeItem(HomeItem.TYPE_CATEGORY, HOME, title + i);
+                item = new HomeItem(title + i, HOME);
             }
 
             response.add(item);
         }
 
-        return behaviorDelegate.returningResponse(response).getHome();
+        return behaviorDelegate.returningResponse(response).getHome(instanceId);
     }
 
     @Override
-    public Call<List<CategoryTopic>> getCategoryTopics(@Url String url) {
+    public Call<List<CategoryTopic>> getCategoryTopics(String cloudCodeId, GetCategoryTopicsParams params) {
         List<CategoryTopic> response = new ArrayList<>();
         List<String> images = Arrays.asList(
                 "https://i.imgsafe.org/2fb7d09.png",
@@ -92,30 +92,19 @@ class MockService implements GerdooService {
         for(int i = 0; i< dataSize; i++){
             String imageUrl = images.get(random.nextInt(images.size()));
 
-            String itemTitle = title;
-            while(random.nextBoolean()) {
-                itemTitle += title;
+            String categoryTitle = title;
+            while (random.nextBoolean()) {
+                categoryTitle += title;
             }
 
-            String categoryTitle = "";
-            if (url != null && url.contains(HOME)) {
-                categoryTitle = title;
-                while (random.nextBoolean()) {
-                    categoryTitle += title;
-                }
-            }
-
-            itemTitle += i;
-
-            int myRank = random.nextInt(3000);
-            response.add(new CategoryTopic(imageUrl, "احسان خواجه امیری", categoryTitle, "", "", MY_RANK + myRank, "https://i.imgsafe.org/c77e5e5.jpg", myRank));
+            response.add(new CategoryTopic(imageUrl, "احسان خواجه امیری", categoryTitle, "", "https://i.imgsafe.org/c77e5e5.jpg"));
         }
 
-        return behaviorDelegate.returningResponse(response).getCategoryTopics(url);
+        return behaviorDelegate.returningResponse(response).getCategoryTopics(cloudCodeId, params);
     }
 
     @Override
-    public Call<List<Category>> getCategories(@Url String url) {
+    public Call<List<Category>> getSubCategories(String cloudCodeId, GetSubCategoriesParams params) {
         List<Category> response = new ArrayList<>();
         List<String> images = Arrays.asList(
                 "https://i.imgsafe.org/c2218e1.png",
@@ -126,12 +115,12 @@ class MockService implements GerdooService {
                 "https://i.imgsafe.org/c8a4323.png",
                 "https://i.imgsafe.org/c7d4087.png"
         );
-        List<Integer> colors = Arrays.asList(
-            0x248a8a,
-            0x16bfbf,
-            0xa0e5e3,
-            0x238080,
-            0xd2f2ed
+        List<String> colors = Arrays.asList(
+            "248a8a",
+            "16bfbf",
+            "a0e5e3",
+            "238080",
+            "d2f2ed"
         );
         String title = "عنوان  ";
 
@@ -146,28 +135,44 @@ class MockService implements GerdooService {
 
             categoryTitle += i;
 
-            Integer color = colors.get(random.nextInt(colors.size()));
-            response.add(new Category(categoryTitle, imageUrl, "", random.nextInt()%4 == 0, color));
+            String color = colors.get(random.nextInt(colors.size()));
+            response.add(new Category("", categoryTitle, imageUrl, random.nextInt()%4 == 0, color));
         }
 
 
-        return behaviorDelegate.returningResponse(response).getCategories(url);
+        return behaviorDelegate.returningResponse(response).getSubCategories(cloudCodeId, params);
     }
 
     @Override
-    public Call<LeaderBoardResponse> getRanking(String gameId, LeaderBoardParams params) {
-        List<LeaderBoardItem> items = new ArrayList<>();
+    public Call<LeaderBoardResponse> getTopPlayers(String cloudId, LeaderBoardParams params) {
+        List<Rank> items = new ArrayList<>();
         String firstName = "اسم";
         String lastName = "فامیل";
 
 
         for(int i = 0; i< 20; i++, i++){
-            items.add(new LeaderBoardItem(firstName, lastName, UUID.randomUUID().toString(), random.nextInt(1000000)));
+            items.add(new Rank(i, random.nextInt(1000000), firstName + " " + lastName, UUID.randomUUID().toString()));
         }
 
 
-        LeaderBoardResponse response = new LeaderBoardResponse(items, "OK");
-        return behaviorDelegate.returningResponse(response).getRanking(gameId, params);
+        LeaderBoardResponse response = new LeaderBoardResponse(items, 14);
+        return behaviorDelegate.returningResponse(response).getTopPlayers(cloudId, params);
+    }
+
+    @Override
+    public Call<LeaderBoardResponse> getAroundMe(String cloudId, LeaderBoardParams params) {
+        List<Rank> items = new ArrayList<>();
+        String firstName = "اسم";
+        String lastName = "فامیل";
+
+
+        for(int i = 0; i< 20; i++, i++){
+            items.add(new Rank(i, random.nextInt(1000000), firstName + " " + lastName, UUID.randomUUID().toString()));
+        }
+
+
+        LeaderBoardResponse response = new LeaderBoardResponse(items, 14);
+        return behaviorDelegate.returningResponse(response).getAroundMe(cloudId, params);
     }
 
     @Override

@@ -60,7 +60,7 @@ public class CategoryView extends ItemsRow<CategoryTopic> {
 
     @Override
     public Call<List<CategoryTopic>> getItems() {
-        return GerdooServer.INSTANCE.getCategoryTopics(category.getDataUrl());
+        return GerdooServer.INSTANCE.getCategoryTopics(category.getCategoryId());
     }
 
     @Override
@@ -83,7 +83,7 @@ public class CategoryView extends ItemsRow<CategoryTopic> {
         setData(row, expanded, toggleable);
     }
 
-    public void setCategory(String title, String dataUrl) {
-        setCategory(new Category(title, null, dataUrl, false, -1), true, false);
+    public void setCategory(String title, String categoryId) {
+        setCategory(new Category(categoryId, title, null, false, null), true, false);
     }
 }

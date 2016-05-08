@@ -44,7 +44,7 @@ public class UserMatchFragment extends Fragment {
                 if (canceled)
                     return;
 
-                ((FragmentContainerActivity) getActivity()).changeFragment(ResultFragment.newInstance());
+                ((FragmentContainerActivity) getActivity()).changeFragment(GameFragment.newInstance());
             }
         }, 5000);
 

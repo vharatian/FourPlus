@@ -33,7 +33,8 @@
     <color name="topicScreamColor">#99000000</color>
     <color name="drawerGray">#9c9c9c</color>
     <color name="profileGradientStartColor">#99000000</color>
-
+    <color name="gamePageBackground">#e4e4e4</color>
+    <color name="option_gray">#bfbfbf</color>
 
 
 </resources>

@@ -1,6 +1,7 @@
 package com.anashidgames.gerdoo.core.service.model;
 
 import com.anashidgames.gerdoo.core.service.model.server.LeaderBoardItem;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
@@ -9,35 +10,20 @@ import java.util.List;
  */
 public class Rank {
 
+    @SerializedName("rank")
     private int rank;
+    @SerializedName("score")
     private int score;
+    @SerializedName("name")
     private String name;
+    @SerializedName("userId")
     private String userId;
-    private int rankChange;
 
-    public Rank(int rank, int score, String name, String userId, int rankChange) {
+    public Rank(int rank, int score, String name, String userId) {
         this.rank = rank;
         this.score = score;
         this.name = name;
         this.userId = userId;
-        this.rankChange = rankChange;
-    }
-
-    public Rank(LeaderBoardItem item, int rank) {
-        int score = 0;
-        List<Integer> scores = item.getScores();
-        if(scores != null && !scores.isEmpty())
-            score = scores.get(0);
-
-        this.rank = rank;
-        this.score = score;
-        this.rankChange = 0;
-
-        LeaderBoardItem.UserBriefProfile profile = item.getUserBriefProfile();
-        if (profile != null) {
-            this.name = profile.getFirstName() + " " + profile.getLastName();
-            this.userId = profile.getUserId();
-        }
     }
 
     public int getRank() {
@@ -56,7 +42,4 @@ public class Rank {
         return userId;
     }
 
-    public int getRankChange() {
-        return rankChange;
-    }
 }

@@ -1,4 +1,4 @@
-package com.anashidgames.gerdoo.core.service.model;
+package com.anashidgames.gerdoo.core.service.model.server;
 
 /**
  * Created by psycho on 4/18/16.

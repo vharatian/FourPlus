@@ -3,6 +3,7 @@ package com.anashidgames.gerdoo.core.service.call;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 
 import com.anashidgames.gerdoo.R;
 
@@ -24,6 +25,7 @@ public abstract class CallbackWithErrorDialog<T> extends PsychoCallBack<T>{
 
     @Override
     public void handleFailure(Call<T> call, Throwable t) {
+        Log.e("Four+", "error", t);
         ShowErrorDialog(R.string.networkError);
     }
 

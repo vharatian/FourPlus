@@ -17,18 +17,14 @@ import android.widget.Toast;
 import com.anashidgames.gerdoo.R;
 import com.anashidgames.gerdoo.core.service.GerdooServer;
 import com.anashidgames.gerdoo.core.service.call.CallbackWithErrorDialog;
-import com.anashidgames.gerdoo.core.service.model.ChangeImageResponse;
-import com.anashidgames.gerdoo.core.service.model.FollowToggleResponse;
+import com.anashidgames.gerdoo.core.service.model.server.ChangeImageResponse;
+import com.anashidgames.gerdoo.core.service.model.server.FollowToggleResponse;
 import com.anashidgames.gerdoo.core.service.model.ProfileInfo;
 import com.anashidgames.gerdoo.pages.profile.view.FriendsRow;
 import com.anashidgames.gerdoo.pages.profile.view.GiftsRow;
 import com.anashidgames.gerdoo.view.chart.pie.PieChart;
 import com.anashidgames.gerdoo.view.chart.pie.PieChartItem;
 import com.bumptech.glide.Glide;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import retrofit2.Call;
 

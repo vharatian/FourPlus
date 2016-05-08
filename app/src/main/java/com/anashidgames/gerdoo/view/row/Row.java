@@ -8,15 +8,15 @@ import android.content.Intent;
 public class Row {
     private String title;
     private String iconUrl;
-    private int color;
+    private String color;
 
-    public Row(String title, String iconUrl, int color) {
+    public Row(String title, String iconUrl, String color) {
         this.title = title;
         this.iconUrl = iconUrl;
         this.color = color;
     }
 
-    public int getColor() {
+    public String getColor() {
         return color;
     }
 

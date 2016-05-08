@@ -75,7 +75,8 @@
             android:gravity="center"
             android:layout_marginLeft="@dimen/smallBreak"
             android:layout_marginTop="@dimen/rankMargin"
-            android:layout_marginBottom="@dimen/rankMargin">
+            android:layout_marginBottom="@dimen/rankMargin"
+            android:visibility="gone">
 
             <com.anashidgames.gerdoo.view.FitToWidthImageView
                 android:layout_width="13dp"

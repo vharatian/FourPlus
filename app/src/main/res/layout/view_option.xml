@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <pl.droidsonroids.gif.GifImageView
+        android:layout_width="@dimen/optionStatusIconSize"
+        android:layout_height="@dimen/optionStatusIconSize"
+        android:layout_gravity="center"
+        android:layout_marginRight="@dimen/normalBreak"
+        android:id="@+id/leftStatusIcon"/>
+
+    <com.anashidgames.gerdoo.view.basic.BoldTextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textSize="17dp"
+        android:textColor="@color/black"
+        android:background="@drawable/gray_button_background_normal"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:id="@+id/titleView"/>
+
+    <pl.droidsonroids.gif.GifImageView
+        android:layout_width="@dimen/optionStatusIconSize"
+        android:layout_height="@dimen/optionStatusIconSize"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/normalBreak"
+        android:id="@+id/rightStatusIcon"/>
+
+</LinearLayout>
