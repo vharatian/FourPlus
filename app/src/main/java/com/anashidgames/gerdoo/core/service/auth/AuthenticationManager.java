@@ -131,6 +131,23 @@ public class AuthenticationManager {
         context.startActivity(intent);
     }
 
+    public AuthenticationInfo checkInfo(boolean refresh){
+        AuthenticationInfo info = getAuthenticationInfo();
+        if (info == null || !info.isValid()) {
+            startAuthenticationActivity();
+            info = null;
+        }else if (info.expired()){
+            if (refresh){
+                refreshToken();
+                checkInfo(false);
+            }else{
+                info = null;
+            }
+        }
+
+        return info;
+    }
+
     private class AuthenticationInfoInterceptor implements Interceptor {
         private static final String AUTHENTICATION_ID = "X-Backtory-Authentication-Id";
         private static final String AUTHENTICATION_KEY = "X-Backtory-Authentication-Key";

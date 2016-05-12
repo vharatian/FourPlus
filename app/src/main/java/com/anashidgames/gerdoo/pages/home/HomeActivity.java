@@ -85,8 +85,8 @@ public class HomeActivity extends FragmentContainerActivity {
 
         drawerItems = Arrays.asList(
                 new DrawerItemView.DrawerItem(R.string.profile, R.drawable.profile_icon, ProfileActivity.newIntent(this, null)),
-                new DrawerItemView.DrawerItem(R.string.gifts, R.drawable.gifts_icon, rateIntent),
-                new DrawerItemView.DrawerItem(R.string.shop, R.drawable.shop_icon, rateIntent),
+//                new DrawerItemView.DrawerItem(R.string.gifts, R.drawable.gifts_icon, rateIntent),
+//                new DrawerItemView.DrawerItem(R.string.shop, R.drawable.shop_icon, rateIntent),
                 new DrawerItemView.DrawerItem(R.string.vote, R.drawable.vote_icon, rateIntent),
                 new DrawerItemView.DrawerItem(R.string.about_us, R.drawable.about_us_icon, TextActivity.newIntent(this, R.string.aboutUsText))
         );

@@ -87,6 +87,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void addItems(List<HomeItem> items) {
+        clearItems();
         int lastItem = -1;
         for(int i=0; i<items.size(); i++){
             HomeItem item = items.get(i);
@@ -102,6 +103,10 @@ public class HomeFragment extends Fragment {
             }
             lastItem = item.getType();
         }
+    }
+
+    private void clearItems() {
+        mainLayout.removeAllViews();
     }
 
     private void addCategory(String title, String categoryId, int colorResource) {

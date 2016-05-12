@@ -1,5 +1,6 @@
 package com.anashidgames.gerdoo.pages.game;
 
+import com.anashidgames.gerdoo.core.service.model.ParticipantInfo;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -21,6 +22,12 @@ public class PlayerData implements Serializable {
         this.avatarUrl = avatarUrl;
         this.name = name;
         this.score = score;
+    }
+
+    public PlayerData(ParticipantInfo myInfo) {
+        userId = myInfo.getUserId();
+        avatarUrl = myInfo.getImageUrl();
+        name = myInfo.getName();
     }
 
     public String getUserId() {

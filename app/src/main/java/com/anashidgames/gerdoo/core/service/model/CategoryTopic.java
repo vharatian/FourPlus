@@ -15,6 +15,8 @@ public class CategoryTopic {
     private String categoryTitle;
     @SerializedName("leaderBoardId")
     private String leaderBoardId;
+    @SerializedName("matchMakingName")
+    private String matchMakingName;
     @SerializedName("bannerUrl")
     private String bannerUrl;
 
@@ -44,5 +46,9 @@ public class CategoryTopic {
 
     public String getBannerUrl() {
         return bannerUrl;
+    }
+
+    public String getMatchMakingName() {
+        return matchMakingName;
     }
 }

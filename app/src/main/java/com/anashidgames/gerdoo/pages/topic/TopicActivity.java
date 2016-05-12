@@ -40,6 +40,7 @@ public class TopicActivity extends GerdooActivity {
     public static final int FOLLOWING_RANKING_PAGE = 1;
     public static final int MY_RANKING_RANKING_PAGE = 2;
     public static final String LEADER_BOARD_ID = "LeaderBoardId";
+    public static final String MATCH_MAKING_NAME = "matchMakingName";
 
     public static Intent newIntent(Context context, CategoryTopic topic) {
 
@@ -47,12 +48,14 @@ public class TopicActivity extends GerdooActivity {
         intent.putExtra(LEADER_BOARD_ID, topic.getLeaderBoardId());
         intent.putExtra(TITLE, topic.getTitle());
         intent.putExtra(BANNER_URL, topic.getBannerUrl());
+        intent.putExtra(MATCH_MAKING_NAME, topic.getMatchMakingName());
         return intent;
     }
 
     private String leaderBoardId;
     private String title;
     private String bannerUrl;
+    private String matchMakingName;
 
     private RecyclerView recyclerView;
     private RankingAdapter adapter;
@@ -67,7 +70,7 @@ public class TopicActivity extends GerdooActivity {
 
     private int currentPage = -1;
 
-    Call<LeaderBoardResponse> leaderBoradCall;
+    Call<LeaderBoardResponse> leaderBoardCall;
 
 
     @Override
@@ -88,6 +91,7 @@ public class TopicActivity extends GerdooActivity {
         leaderBoardId = bundle.getString(LEADER_BOARD_ID);
         title = bundle.getString(TITLE);
         bannerUrl = bundle.getString(BANNER_URL);
+        matchMakingName = bundle.getString(MATCH_MAKING_NAME);
     }
 
     private void initMyRankButton() {
@@ -123,17 +127,17 @@ public class TopicActivity extends GerdooActivity {
         currentPage = page;
 
 
-        if (leaderBoradCall != null) {
-            leaderBoradCall.cancel();
-            leaderBoradCall = null;
+        if (leaderBoardCall != null) {
+            leaderBoardCall.cancel();
+            leaderBoardCall = null;
         }
 
         if (page == MY_RANKING_RANKING_PAGE) {
-            leaderBoradCall = GerdooServer.INSTANCE.getAroundMe(leaderBoardId);
-            leaderBoradCall.enqueue(new LeaderBoardCallBack(this));
+            leaderBoardCall = GerdooServer.INSTANCE.getAroundMe(leaderBoardId);
+            leaderBoardCall.enqueue(new LeaderBoardCallBack(this));
         }else {
-            leaderBoradCall = GerdooServer.INSTANCE.getTopPlayers(leaderBoardId);
-            leaderBoradCall.enqueue(new LeaderBoardCallBack(this));
+            leaderBoardCall = GerdooServer.INSTANCE.getTopPlayers(leaderBoardId);
+            leaderBoardCall.enqueue(new LeaderBoardCallBack(this));
         }
 
         if (page == MY_RANKING_RANKING_PAGE)
@@ -169,7 +173,7 @@ public class TopicActivity extends GerdooActivity {
         findViewById(R.id.playButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(GameActivity.newIntent(TopicActivity.this));
+                startActivity(GameActivity.newIntent(TopicActivity.this, matchMakingName));
             }
         });
 

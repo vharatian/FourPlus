@@ -2,7 +2,9 @@ package com.anashidgames.gerdoo.core.service;
 
 import com.anashidgames.gerdoo.core.service.model.Category;
 import com.anashidgames.gerdoo.core.service.model.CategoryTopic;
+import com.anashidgames.gerdoo.core.service.model.GetSkillResponse;
 import com.anashidgames.gerdoo.core.service.model.LeaderBoardParams;
+import com.anashidgames.gerdoo.core.service.model.MatchData;
 import com.anashidgames.gerdoo.core.service.model.Rank;
 import com.anashidgames.gerdoo.core.service.model.parameters.GetCategoryTopicsParams;
 import com.anashidgames.gerdoo.core.service.model.parameters.GetSubCategoriesParams;
@@ -21,9 +23,12 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import ir.pegahtech.backtory.models.messages.MatchFoundMessage;
 import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 import retrofit2.http.Url;
 import retrofit2.mock.BehaviorDelegate;
 
@@ -176,9 +181,19 @@ class MockService implements GerdooService {
     }
 
     @Override
-    public Call<UserInfo> getUserInfo() {
+    public Call<GetSkillResponse> getSkill(@Path("cloudCodeId") String cloudId) {
+        return null;
+    }
+
+    @Override
+    public Call<MatchData> getMatchData(@Path("cloudCodeId") String cloudCodeId, @Body MatchFoundMessage matchFoundMessage) {
+        return null;
+    }
+
+    @Override
+    public Call<UserInfo> getUserInfo(String cloudCodeId) {
         UserInfo response = new UserInfo("http://indiabright.com/wp-content/uploads/2015/11/profile_picture_by_kyo_tux-d4hrimy.png", "اسم و فامیل");
-        return behaviorDelegate.returningResponse(response).getUserInfo();
+        return behaviorDelegate.returningResponse(response).getUserInfo(cloudCodeId);
     }
 
     @Override

@@ -21,6 +21,8 @@ public class OptionView extends LinearLayout {
     public static final int STATUS_LEFT_CORRECT = 3;
     public static final int STATUS_RIGHT_WRONG = 4;
     public static final int STATUS_RIGHT_CORRECT = 5;
+    public static final int STATUS_DISABLED = 6;
+
     public static final int HIDE = 0;
 
 
@@ -89,6 +91,8 @@ public class OptionView extends LinearLayout {
                 setStatusIconResource(rightStatusIcon, R.drawable.check_animation);
                 backgroundResource = R.drawable.gray_button_background_valid;
                 break;
+            case STATUS_DISABLED:
+                backgroundResource = R.drawable.gray_button_background_disabled;
         }
 
         titleView.setBackgroundResource(backgroundResource);

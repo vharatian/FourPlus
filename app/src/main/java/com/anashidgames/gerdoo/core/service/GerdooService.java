@@ -2,7 +2,10 @@ package com.anashidgames.gerdoo.core.service;
 
 import com.anashidgames.gerdoo.core.service.model.Category;
 import com.anashidgames.gerdoo.core.service.model.CategoryTopic;
+import com.anashidgames.gerdoo.core.service.model.GetSkillParams;
+import com.anashidgames.gerdoo.core.service.model.GetSkillResponse;
 import com.anashidgames.gerdoo.core.service.model.LeaderBoardParams;
+import com.anashidgames.gerdoo.core.service.model.MatchData;
 import com.anashidgames.gerdoo.core.service.model.parameters.GetCategoryTopicsParams;
 import com.anashidgames.gerdoo.core.service.model.parameters.GetSubCategoriesParams;
 import com.anashidgames.gerdoo.core.service.model.server.ChangeImageResponse;
@@ -16,6 +19,7 @@ import com.anashidgames.gerdoo.core.service.model.server.LeaderBoardResponse;
 
 import java.util.List;
 
+import ir.pegahtech.backtory.models.messages.MatchFoundMessage;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -61,8 +65,21 @@ interface GerdooService {
             @Body LeaderBoardParams params
     );
 
-    @GET("/")
-    Call<UserInfo> getUserInfo();
+    @POST("/api/lambda/{cloudCodeId}/getMySkill")
+    Call<GetSkillResponse> getSkill(
+            @Path("cloudCodeId") String cloudId
+    );
+
+    @POST("/api/lambda/{cloudCodeId}/getMatchData")
+    Call<MatchData> getMatchData(
+            @Path("cloudCodeId") String cloudCodeId,
+            @Body MatchFoundMessage matchFoundMessage
+    );
+
+    @POST("/api/lambda/{cloudCodeId}/getBriefProfile")
+    Call<UserInfo> getUserInfo(
+            @Path("cloudCodeId") String cloudCodeId
+    );
 
     @GET("/")
     Call<ProfileInfo> getProfile(Long userId);
@@ -78,4 +95,6 @@ interface GerdooService {
 
     @GET()
     Call<ChangeImageResponse> changeImage(@Url String url, @Part("image") RequestBody body);
+
+
 }

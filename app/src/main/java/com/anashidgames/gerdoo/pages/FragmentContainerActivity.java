@@ -12,10 +12,15 @@ import com.anashidgames.gerdoo.R;
  */
 public class FragmentContainerActivity extends GerdooActivity {
 
+    private final boolean saveBackStack;
     private int fragmentId;
 
     public FragmentContainerActivity(int fragmentId) {
+        this(fragmentId, true);
+    }
+    public FragmentContainerActivity(int fragmentId, boolean saveBackStack) {
         this.fragmentId = fragmentId;
+        this.saveBackStack = saveBackStack;
     }
 
     public void changeFragment(Fragment fragment){
@@ -24,7 +29,9 @@ public class FragmentContainerActivity extends GerdooActivity {
         transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.fade_out);
         transaction.replace(fragmentId, fragment);
 
-        transaction.addToBackStack(null);
+        if (saveBackStack) {
+            transaction.addToBackStack(null);
+        }
         transaction.commit();
 
     }

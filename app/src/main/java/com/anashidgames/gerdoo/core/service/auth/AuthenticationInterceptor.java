@@ -15,7 +15,6 @@ import okhttp3.Response;
  */
 public class AuthenticationInterceptor implements Interceptor {
 
-    public static final String ACCESS_TOKEN = "access_token";
     public static final String AUTHORIZATION = "Authorization";
     private AuthenticationManager authenticationManager;
 
@@ -26,7 +25,7 @@ public class AuthenticationInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
-        AuthenticationInfo info = checkInfo(true);
+        AuthenticationInfo info = authenticationManager.checkInfo(true);
 
         if (info != null) {
             String accessToken = info.getAccessToken();
@@ -39,23 +38,5 @@ public class AuthenticationInterceptor implements Interceptor {
         }
 
         return chain.proceed(request);
-    }
-
-
-    private AuthenticationInfo checkInfo(boolean refresh){
-        AuthenticationInfo info = authenticationManager.getAuthenticationInfo();
-        if (info == null || !info.isValid()) {
-            authenticationManager.startAuthenticationActivity();
-            info = null;
-        }else if (info.expired()){
-            if (refresh){
-                authenticationManager.refreshToken();
-                checkInfo(false);
-            }else{
-                info = null;
-            }
-        }
-
-        return info;
     }
 }

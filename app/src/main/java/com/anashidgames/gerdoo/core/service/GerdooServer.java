@@ -8,7 +8,9 @@ import com.anashidgames.gerdoo.core.service.auth.AuthenticationManager;
 import com.anashidgames.gerdoo.core.service.model.AuthenticationInfo;
 import com.anashidgames.gerdoo.core.service.model.Category;
 import com.anashidgames.gerdoo.core.service.model.CategoryTopic;
+import com.anashidgames.gerdoo.core.service.model.GetSkillResponse;
 import com.anashidgames.gerdoo.core.service.model.LeaderBoardParams;
+import com.anashidgames.gerdoo.core.service.model.MatchData;
 import com.anashidgames.gerdoo.core.service.model.parameters.GetCategoryTopicsParams;
 import com.anashidgames.gerdoo.core.service.model.parameters.GetSubCategoriesParams;
 import com.anashidgames.gerdoo.core.service.model.server.ChangeImageResponse;
@@ -20,9 +22,12 @@ import com.anashidgames.gerdoo.core.service.model.ProfileInfo;
 import com.anashidgames.gerdoo.core.service.model.SignUpInfo;
 import com.anashidgames.gerdoo.core.service.model.UserInfo;
 import com.anashidgames.gerdoo.core.service.model.server.LeaderBoardResponse;
+import com.anashidgames.gerdoo.core.service.realTime.GameManager;
+import com.anashidgames.gerdoo.core.service.realTime.MatchMakingManager;
 
 import java.util.List;
 
+import ir.pegahtech.backtory.models.messages.MatchFoundMessage;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
@@ -40,6 +45,7 @@ public class GerdooServer{
 
     public static final String AUTHENTICATION_ID = "57163ee5e4b0cad8c4dd1844";
     public static final String AUTHENTICATION_KEY = "57163ee5e4b093ed2821a011";
+    private static final String REALTIME_INSTANCE_ID = "57284ac1e4b01c017afb4015";
 
     public static final String CLOUD_CODE_ID = "57163effe4b0cad8c4dd184a";
     public static final String GAME_ID = "57163f07e4b0cad8c4dd184c";
@@ -49,11 +55,13 @@ public class GerdooServer{
 //    public static final String HOST = "http://192.168.0.99:8585";
     public static final String HOST = "http://api1.backtory.com/";
 
+
     private GerdooService mockService;
     private GerdooService realService;
     private GerdooService service;
 
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
+    private Context context;
 
 
     private GerdooServer(String authenticationId, String authenticationKey) {
@@ -83,6 +91,7 @@ public class GerdooServer{
     }
 
     public void setContext(Context context) {
+        this.context = context;
         authenticationManager.setContext(context);
     }
 
@@ -119,7 +128,7 @@ public class GerdooServer{
     }
 
     public Call<UserInfo> getUserInfo() {
-        return service.getUserInfo();
+        return realService.getUserInfo(CLOUD_CODE_ID);
     }
 
     public Call<ProfileInfo> getProfile(Long userId) {
@@ -141,5 +150,25 @@ public class GerdooServer{
     public Call<ChangeImageResponse> changeImage(String url, Uri selectedImage) {
         RequestBody body = RequestBody.create(MediaType.parse("image/*"), selectedImage.getPath());
         return service.changeImage(url, body);
+    }
+
+    public Call<GetSkillResponse> getSkill() {
+        return realService.getSkill(CLOUD_CODE_ID);
+    }
+
+    public AuthenticationManager getAuthenticationManager() {
+        return authenticationManager;
+    }
+
+    public MatchMakingManager createMatchMakingManager(String matchMakingName) {
+        return new MatchMakingManager(context, authenticationManager, REALTIME_INSTANCE_ID, matchMakingName);
+    }
+
+    public Call<MatchData> getMatchData(MatchFoundMessage matchFoundMessage) {
+        return realService.getMatchData(CLOUD_CODE_ID, matchFoundMessage);
+    }
+
+    public GameManager createGameManager(MatchData matchData) {
+        return new GameManager(authenticationManager, REALTIME_INSTANCE_ID, matchData);
     }
 }

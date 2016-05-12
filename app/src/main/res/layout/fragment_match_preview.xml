@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.anashidgames.gerdoo.pages.game.view.PlayerView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:id="@+id/opponentPlayerView"
+            android:layout_margin="@dimen/longBreak"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/lineHeight"
+            android:background="@color/colorAccent"/>
+
+        <com.anashidgames.gerdoo.pages.game.view.PlayerView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:id="@+id/myPlayerView"
+            android:layout_margin="@dimen/longBreak"/>
+
+    </LinearLayout>
+
+    <com.anashidgames.gerdoo.view.FitToWidthImageView
+        android:layout_width="@dimen/vsIconSize"
+        android:layout_height="wrap_content"
+        android:src="@drawable/vs"
+        android:layout_gravity="center"/>
+
+</FrameLayout>
