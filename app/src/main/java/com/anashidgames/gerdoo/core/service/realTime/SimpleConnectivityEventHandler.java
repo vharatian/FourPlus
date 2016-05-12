@@ -18,7 +18,7 @@ import ir.pegahtech.connectivity.BacktoryConnectivityEventHandler;
 public class SimpleConnectivityEventHandler implements BacktoryConnectivityEventHandler {
     @Override
     public void onMatchFound(MatchFoundMessage matchFoundMessage) {
-
+        Log.i("psycho", "Match found message: " + matchFoundMessage.getExtraMessage());
     }
 
     @Override

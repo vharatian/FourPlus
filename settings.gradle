@@ -1,3 +1,2 @@
 include ':app'
-include ':androidinstagramoauth'
 include ':backtoryrealtimesdk'

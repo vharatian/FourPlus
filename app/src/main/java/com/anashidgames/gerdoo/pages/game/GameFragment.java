@@ -3,9 +3,14 @@ package com.anashidgames.gerdoo.pages.game;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentContainer;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.Transformation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,9 +18,12 @@ import android.widget.TextView;
 import com.anashidgames.gerdoo.R;
 import com.anashidgames.gerdoo.core.service.model.MatchData;
 import com.anashidgames.gerdoo.core.service.model.Option;
+import com.anashidgames.gerdoo.core.service.model.ParticipantInfo;
 import com.anashidgames.gerdoo.core.service.model.Question;
 import com.anashidgames.gerdoo.core.service.realTime.GameManager;
+import com.anashidgames.gerdoo.pages.FragmentContainerActivity;
 import com.anashidgames.gerdoo.pages.game.view.OptionView;
+import com.anashidgames.gerdoo.utils.PsychoUtils;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
@@ -29,8 +37,8 @@ import pl.droidsonroids.gif.GifImageView;
 public class GameFragment extends Fragment {
 
     public static final String DATA = "data";
-    private List<Option> options;
-    private int questionIndex = 1;
+    public static final int QUESTION_TIME = 10 * 1000;
+    public static final String SCORE = "score";
 
     public static Fragment newInstance() {
         return new GameFragment();
@@ -60,6 +68,13 @@ public class GameFragment extends Fragment {
     private Option selectedOption;
 
     private List<OptionView> optionsView;
+    private TimerAnimation timerAnimation;
+
+    private int remainingTime;
+    private int myScore;
+    private int opponentScore;
+
+    private boolean finished;
 
     @Nullable
     @Override
@@ -75,9 +90,19 @@ public class GameFragment extends Fragment {
         initHintViews(rootView);
 
         setMatchData(gameManager.getMatchData());
+        setScores(0, 0);
         setCurrentQuestion(gameManager.getCurrentQuestion());
 
         return rootView;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (timerAnimation != null) {
+            timerAnimation.cancel();
+            timerAnimation = null;
+        }
     }
 
     private void initGameManager() {
@@ -103,7 +128,7 @@ public class GameFragment extends Fragment {
 
         opponentImageView = (ImageView) rootView.findViewById(R.id.opponentImageView);
         opponentNameView = (TextView) rootView.findViewById(R.id.opponentNameView);
-        opponentScoreView = (TextView) rootView.findViewById(R.id.opponentNameView);
+        opponentScoreView = (TextView) rootView.findViewById(R.id.opponentScoreView);
     }
 
     private void setMatchData(MatchData data) {
@@ -117,13 +142,23 @@ public class GameFragment extends Fragment {
     private void setCurrentQuestion(Question question) {
         this.currentQuestion = question;
         answered = false;
-        questionIndex ++;
+        remainingTime = 10;
         setQuestionBody(question.getQuestionImageUrl(), question.getQuestionText());
         setOptions(question.getOptions());
+        resetTimer();
+    }
+
+    private void resetTimer() {
+        if (timerAnimation != null){
+            timerAnimation.cancel();
+        }
+
+
+        timerAnimation = new TimerAnimation(PsychoUtils.getScreenWidth(getActivity()));
+        timeBar.startAnimation(timerAnimation);
     }
 
     private void setOptions(List<Option> options) {
-        this.options = options;
         optionsLayout.removeAllViews();
         optionsView = new ArrayList<>();
         if (options == null){
@@ -140,9 +175,9 @@ public class GameFragment extends Fragment {
     }
 
     private void setQuestionBody(String imageUrl, String questionText) {
+        questionTextView.setText(questionText);
         if (imageUrl != null && !imageUrl.isEmpty()) {
             questionImageView.setVisibility(View.VISIBLE);
-            questionTextView.setVisibility(View.GONE);
             Glide.with(getActivity()).
                     load(imageUrl).
                     placeholder(R.drawable.cover_place_holder).
@@ -150,10 +185,23 @@ public class GameFragment extends Fragment {
                     into(questionImageView);
 
         }else {
-            questionTextView.setVisibility(View.VISIBLE);
             questionImageView.setVisibility(View.GONE);
-            questionTextView.setText(questionText);
         }
+    }
+
+    private void setScores(int myScore, int opponentScore) {
+        this.myScore = myScore;
+        this.opponentScore = opponentScore;
+        myScoreView.setText(getResources().getString(R.string.score).replace(SCORE, "" + myScore));
+        opponentScoreView.setText(getResources().getString(R.string.score).replace(SCORE, "" + opponentScore));
+    }
+
+    private void showResultPage() {
+        finished = true;
+        MatchData matchdata = gameManager.getMatchData();
+        PlayerData myPlayer = new PlayerData(matchdata.getMyInfo(), myScore);
+        PlayerData opponentPlayer = new PlayerData(matchdata.getOpponentInfo(), opponentScore);
+        ((FragmentContainerActivity) getActivity()).changeFragment(ResultFragment.newInstance(myPlayer, opponentPlayer));
     }
 
     private class AnswerQuestion implements View.OnClickListener {
@@ -172,8 +220,7 @@ public class GameFragment extends Fragment {
 
             ((OptionView) v).setStatus(OptionView.STATUS_DISABLED);
             selectedOption = option;
-
-                gameManager.answerToQuestion(questionIndex, 1 + options.indexOf(option), 10);
+            gameManager.answerToQuestion(option, remainingTime);
             answered = true;
         }
     }
@@ -182,6 +229,75 @@ public class GameFragment extends Fragment {
         @Override
         public void onNewQuestion(Question question) {
             setCurrentQuestion(question);
+        }
+
+        @Override
+        public void onGameFinished() {
+            showResultPage();
+        }
+
+        @Override
+        public void onScore(int myScore, int opponentScore) {
+            setScores(myScore, opponentScore);
+        }
+    }
+
+    private class TimerAnimation extends Animation {
+        int startWidth;
+
+        public TimerAnimation(int startWidth) {
+            this.startWidth = startWidth;
+            setDuration(QUESTION_TIME);
+            setInterpolator(new LinearInterpolator());
+        }
+
+        protected void applyTransformation(float interpolatedTime, Transformation t) {
+            if (finished) {
+                return;
+            }
+
+            super.applyTransformation(interpolatedTime, t);
+            interpolatedTime = (1 - interpolatedTime);
+
+            setBarSize(interpolatedTime);
+            setTime(interpolatedTime);
+            setBarColor(interpolatedTime);
+
+            if (interpolatedTime == 0){
+                if(!answered){
+                    gameManager.notAnswered();
+                }
+
+                timerAnimation.cancel();
+                timerAnimation = null;
+            }
+        }
+
+        private void setTime(float interpolatedTime) {
+            remainingTime = (int) (interpolatedTime * 10);
+            timeBar.setText("" + remainingTime);
+        }
+
+        private void setBarSize(float interpolatedTime) {
+            timeBar.getLayoutParams().width = (int) (startWidth * interpolatedTime);
+            timeBar.requestLayout();
+        }
+
+        private void setBarColor(float interpolatedTime) {
+            int backgroundColorResource;
+            if (interpolatedTime > 0.66){
+                backgroundColorResource = R.color.green;
+            }else if (interpolatedTime > 0.33){
+                backgroundColorResource = R.color.yellow;
+            }else {
+                backgroundColorResource = R.color.red;
+            }
+            timeBar.setBackgroundColor(getResources().getColor(backgroundColorResource));
+        }
+
+        @Override
+        public boolean willChangeBounds() {
+            return true;
         }
     }
 }

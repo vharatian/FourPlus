@@ -10,14 +10,14 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/mainLayout">
+        android:layout_height="wrap_content">
 
         <com.anashidgames.gerdoo.view.FitToWidthImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/allCategories"
             android:src="@drawable/all_categories_banner"/>
+
 
         <com.pnikosis.materialishprogress.ProgressWheel
             android:layout_width="@dimen/progressWheelSize"
@@ -27,6 +27,12 @@
             android:layout_gravity="center"
             app:matProg_progressIndeterminate="true"
             android:id="@+id/progress"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/mainLayout"/>
 
     </LinearLayout>
 </ScrollView>

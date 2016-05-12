@@ -149,7 +149,7 @@ class MockService implements GerdooService {
     }
 
     @Override
-    public Call<LeaderBoardResponse> getTopPlayers(String cloudId, LeaderBoardParams params) {
+    public Call<List<Rank>> getTopPlayers(String cloudId, LeaderBoardParams params) {
         List<Rank> items = new ArrayList<>();
         String firstName = "اسم";
         String lastName = "فامیل";
@@ -165,7 +165,7 @@ class MockService implements GerdooService {
     }
 
     @Override
-    public Call<LeaderBoardResponse> getAroundMe(String cloudId, LeaderBoardParams params) {
+    public Call<List<Rank>> getAroundMe(String cloudId, LeaderBoardParams params) {
         List<Rank> items = new ArrayList<>();
         String firstName = "اسم";
         String lastName = "فامیل";

@@ -28,14 +28,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="@dimen/normalBreak"
         android:id="@+id/mail"/>
 
     <com.anashidgames.gerdoo.pages.auth.view.ValidatableInput
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="@dimen/normalBreak"
+        android:id="@+id/phoneNumber"/>
+
+    <com.anashidgames.gerdoo.pages.auth.view.ValidatableInput
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:id="@+id/password"/>
 
     <com.anashidgames.gerdoo.pages.auth.view.ValidatableInput
@@ -114,6 +118,7 @@
             android:layout_gravity="center"
             android:background="@drawable/button_background_normal"
             android:layout_marginTop="@dimen/xxlargeBreak"
+            android:layout_marginBottom="@dimen/xxlargeBreak"
             android:text="@string/signIn"
             android:textColor="@color/colorAccent"
             android:textSize="20dp"
@@ -121,29 +126,6 @@
             android:layout_marginLeft="@dimen/formButtonMargin"
             android:layout_marginRight="@dimen/formButtonMargin"
             android:id="@+id/signInBtn"/>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="@dimen/normalBreak"
-            android:layout_marginBottom="@dimen/xlargeBreak"
-            android:layout_gravity="center">
-
-            <ImageView
-                android:layout_width="@dimen/autoSignInItemsSize"
-                android:layout_height="@dimen/autoSignInItemsSize"
-                android:src="@drawable/insta"
-                android:id="@+id/signInWidthInstagram"/>
-
-            <ImageView
-                android:layout_width="@dimen/autoSignInItemsSize"
-                android:layout_height="@dimen/autoSignInItemsSize"
-                android:src="@drawable/google"
-                android:layout_marginLeft="@dimen/largeBreak"
-                android:id="@+id/signInWidthGoogle"/>
-
-        </LinearLayout>
 
 
     </LinearLayout>

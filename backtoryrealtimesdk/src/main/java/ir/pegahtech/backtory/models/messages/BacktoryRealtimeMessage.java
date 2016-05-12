@@ -29,4 +29,5 @@ public class BacktoryRealtimeMessage {
     public void set_class(String _class) {
         this._class = _class;
     }
+
 }

@@ -1,6 +1,7 @@
 package com.anashidgames.gerdoo.core.service.auth;
 
 import com.anashidgames.gerdoo.core.service.model.AuthenticationInfo;
+import com.anashidgames.gerdoo.core.service.model.GustSignUpInfo;
 import com.anashidgames.gerdoo.core.service.model.SignUpInfo;
 import com.anashidgames.gerdoo.core.service.model.parameters.SignUpParameters;
 
@@ -30,4 +31,7 @@ public interface AuthenticationService {
     @Headers("X-Backtory-Authentication-Refresh: 1")
     @POST("/api/auth/login")
     Call<AuthenticationInfo> refreshToken(@Field("refresh_token") String refreshToken);
+
+    @POST("/api/auth/guest-users")
+    Call<GustSignUpInfo> gustSignUp();
 }

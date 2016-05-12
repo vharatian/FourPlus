@@ -9,6 +9,9 @@ import android.os.Bundle;
 
 import com.anashidgames.gerdoo.core.DataHelper;
 import com.anashidgames.gerdoo.R;
+import com.anashidgames.gerdoo.core.GerdooApplication;
+import com.anashidgames.gerdoo.core.service.GerdooServer;
+import com.anashidgames.gerdoo.core.service.auth.AuthenticationManager;
 import com.anashidgames.gerdoo.pages.FragmentContainerActivity;
 import com.anashidgames.gerdoo.pages.GerdooActivity;
 import com.anashidgames.gerdoo.pages.home.HomeActivity;
@@ -16,6 +19,7 @@ import com.anashidgames.gerdoo.pages.home.HomeActivity;
 public class AuthenticationActivity extends FragmentContainerActivity {
 
     public static final String START_HOME = "startHome";
+    private boolean authenticated;
 
 
     public static Intent newIntent(Context context, boolean startHome) {
@@ -40,9 +44,33 @@ public class AuthenticationActivity extends FragmentContainerActivity {
         changeFragment(SignUpFragment.newInstance());
     }
 
-    public void enter() {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        GerdooServer.INSTANCE.getAuthenticationManager().authenticationPageIsOnScreen(this);
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        GerdooServer.INSTANCE.getAuthenticationManager().authenticationPageIsNotOnScreen(this);
+    }
+
+    public void notifyAuthenticated() {
         finish();
-        if (startHome)
+
+        authenticated = true;
+        if (startHome) {
             startActivity(HomeActivity.newIntent(this));
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (!authenticated){
+            GerdooApplication.closeApplication();
+        }
     }
 }

@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.anashidgames.gerdoo.core.service.model.AuthenticationInfo;
+import com.anashidgames.gerdoo.core.service.model.GustSignUpInfo;
+import com.anashidgames.gerdoo.core.service.model.SignInInfo;
+import com.anashidgames.gerdoo.core.service.model.SignUpInfo;
 import com.google.gson.Gson;
 
 import java.util.UUID;
@@ -16,6 +19,9 @@ public class DataHelper {
     public static final String FIRST_TIME = "firstTime";
     public static final String SESSION_KEY = "sessionKey";
     public static final String AUTHENTICATION_INFO = "authenticationInfo";
+    public static final String SIGN_IN_INFO = "signInInfo";
+    public static final String GUST_SIGN_UP_INFO = "gustSignUpInfo";
+    public static final String SIGN_UP_INFO = "signUpInfo";
 
     private Context context;
     private SharedPreferences preferences;
@@ -36,6 +42,12 @@ public class DataHelper {
     private void writeString(String key, String s){
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(key, s);
+        editor.commit();
+    }
+
+    private void removeString(String key){
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.remove(key);
         editor.commit();
     }
 
@@ -60,5 +72,25 @@ public class DataHelper {
     public void setAnonymousAuthenticationInfo(){
         AuthenticationInfo info = new AuthenticationInfo(UUID.randomUUID().toString(), UUID.randomUUID().toString(), 10000000);
         setAuthenticationInfo(info);
+    }
+
+    public void removeAuthenticationInfo() {
+        removeString(AUTHENTICATION_INFO);
+    }
+
+    public void setSignInInfo(SignInInfo info) {
+        String json = gson.toJson(info);
+        writeString(SIGN_IN_INFO, json);
+    }
+
+    public void setGustSignUpInfo(GustSignUpInfo info) {
+        String json = gson.toJson(info);
+        writeString(GUST_SIGN_UP_INFO, json);
+    }
+
+
+    public void setSignUpInfo(SignUpInfo info) {
+        String json = gson.toJson(info);
+        writeString(SIGN_UP_INFO, json);
     }
 }

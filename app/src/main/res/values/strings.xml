@@ -59,4 +59,9 @@
     <string name="aboutUsText">درباره ما</string>
     <string name="cancel">انصراف</string>
     <string name="guide">راهنمایی</string>
+    <string name="signOut">خروج</string>
+    <string name="phoneNumber">شماره تلفن</string>
+    <string name="wrongPhoneNumber">شماره تلفن اشتباه است</string>
+    <string name="phoneNumberIsNeeded">لطفا شماره تلفن را وارد کنید</string>
+    <string name="score">امتیاز: score</string>
 </resources>

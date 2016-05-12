@@ -10,9 +10,19 @@ import com.anashidgames.gerdoo.core.service.GerdooServer;
  */
 public class GerdooApplication extends Application {
 
+    private static GerdooApplication INSTANCE;
+
+    public static void closeApplication(){
+        if (INSTANCE != null){
+            System.exit(0);
+        }
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
+        INSTANCE = this;
+
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread thread, Throwable ex) {

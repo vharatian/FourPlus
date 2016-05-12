@@ -6,6 +6,7 @@ import com.anashidgames.gerdoo.core.service.model.GetSkillParams;
 import com.anashidgames.gerdoo.core.service.model.GetSkillResponse;
 import com.anashidgames.gerdoo.core.service.model.LeaderBoardParams;
 import com.anashidgames.gerdoo.core.service.model.MatchData;
+import com.anashidgames.gerdoo.core.service.model.Rank;
 import com.anashidgames.gerdoo.core.service.model.parameters.GetCategoryTopicsParams;
 import com.anashidgames.gerdoo.core.service.model.parameters.GetSubCategoriesParams;
 import com.anashidgames.gerdoo.core.service.model.server.ChangeImageResponse;
@@ -54,13 +55,13 @@ interface GerdooService {
     );
 
     @POST("/api/lambda/{cloudCodeId}/getTopPlayers")
-    Call<LeaderBoardResponse> getTopPlayers(
+    Call<List<Rank>> getTopPlayers(
             @Path("cloudCodeId") String cloudId,
             @Body LeaderBoardParams params
     );
 
     @POST("/api/lambda/{cloudCodeId}/getAroundMe")
-    Call<LeaderBoardResponse> getAroundMe(
+    Call<List<Rank>> getAroundMe(
             @Path("cloudCodeId") String cloudId,
             @Body LeaderBoardParams params
     );

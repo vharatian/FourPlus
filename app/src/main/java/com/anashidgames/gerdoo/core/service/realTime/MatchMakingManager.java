@@ -81,7 +81,9 @@ public class MatchMakingManager {
         public void handleSuccessful(GetSkillResponse data) {
             int skill = data.getMyRank();
             eventHandler.setUserMatchedCallback(callback);
-            socket.matchmakingRequest(matchMakingName, skill);
+            socket.matchmakingRequest(matchMakingName, 55);
+//            socket.matchmakingRequest(matchMakingName, skill);
+//            socket.matchmakingRequest("MATCH[23]", 55);
         }
     }
 

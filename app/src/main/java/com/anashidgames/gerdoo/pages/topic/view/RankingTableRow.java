@@ -36,13 +36,9 @@ public class RankingTableRow extends LinearLayout implements PsychoSettable<Rank
 
     private View mainLayout;
 
-    private int myRank;
 
-
-    public RankingTableRow(Context context, int myRank) {
+    public RankingTableRow(Context context) {
         super(context);
-        this.myRank = myRank;
-
         init(context);
     }
 
@@ -85,12 +81,12 @@ public class RankingTableRow extends LinearLayout implements PsychoSettable<Rank
 //        setRankChange(rank.getRankChange());
 
         int textColor = 0;
-        if (rank.getRank() != myRank) {
-            mainLayout.setBackgroundResource(colorsResource.get(rank.getRank() % colorsResource.size()));
-            textColor = getResources().getColor(R.color.black);
-        }else {
+        if (rank.isMe()) {
             mainLayout.setBackgroundResource(R.color.colorPrimary);
             textColor = getResources().getColor(R.color.white);
+        }else {
+            mainLayout.setBackgroundResource(colorsResource.get(rank.getRank() % colorsResource.size()));
+            textColor = getResources().getColor(R.color.black);
         }
 
         scoreView.setTextColor(textColor);
@@ -122,9 +118,6 @@ public class RankingTableRow extends LinearLayout implements PsychoSettable<Rank
         }
     }
 
-    public void setMyRank(int myRank) {
-        this.myRank = myRank;
-    }
 
     private void setRankChange(int rankChange) {
         if (rankChange == 0){

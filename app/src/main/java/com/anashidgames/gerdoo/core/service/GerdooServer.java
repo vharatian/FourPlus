@@ -11,6 +11,7 @@ import com.anashidgames.gerdoo.core.service.model.CategoryTopic;
 import com.anashidgames.gerdoo.core.service.model.GetSkillResponse;
 import com.anashidgames.gerdoo.core.service.model.LeaderBoardParams;
 import com.anashidgames.gerdoo.core.service.model.MatchData;
+import com.anashidgames.gerdoo.core.service.model.Rank;
 import com.anashidgames.gerdoo.core.service.model.parameters.GetCategoryTopicsParams;
 import com.anashidgames.gerdoo.core.service.model.parameters.GetSubCategoriesParams;
 import com.anashidgames.gerdoo.core.service.model.server.ChangeImageResponse;
@@ -33,6 +34,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.mock.BehaviorDelegate;
@@ -95,8 +97,8 @@ public class GerdooServer{
         authenticationManager.setContext(context);
     }
 
-    public Call<SignUpInfo> signUp(String email, String password) {
-        return authenticationManager.signUp(email, password);
+    public void signUp(String email, String phoneNumber, String password, Callback<AuthenticationInfo> callback) {
+        authenticationManager.signUp(email, phoneNumber, password, callback);
     }
 
     public Call<Boolean> sendForgetPasswordMail(String email) {
@@ -119,11 +121,11 @@ public class GerdooServer{
         return realService.getSubCategories(CLOUD_CODE_ID, new GetSubCategoriesParams(categoryId));
     }
 
-    public Call<LeaderBoardResponse> getTopPlayers(String leaderBoardId) {
+    public Call<List<Rank>> getTopPlayers(String leaderBoardId) {
         return realService.getTopPlayers(CLOUD_CODE_ID, new LeaderBoardParams(leaderBoardId));
     }
 
-    public Call<LeaderBoardResponse> getAroundMe(String leaderBoardId) {
+    public Call<List<Rank>> getAroundMe(String leaderBoardId) {
         return realService.getAroundMe(CLOUD_CODE_ID, new LeaderBoardParams(leaderBoardId));
     }
 
@@ -170,5 +172,9 @@ public class GerdooServer{
 
     public GameManager createGameManager(MatchData matchData) {
         return new GameManager(authenticationManager, REALTIME_INSTANCE_ID, matchData);
+    }
+
+    public void gustSignUp(Callback<AuthenticationInfo> callback) {
+        authenticationManager.gustSignUp(callback);
     }
 }

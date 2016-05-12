@@ -63,7 +63,7 @@ public class ForgetPasswordFragment extends FormFragment {
 
 
     @Override
-    protected void callServer(Callback callBack) {
+    protected void callServer(int formId, Callback callBack) {
         String email = mailInput.getText();
         Call<Boolean> call = server.sendForgetPasswordMail(email);
         call.enqueue(callBack);

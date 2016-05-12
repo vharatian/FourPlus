@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Gerdoo.iml" filepath="$PROJECT_DIR$/Gerdoo.iml" />
-      <module fileurl="file://$PROJECT_DIR$/androidinstagramoauth/androidinstagramoauth.iml" filepath="$PROJECT_DIR$/androidinstagramoauth/androidinstagramoauth.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/backtoryrealtimesdk/backtoryrealtimesdk.iml" filepath="$PROJECT_DIR$/backtoryrealtimesdk/backtoryrealtimesdk.iml" />
     </modules>

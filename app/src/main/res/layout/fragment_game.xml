@@ -86,19 +86,24 @@
 
     </LinearLayout>
 
-    <com.anashidgames.gerdoo.view.basic.TextView
+    <com.anashidgames.gerdoo.view.basic.BoldTextView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/gameTimeBarHeight"
+        android:layout_height="wrap_content"
         android:id="@+id/timeBar"
         android:layout_marginTop="@dimen/smallBreak"
         android:textColor="@color/black"
         android:background="@color/green"
-        android:textSize="10dp"/>
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textSize="13dp"/>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_margin="@dimen/normalBreak">
 
         <com.anashidgames.gerdoo.view.basic.TextView
             android:layout_width="wrap_content"
@@ -114,7 +119,7 @@
             android:id="@+id/questionImageView"
             android:scaleType="fitCenter"/>
 
-    </FrameLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -128,7 +133,6 @@
         android:id="@+id/hintButton"
         android:layout_gravity="center"
         android:src="@drawable/hint"
-        android:layout_marginTop="@dimen/normalBreak"
         android:visibility="gone"/>
 
     <TextView

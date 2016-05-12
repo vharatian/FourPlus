@@ -6,9 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.anashidgames.gerdoo.core.DataHelper;
+import com.anashidgames.gerdoo.core.service.call.CallbackWithErrorDialog;
 import com.anashidgames.gerdoo.core.service.call.PsychoCall;
 import com.anashidgames.gerdoo.core.service.call.PsychoCallBack;
 import com.anashidgames.gerdoo.core.service.model.AuthenticationInfo;
+import com.anashidgames.gerdoo.core.service.model.GustSignUpInfo;
+import com.anashidgames.gerdoo.core.service.model.SignInInfo;
 import com.anashidgames.gerdoo.core.service.model.SignUpInfo;
 import com.anashidgames.gerdoo.core.service.model.parameters.SignUpParameters;
 import com.anashidgames.gerdoo.pages.auth.AuthenticationActivity;
@@ -22,6 +25,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.mock.BehaviorDelegate;
@@ -39,6 +43,7 @@ public class AuthenticationManager {
 
     private Gson gson;
     private Context context;
+    private boolean isAuthenticationPageOnScreen = false;
 
     public AuthenticationManager(String host, String authenticationId, String authenticationKey) {
         gson = new Gson();
@@ -66,11 +71,20 @@ public class AuthenticationManager {
         service = realService;
     }
 
-    public Call<SignUpInfo> signUp(String email, String password) {
-        return service.signUp(new SignUpParameters(email, password));
+    public void signUp(String email, String phoneNumber, String password, Callback<AuthenticationInfo> callback) {
+        Call<SignUpInfo> call = service.signUp(new SignUpParameters(email, phoneNumber, password));
+        call.enqueue(new SignUpCallback(context, email, password, callback));
+    }
+
+    public void gustSignUp(Callback<AuthenticationInfo> callBack) {
+        Call<GustSignUpInfo> call = service.gustSignUp();
+        call.enqueue(new GustSignUpCallBack(context, callBack));
     }
 
     public Call<AuthenticationInfo> signIn(String email, String password) {
+        SignInInfo info = new SignInInfo(email, password);
+        dataHelper.setSignInInfo(info);
+
         Call<AuthenticationInfo> call = service.signIn(email, password);
         PsychoCall<AuthenticationInfo> psychoCall = new PsychoCall<>(call);
         psychoCall.addCallback(new AuthenticationCallback());
@@ -125,7 +139,11 @@ public class AuthenticationManager {
         return dataHelper.getAuthenticationInfo();
     }
 
-    public void startAuthenticationActivity() {
+    public synchronized void startAuthenticationActivity() {
+        if (isAuthenticationPageOnScreen){
+            return;
+        }
+        isAuthenticationPageOnScreen = true;
         Intent intent = AuthenticationActivity.newIntent(context, false);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
@@ -147,6 +165,25 @@ public class AuthenticationManager {
 
         return info;
     }
+
+    public void signOut() {
+        dataHelper.removeAuthenticationInfo();
+        startAuthenticationActivity();
+    }
+
+    public void authenticationPageIsOnScreen(AuthenticationActivity activity){
+        if (activity != null){
+            isAuthenticationPageOnScreen = true;
+        }
+    }
+
+    public void authenticationPageIsNotOnScreen(AuthenticationActivity activity){
+        if (activity != null){
+            isAuthenticationPageOnScreen = false;
+        }
+    }
+
+
 
     private class AuthenticationInfoInterceptor implements Interceptor {
         private static final String AUTHENTICATION_ID = "X-Backtory-Authentication-Id";
@@ -177,6 +214,42 @@ public class AuthenticationManager {
         @Override
         public void handleSuccessful(AuthenticationInfo data) {
             checkAuthenticationInfo(data);
+        }
+    }
+
+    private class GustSignUpCallBack extends CallbackWithErrorDialog<GustSignUpInfo> {
+        private final Callback<AuthenticationInfo> signInCallBack;
+
+        public GustSignUpCallBack(Context context, Callback<AuthenticationInfo> signInCallBack) {
+            super(context);
+            this.signInCallBack = signInCallBack;
+        }
+
+        @Override
+        public void handleSuccessful(GustSignUpInfo data) {
+            dataHelper.setGustSignUpInfo(data);
+            Call<AuthenticationInfo> call = signIn(data.getUserName(), data.getPassword());
+            call.enqueue(signInCallBack);
+        }
+    }
+
+    private class SignUpCallback extends CallbackWithErrorDialog<SignUpInfo> {
+        private final Callback<AuthenticationInfo> signInCallBack;
+        private final String username;
+        private final String password;
+
+        public SignUpCallback(Context context, String username, String password, Callback<AuthenticationInfo> callback) {
+            super(context);
+            this.username = username;
+            this.password = password;
+            this.signInCallBack = callback;
+        }
+
+        @Override
+        public void handleSuccessful(SignUpInfo data) {
+            dataHelper.setSignUpInfo(data);
+            Call<AuthenticationInfo> call = signIn(username, password);
+            call.enqueue(signInCallBack);
         }
     }
 }

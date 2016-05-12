@@ -1,5 +1,13 @@
 package com.anashidgames.gerdoo.utils;
 
+import android.content.Context;
+import android.graphics.Point;
+import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
+import android.util.DisplayMetrics;
+import android.view.Display;
+import android.view.WindowManager;
+
 /**
  * Created by psycho on 3/17/16.
  */
@@ -68,5 +76,19 @@ public class PsychoUtils {
     public static boolean isOnBottom(float angle) {
         angle = PsychoUtils.getNormalAngle(angle);
         return angle > 0 && angle < COMPLETE_CIRCLE/2;
+    }
+
+    public static int getScreenWidth(Context context) {
+        Point size = getScreenSize(context);
+        return size.x;
+    }
+
+    @NonNull
+    private static Point getScreenSize(Context context) {
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        return size;
     }
 }

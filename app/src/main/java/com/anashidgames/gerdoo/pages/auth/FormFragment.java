@@ -23,6 +23,8 @@ import java.util.List;
  */
 public abstract class FormFragment extends KeyboardHiderFragment {
 
+    public static final int DEFAULT_FORM_ID = -28467;
+
     private int messageViewId;
     private int submitButtonId;
 
@@ -41,7 +43,7 @@ public abstract class FormFragment extends KeyboardHiderFragment {
         stateChangeListener = new AuthStateChangeListener(new InputStateChangeListener());
     }
 
-    protected abstract void callServer(Callback callback);
+    protected abstract void callServer(int formId, Callback callback);
     protected abstract void submitted(Object result);
 
 
@@ -76,7 +78,7 @@ public abstract class FormFragment extends KeyboardHiderFragment {
     private void onSubmitRequested() {
         if (stateChangeListener.isValid()){
             showMessage("");
-            submitForm();
+            submitForm(DEFAULT_FORM_ID);
         }else{
             showErrors();
         }
@@ -96,7 +98,7 @@ public abstract class FormFragment extends KeyboardHiderFragment {
         showMessage(messageResource);
     }
 
-    protected void submitForm(){
+    protected void submitForm(int formId){
         cancelRequesting();
         progressDialog = ProgressDialog.show(getActivity(),
                 "",
@@ -111,7 +113,7 @@ public abstract class FormFragment extends KeyboardHiderFragment {
                 }
         );
 
-        callServer(new SubmitCallBack());
+        callServer(formId, new SubmitCallBack());
     }
 
 

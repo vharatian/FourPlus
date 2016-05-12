@@ -70,7 +70,7 @@ public class TopicActivity extends GerdooActivity {
 
     private int currentPage = -1;
 
-    Call<LeaderBoardResponse> leaderBoardCall;
+    Call<List<Rank>> leaderBoardCall;
 
 
     @Override
@@ -195,11 +195,10 @@ public class TopicActivity extends GerdooActivity {
 
         private List<Rank> ranks = new ArrayList<>();
         private List<RankingTableRow> rows = new ArrayList<>();
-        private int myRank = 0;
 
         @Override
         public PsychoViewHolder<Rank> onCreateViewHolder(ViewGroup parent, int viewType) {
-            RankingTableRow row = new RankingTableRow(TopicActivity.this, myRank);
+            RankingTableRow row = new RankingTableRow(TopicActivity.this);
             rows.add(row);
             row.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
             return new PsychoViewHolder<>(row);
@@ -222,14 +221,6 @@ public class TopicActivity extends GerdooActivity {
 
             this.ranks = ranks;
             notifyDataSetChanged();
-        }
-
-        public void setMyRank(int myRank) {
-            this.myRank = myRank;
-
-            for(RankingTableRow row : rows){
-                row.setMyRank(myRank);
-            }
         }
     }
 
@@ -308,16 +299,15 @@ public class TopicActivity extends GerdooActivity {
         }
     }
 
-    private class LeaderBoardCallBack extends CallbackWithErrorDialog<LeaderBoardResponse> {
+    private class LeaderBoardCallBack extends CallbackWithErrorDialog<List<Rank>> {
 
         public LeaderBoardCallBack(Context context) {
             super(context);
         }
 
         @Override
-        public void handleSuccessful(LeaderBoardResponse data) {
-            adapter.setMyRank(data.getMyRank());
-            adapter.setRanks(data.getRanks());
+        public void handleSuccessful(List<Rank> data) {
+            adapter.setRanks(data);
         }
     }
 }

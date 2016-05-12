@@ -48,7 +48,7 @@ public class SignInFragment extends FormFragment {
     }
 
     @Override
-    protected void callServer(Callback callback) {
+    protected void callServer(int formId, Callback callback) {
         String email = mailInput.getText();
         String password = passwordInput.getText();
         Call<AuthenticationInfo> call = server.signIn(email, password);
@@ -61,7 +61,7 @@ public class SignInFragment extends FormFragment {
         if(info == null || !info.isValid()){
             showWrongInputError();
         }else{
-            ((AuthenticationActivity) getActivity()).enter();
+            ((AuthenticationActivity) getActivity()).notifyAuthenticated();
         }
 
         passwordInput.clearText();

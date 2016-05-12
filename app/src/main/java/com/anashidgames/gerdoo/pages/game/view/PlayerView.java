@@ -60,7 +60,7 @@ public class PlayerView extends FrameLayout {
 
     public void setData(PlayerData data){
 
-        Glide.with(getContext()).load(data.getAvatarUrl()).placeholder(R.drawable.user_image_place_holder).crossFade().into(avatarView);
+        Glide.with(getContext()).load(data.getImageUrl()).placeholder(R.drawable.user_image_place_holder).crossFade().into(avatarView);
 
         nameView.setText(data.getName());
         if (data.hasScore()){

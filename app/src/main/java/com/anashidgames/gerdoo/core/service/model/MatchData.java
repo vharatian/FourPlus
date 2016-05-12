@@ -29,11 +29,14 @@ public class MatchData implements Serializable{
     @SerializedName("requestId")
     private String requestId;
 
+    private String ownerUserId;
+
     public MatchData(MatchFoundMessage message) {
         this.challengeId = message.getRealtimeChallengeId();
         this.port = message.getPort();
         this.requestId = message.getRequestId();
         this.address = message.getAddress();
+        this.ownerUserId = message.getOwnerUserId();
 
         String extraMessage = message.getExtraMessage();
         Log.i("psycho", "extraMessage : " + extraMessage);
@@ -46,7 +49,7 @@ public class MatchData implements Serializable{
 
         if (participantList != null){
             for(ParticipantInfo info : participantList){
-                if (info.getUserId() != null && info.getUserId().equals(message.getOwnerUserId())){
+                if (info.getUserId() != null && info.getUserId().equals(ownerUserId)){
                     myInfo = info;
                 }else {
                     opponentInfo = info;
@@ -86,5 +89,9 @@ public class MatchData implements Serializable{
 
     public String getRequestId() {
         return requestId;
+    }
+
+    public String getOwnerUserId() {
+        return ownerUserId;
     }
 }

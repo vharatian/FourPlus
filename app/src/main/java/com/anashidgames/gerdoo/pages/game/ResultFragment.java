@@ -1,5 +1,6 @@
 package com.anashidgames.gerdoo.pages.game;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -21,16 +22,10 @@ public class ResultFragment extends Fragment {
     public static final String ME = "me";
 
 
-    public static Fragment newInstance() {
-        String proPicUrl = "http://indiabright.com/wp-content/uploads/2015/11/profile_picture_by_kyo_tux-d4hrimy.png";
-        String firstName = "کیان اشرفی";
-        String secondName = "وحید هراتیان";
-        PlayerData firstPlayer = new PlayerData("", proPicUrl, firstName, 782);
-        PlayerData secondPlayer = new PlayerData("", proPicUrl, secondName, 56);
-
+    public static Fragment newInstance(PlayerData myPlayer, PlayerData opponentPlayer) {
         Bundle bundle = new Bundle();
-        bundle.putSerializable(OPPONENT, firstPlayer);
-        bundle.putSerializable(ME, secondPlayer);
+        bundle.putSerializable(OPPONENT, opponentPlayer);
+        bundle.putSerializable(ME, myPlayer);
         ResultFragment fragment = new ResultFragment();
         fragment.setArguments(bundle);
         return fragment;
@@ -92,7 +87,9 @@ public class ResultFragment extends Fragment {
             switch (v.getId()){
                 case R.id.homeButton:
                     getActivity().finish();
-                    startActivity(HomeActivity.newIntent(getActivity()));
+                    Intent intent = HomeActivity.newIntent(getActivity());
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
                     break;
                 case R.id.replayButton:
                 case R.id.doneButton:

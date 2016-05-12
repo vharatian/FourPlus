@@ -88,6 +88,8 @@ public class DrawerItemView extends LinearLayout {
         public void onClick(View v) {
             if (item.getIntent() != null) {
                 getContext().startActivity(item.getIntent());
+            }else if(item.getListener() != null){
+                item.getListener().onClick(v);
             }
         }
     }
@@ -97,11 +99,18 @@ public class DrawerItemView extends LinearLayout {
         private int titleResource;
         private int iconResource;
         private Intent intent;
+        private OnClickListener listener;
 
         public DrawerItem(int titleResource, int iconResource, Intent intent) {
             this.titleResource = titleResource;
             this.iconResource = iconResource;
             this.intent = intent;
+        }
+
+        public DrawerItem(int titleResource, int iconResource, OnClickListener listener) {
+            this.titleResource = titleResource;
+            this.iconResource = iconResource;
+            this.listener = listener;
         }
 
         public int getTitleResource() {
@@ -114,6 +123,10 @@ public class DrawerItemView extends LinearLayout {
 
         public Intent getIntent() {
             return intent;
+        }
+
+        public OnClickListener getListener() {
+            return listener;
         }
     }
 }

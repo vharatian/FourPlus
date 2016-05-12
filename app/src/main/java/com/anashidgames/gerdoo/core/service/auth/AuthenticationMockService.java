@@ -1,6 +1,7 @@
 package com.anashidgames.gerdoo.core.service.auth;
 
 import com.anashidgames.gerdoo.core.service.model.AuthenticationInfo;
+import com.anashidgames.gerdoo.core.service.model.GustSignUpInfo;
 import com.anashidgames.gerdoo.core.service.model.SignUpInfo;
 import com.anashidgames.gerdoo.core.service.model.parameters.SignUpParameters;
 
@@ -49,6 +50,11 @@ public class AuthenticationMockService implements AuthenticationService {
         }
 
         return behaviorDelegate.returningResponse(info).refreshToken(refreshToken);
+    }
+
+    @Override
+    public Call<GustSignUpInfo> gustSignUp() {
+        return null;
     }
 
     @Override

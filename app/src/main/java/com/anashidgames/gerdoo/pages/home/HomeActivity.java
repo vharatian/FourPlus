@@ -88,7 +88,8 @@ public class HomeActivity extends FragmentContainerActivity {
 //                new DrawerItemView.DrawerItem(R.string.gifts, R.drawable.gifts_icon, rateIntent),
 //                new DrawerItemView.DrawerItem(R.string.shop, R.drawable.shop_icon, rateIntent),
                 new DrawerItemView.DrawerItem(R.string.vote, R.drawable.vote_icon, rateIntent),
-                new DrawerItemView.DrawerItem(R.string.about_us, R.drawable.about_us_icon, TextActivity.newIntent(this, R.string.aboutUsText))
+                new DrawerItemView.DrawerItem(R.string.about_us, R.drawable.about_us_icon, TextActivity.newIntent(this, R.string.aboutUsText)),
+                new DrawerItemView.DrawerItem(R.string.signOut, R.drawable.sign_out, new SignOutListener())
         );
     }
 
@@ -168,4 +169,10 @@ public class HomeActivity extends FragmentContainerActivity {
         }
     }
 
+    private class SignOutListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            GerdooServer.INSTANCE.getAuthenticationManager().signOut();
+        }
+    }
 }
