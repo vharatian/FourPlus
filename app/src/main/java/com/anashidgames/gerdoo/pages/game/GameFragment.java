@@ -40,6 +40,7 @@ public class GameFragment extends Fragment {
     public static final int QUESTION_TIME = 10 * 1000;
     public static final String SCORE = "score";
 
+
     public static Fragment newInstance() {
         return new GameFragment();
     }
@@ -75,6 +76,8 @@ public class GameFragment extends Fragment {
     private int opponentScore;
 
     private boolean finished;
+
+    private List<Option> options;
 
     @Nullable
     @Override
@@ -153,12 +156,12 @@ public class GameFragment extends Fragment {
             timerAnimation.cancel();
         }
 
-
         timerAnimation = new TimerAnimation(PsychoUtils.getScreenWidth(getActivity()));
         timeBar.startAnimation(timerAnimation);
     }
 
     private void setOptions(List<Option> options) {
+        this.options = options;
         optionsLayout.removeAllViews();
         optionsView = new ArrayList<>();
         if (options == null){
@@ -204,6 +207,27 @@ public class GameFragment extends Fragment {
         ((FragmentContainerActivity) getActivity()).changeFragment(ResultFragment.newInstance(myPlayer, opponentPlayer));
     }
 
+    private void setAnswer(boolean isMe, boolean isAnswerCorrect) {
+        if (isMe){
+            OptionView optionView = getOptionView(selectedOption);
+            if (optionView != null) {
+                if (isAnswerCorrect) {
+                    optionView.setStatus(OptionView.STATUS_RIGHT_CORRECT);
+                } else {
+                    optionView.setStatus(OptionView.STATUS_RIGHT_WRONG);
+                }
+            }
+        }
+    }
+
+    private OptionView getOptionView(Option option) {
+        if (option != null && options.indexOf(option) >= 0) {
+            return optionsView.get(options.indexOf(option));
+        }
+
+        return null;
+    }
+
     private class AnswerQuestion implements View.OnClickListener {
 
         private Option option;
@@ -220,8 +244,19 @@ public class GameFragment extends Fragment {
 
             ((OptionView) v).setStatus(OptionView.STATUS_DISABLED);
             selectedOption = option;
-            gameManager.answerToQuestion(option, remainingTime);
-            answered = true;
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        gameManager.answerToQuestion(option, remainingTime);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        getActivity().finish();
+                    }
+                    answered = true;
+                }
+            }).start();
         }
     }
 
@@ -239,6 +274,11 @@ public class GameFragment extends Fragment {
         @Override
         public void onScore(int myScore, int opponentScore) {
             setScores(myScore, opponentScore);
+        }
+
+        @Override
+        public void onAnswer(boolean isMe, boolean isAnswerCorrect) {
+            setAnswer(isMe, isAnswerCorrect);
         }
     }
 

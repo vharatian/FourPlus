@@ -24,15 +24,19 @@ public class FragmentContainerActivity extends GerdooActivity {
     }
 
     public void changeFragment(Fragment fragment){
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.fade_out);
-        transaction.replace(fragmentId, fragment);
+        try {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.fade_out);
+            transaction.replace(fragmentId, fragment);
 
-        if (saveBackStack) {
-            transaction.addToBackStack(null);
+            if (saveBackStack) {
+                transaction.addToBackStack(null);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        transaction.commit();
 
     }
 

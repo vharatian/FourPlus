@@ -50,7 +50,11 @@ public abstract class CallbackWithErrorDialog<T> extends PsychoCallBack<T>{
                 .setPositiveButton(R.string.ok, new CloseClickListener())
                 .create();
 
-        dialog.show();
+        try {
+            dialog.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     protected void postError(){}

@@ -39,45 +39,45 @@ import retrofit2.http.Url;
 
 interface GerdooService {
 
-    @POST("/api/lambda/{cloudCodeId}/getHome")
+    @POST("/lambda/{cloudCodeId}/getHome")
     Call<List<HomeItem>> getHome(@Path("cloudCodeId") String cloudCodeId);
 
-    @POST("/api/lambda/{cloudCodeId}/getCategoryTopics")
+    @POST("/lambda/{cloudCodeId}/getCategoryTopics")
     Call<List<CategoryTopic>> getCategoryTopics(
             @Path("cloudCodeId") String cloudCodeId,
             @Body GetCategoryTopicsParams params
     );
 
-    @POST("/api/lambda/{cloudCodeId}/getSubCategories")
+    @POST("/lambda/{cloudCodeId}/getSubCategories")
     Call<List<Category>> getSubCategories(
             @Path("cloudCodeId") String cloudCodeId,
             @Body GetSubCategoriesParams params
     );
 
-    @POST("/api/lambda/{cloudCodeId}/getTopPlayers")
+    @POST("/lambda/{cloudCodeId}/getTopPlayers")
     Call<List<Rank>> getTopPlayers(
             @Path("cloudCodeId") String cloudId,
             @Body LeaderBoardParams params
     );
 
-    @POST("/api/lambda/{cloudCodeId}/getAroundMe")
+    @POST("/lambda/{cloudCodeId}/getAroundMe")
     Call<List<Rank>> getAroundMe(
             @Path("cloudCodeId") String cloudId,
             @Body LeaderBoardParams params
     );
 
-    @POST("/api/lambda/{cloudCodeId}/getMySkill")
+    @POST("/lambda/{cloudCodeId}/getMySkill")
     Call<GetSkillResponse> getSkill(
             @Path("cloudCodeId") String cloudId
     );
 
-    @POST("/api/lambda/{cloudCodeId}/getMatchData")
+    @POST("/lambda/{cloudCodeId}/getMatchData")
     Call<MatchData> getMatchData(
             @Path("cloudCodeId") String cloudCodeId,
             @Body MatchFoundMessage matchFoundMessage
     );
 
-    @POST("/api/lambda/{cloudCodeId}/getBriefProfile")
+    @POST("/lambda/{cloudCodeId}/getBriefProfile")
     Call<UserInfo> getUserInfo(
             @Path("cloudCodeId") String cloudCodeId
     );

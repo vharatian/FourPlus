@@ -23,7 +23,7 @@ import retrofit2.Call;
 public class MatchMakingManager {
 
 
-    public static final String CONNECTIVITY_URL = "ws://api1.backtory.com/connectivity/ws";
+    public static final String CONNECTIVITY_URL = "wss://ws.backtory.com/connectivity/ws";
 
     private ConnectivityWebSocket socket;
     private AuthenticationManager authenticationManager;
@@ -79,11 +79,15 @@ public class MatchMakingManager {
 
         @Override
         public void handleSuccessful(GetSkillResponse data) {
-            int skill = data.getMyRank();
+            final int skill = data.getMyRank();
             eventHandler.setUserMatchedCallback(callback);
-            socket.matchmakingRequest(matchMakingName, 55);
-//            socket.matchmakingRequest(matchMakingName, skill);
-//            socket.matchmakingRequest("MATCH[23]", 55);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    socket.matchmakingRequest(matchMakingName, skill);
+                }
+            }).start();
+
         }
     }
 

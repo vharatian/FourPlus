@@ -20,9 +20,7 @@ import com.anashidgames.gerdoo.core.service.model.Friend;
 import com.anashidgames.gerdoo.core.service.model.Gift;
 import com.anashidgames.gerdoo.core.service.model.HomeItem;
 import com.anashidgames.gerdoo.core.service.model.ProfileInfo;
-import com.anashidgames.gerdoo.core.service.model.SignUpInfo;
 import com.anashidgames.gerdoo.core.service.model.UserInfo;
-import com.anashidgames.gerdoo.core.service.model.server.LeaderBoardResponse;
 import com.anashidgames.gerdoo.core.service.realTime.GameManager;
 import com.anashidgames.gerdoo.core.service.realTime.MatchMakingManager;
 
@@ -45,17 +43,16 @@ import retrofit2.mock.MockRetrofit;
  */
 public class GerdooServer{
 
-    public static final String AUTHENTICATION_ID = "57163ee5e4b0cad8c4dd1844";
-    public static final String AUTHENTICATION_KEY = "57163ee5e4b093ed2821a011";
-    private static final String REALTIME_INSTANCE_ID = "57284ac1e4b01c017afb4015";
+    public static final String AUTHENTICATION_ID = "5734df81e4b05a0b0e955409";
+    public static final String AUTHENTICATION_KEY = "5734df81e4b09a527aa07444";
+    private static final String REAL_TIME_INSTANCE_ID = "57359624e4b05a0b0e955468";
 
-    public static final String CLOUD_CODE_ID = "57163effe4b0cad8c4dd184a";
-    public static final String GAME_ID = "57163f07e4b0cad8c4dd184c";
+    public static final String CLOUD_CODE_ID = "5734df82e4b05a0b0e95540d";
 
     public static final GerdooServer INSTANCE = new GerdooServer(AUTHENTICATION_ID, AUTHENTICATION_KEY);
 
 //    public static final String HOST = "http://192.168.0.99:8585";
-    public static final String HOST = "http://api1.backtory.com/";
+    public static final String HOST = "http://api.backtory.com/";
 
 
     private GerdooService mockService;
@@ -163,7 +160,7 @@ public class GerdooServer{
     }
 
     public MatchMakingManager createMatchMakingManager(String matchMakingName) {
-        return new MatchMakingManager(context, authenticationManager, REALTIME_INSTANCE_ID, matchMakingName);
+        return new MatchMakingManager(context, authenticationManager, REAL_TIME_INSTANCE_ID, matchMakingName);
     }
 
     public Call<MatchData> getMatchData(MatchFoundMessage matchFoundMessage) {
@@ -171,7 +168,7 @@ public class GerdooServer{
     }
 
     public GameManager createGameManager(MatchData matchData) {
-        return new GameManager(authenticationManager, REALTIME_INSTANCE_ID, matchData);
+        return new GameManager(authenticationManager, REAL_TIME_INSTANCE_ID, matchData);
     }
 
     public void gustSignUp(Callback<AuthenticationInfo> callback) {

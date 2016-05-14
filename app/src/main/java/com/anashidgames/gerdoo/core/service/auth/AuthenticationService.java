@@ -18,10 +18,10 @@ import retrofit2.http.Query;
  * Created by psycho on 4/23/16.
  */
 public interface AuthenticationService {
-    @POST("/api/auth/users")
+    @POST("/auth/users")
     Call<SignUpInfo> signUp(@Body SignUpParameters parameters);
 
-    @POST("/api/auth/login")
+    @POST("/auth/login")
     Call<AuthenticationInfo> signIn(@Query("username") String email, @Query("password") String password);
 
     @GET("/")
@@ -29,9 +29,9 @@ public interface AuthenticationService {
 
     @FormUrlEncoded
     @Headers("X-Backtory-Authentication-Refresh: 1")
-    @POST("/api/auth/login")
+    @POST("/auth/login")
     Call<AuthenticationInfo> refreshToken(@Field("refresh_token") String refreshToken);
 
-    @POST("/api/auth/guest-users")
+    @POST("/auth/guest-users")
     Call<GustSignUpInfo> gustSignUp();
 }

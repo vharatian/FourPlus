@@ -14,6 +14,7 @@ import com.anashidgames.gerdoo.core.service.model.Question;
 import com.anashidgames.gerdoo.core.service.model.Score;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
@@ -43,6 +44,8 @@ public class GameManager {
     public static final String QUESTION = "question";
     public static final int NOT_ANSWERED = -1;
     public static final String SCORES = "scores";
+    public static final int FINISH_INDEX = 7;
+    public static final String IS_ANSWER_CORRECT = "isAnswerCorrect";
 
 
     private final MatchData matchData;
@@ -71,7 +74,7 @@ public class GameManager {
             @Override
             public void run() {
                 AuthenticationInfo info = authenticationManager.checkInfo(true);
-                URI uri = URI.create("ws://" + matchData.getAddress() + "/ws");
+                URI uri = URI.create("wss://" + matchData.getAddress() + "/ws");
                 socket = new RealtimeWebSocket(uri, instanceId, info.getAccessToken(), matchData.getChallengeId());
                 realTimeEventHandler = new RealTimeEventHandler();
                 realTimeEventHandler.setStartCallback(callBack);
@@ -86,9 +89,15 @@ public class GameManager {
         }).start();
     }
 
-    private void setCurrentQuestion(Question currentQuestion) {
-        this.currentQuestion = currentQuestion;
+    private boolean setCurrentQuestion(Question currentQuestion) {
         questionIndex ++;
+        if (questionIndex == FINISH_INDEX){
+            answerToQuestion(null, NOT_ANSWERED);
+            return false;
+        }
+
+        this.currentQuestion = currentQuestion;
+        return true;
 
     }
 
@@ -100,23 +109,28 @@ public class GameManager {
         return matchData;
     }
 
-    public void answerToQuestion(Option option, int remainingTIme) {
-        try {
-            int optionIndex = NOT_ANSWERED;
-            if (option != null){
-                optionIndex = 1 + currentQuestion.getOptions().indexOf(option);
-            }
+    public void answerToQuestion(final Option option, final int remainingTIme) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    int optionIndex = NOT_ANSWERED;
+                    if (option != null){
+                        optionIndex = 1 + currentQuestion.getOptions().indexOf(option);
+                    }
 
-            JSONObject event = new JSONObject();
-            event.put(CHALLENGE_ID, matchData.getChallengeId());
-            event.put(QUESTION_NUMBER, questionIndex);
-            event.put(SELECTED_ANSWER, optionIndex);
-            event.put(REMAINING_TIME, remainingTIme);
-            Log.i("psycho", "sending message: " + event.toString());
-            socket.sendToChallenge(event);
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
+                    JSONObject event = new JSONObject();
+                    event.put(CHALLENGE_ID, matchData.getChallengeId());
+                    event.put(QUESTION_NUMBER, questionIndex);
+                    event.put(SELECTED_ANSWER, optionIndex);
+                    event.put(REMAINING_TIME, remainingTIme);
+                    Log.i("psycho", "sending message: " + event.toString());
+                    socket.sendToChallenge(event);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     public void setGameEventHandler(GameEventHandler gameEventHandler){
@@ -148,29 +162,44 @@ public class GameManager {
         }
 
         @Override
-        public void onChallengeEventMessage(ChallengeEventMessage challengeEventMessage) {
-            super.onChallengeEventMessage(challengeEventMessage);
-            String message = challengeEventMessage.getMessage();
-            JsonObject jsonObject = gson.fromJson(message, JsonObject.class);
-            if (jsonObject.has(QUESTION)){
-                final Question question = gson.fromJson(jsonObject.get(QUESTION), Question.class);
+        public void onChallengeEventMessage(final ChallengeEventMessage challengeEventMessage) {
+            try {
+                super.onChallengeEventMessage(challengeEventMessage);
+                String message = challengeEventMessage.getMessage();
+                JsonObject jsonObject = gson.fromJson(message, JsonObject.class);
 
-                if (showQuestion) {
-                    setCurrentQuestion(question);
-                    if (gameEventHandler != null) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                gameEventHandler.onNewQuestion(question);
-                            }
-                        });
-                    }
-                }
-                showQuestion = !showQuestion;
+                checkAnswerCorrectness(challengeEventMessage.getUserId(), jsonObject);
+                checkQuestion(jsonObject);
+                checkScores(jsonObject);
+
+            } catch (JsonSyntaxException e) {
+                e.printStackTrace();
+
             }
+        }
 
+        private void checkAnswerCorrectness(final String userId, JsonObject jsonObject) {
+            if (jsonObject.has(IS_ANSWER_CORRECT)){
+                final boolean isAnswerCorrect = jsonObject.get(IS_ANSWER_CORRECT).getAsBoolean();
+                if (gameEventHandler != null){
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (matchData.getOwnerUserId().equals(userId)) {
+                                gameEventHandler.onAnswer(true, isAnswerCorrect);
+                            }else {
+                                gameEventHandler.onAnswer(false, isAnswerCorrect);
+                            }
+                        }
+                    });
+                }
+            }
+        }
+
+        private void checkScores(JsonObject jsonObject) {
             if (jsonObject.has(SCORES)){
                 Score[] scores = gson.fromJson(jsonObject.get(SCORES), Score[].class);
+                Log.i("psycho", "Scores: " + scores);
                 int myScore = 0, opponentScore = 0;
                 String myUserId = matchData.getOwnerUserId();
                 if (scores != null) {
@@ -191,7 +220,26 @@ public class GameManager {
                         }
                     });
                 }
+            }
+        }
 
+        private void checkQuestion(JsonObject jsonObject) {
+            if (jsonObject.has(QUESTION)){
+                final Question question = gson.fromJson(jsonObject.get(QUESTION), Question.class);
+
+                if (showQuestion) {
+                    if(setCurrentQuestion(question)) {
+                        if (gameEventHandler != null) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    gameEventHandler.onNewQuestion(question);
+                                }
+                            });
+                        }
+                    }
+                }
+                showQuestion = !showQuestion;
             }
         }
 
@@ -222,6 +270,7 @@ public class GameManager {
         void onNewQuestion(Question question);
         void onGameFinished();
         void onScore(int myScore, int opponentScore);
+        void onAnswer(boolean isMe, boolean isAnswerCorrect);
     }
 
     public interface GameStartCallBack {

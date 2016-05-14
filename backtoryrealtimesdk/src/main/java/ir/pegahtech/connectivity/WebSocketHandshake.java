@@ -117,9 +117,10 @@ public class WebSocketHandshake {
             throws WebSocketException {
         if (!headers.get("Upgrade").toLowerCase().equals("websocket")) {
             throw new WebSocketException("connection failed: missing header field in server handshake: Upgrade");
-        } else if (!headers.get("Connection").toLowerCase().equals("upgrade")) {
-            throw new WebSocketException("connection failed: missing header field in server handshake: Connection");
         }
+//        else if (!headers.get("Connection").toLowerCase().equals("upgrade")) {
+//            throw new WebSocketException("connection failed: missing header field in server handshake: Connection");
+//        }
     }
 
     private int rand(int min, int max) {

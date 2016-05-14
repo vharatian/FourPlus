@@ -129,6 +129,6 @@ public class SimpleRealTimeEventHandler implements BacktoryRealtimeEventHandler 
 
     @Override
     public void onChallengeLeavedMessage(ChallengeLeavedMessage leavedMessage) {
-
+        Log.i("psycho", "Opponent leaved userId: " + leavedMessage.getUserId() + " userName: " + leavedMessage.getUsername());
     }
 }
