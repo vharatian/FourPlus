@@ -69,11 +69,6 @@ public class DataHelper {
         writeString(AUTHENTICATION_INFO, json);
     }
 
-    public void setAnonymousAuthenticationInfo(){
-        AuthenticationInfo info = new AuthenticationInfo(UUID.randomUUID().toString(), UUID.randomUUID().toString(), 10000000);
-        setAuthenticationInfo(info);
-    }
-
     public void removeAuthenticationInfo() {
         removeString(AUTHENTICATION_INFO);
     }

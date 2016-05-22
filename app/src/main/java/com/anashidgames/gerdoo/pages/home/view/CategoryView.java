@@ -21,7 +21,6 @@ import com.anashidgames.gerdoo.view.row.Row;
 import com.anashidgames.gerdoo.view.row.RowItem;
 import com.anashidgames.gerdoo.view.row.ScrollableRow;
 import com.anashidgames.gerdoo.view.row.ExpandableRelativeLayout;
-import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;

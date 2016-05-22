@@ -12,25 +12,29 @@ import ir.pegahtech.backtory.models.messages.nested.ExceptionResponse;
 /**
  * Created by Mohammad on 5/2/16 AD.
  */
-public interface BacktoryConnectivityEventHandler {
+public abstract class BacktoryConnectivityEventHandler {
 
-    void onMatchFound(MatchFoundMessage matchFoundMessage);
+    public void onMatchFound(MatchFoundMessage matchFoundMessage){}
 
-    void onOpen();
+    public void onOpen(){}
 
-    void onMessage(String message);
+    public void onMessage(String message){}
 
-    void onException(List<ExceptionResponse> exceptions, String exceptionsString);
+    public void onException(List<ExceptionResponse> exceptions, String exceptionsString){}
 
-    void onError(String message);
+    public void onError(String message){}
 
-    void onClose();
+    public void onClose(){}
 
-    void onMatchNotFound(MatchNotFoundMessage matchNotFoundMessage);
+    public void onMatchNotFound(MatchNotFoundMessage matchNotFoundMessage){}
 
-    void onMatchUpdate(MatchUpdateMessage matchUpdateMessage);
+    public void onMatchUpdate(MatchUpdateMessage matchUpdateMessage){}
 
-    void onChatMessage(ChatMessage chatMessage);
+    public void onChatMessage(ChatMessage chatMessage){}
 
-    void onPushMessage(PushNotifMessage pushNotifMessage);
+    public void onPushMessage(PushNotifMessage pushNotifMessage){}
+
+    public void onMatchCancellationResponse(String requestId){}
+
+    public void onMatchResponse(String requestId){}
 }

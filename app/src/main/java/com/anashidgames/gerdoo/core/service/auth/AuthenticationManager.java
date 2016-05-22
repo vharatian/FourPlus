@@ -99,12 +99,14 @@ public class AuthenticationManager {
     public synchronized AuthenticationInfo refreshToken() {
         try {
             AuthenticationInfo info = getAuthenticationInfo();
-            Call<AuthenticationInfo> call = service.refreshToken(info.getRefreshToken());
-            retrofit2.Response<AuthenticationInfo> response = call.execute();
-            if (response.isSuccessful()) {
-                checkAuthenticationInfo(response.body());
-            }else{
-                setAuthenticationInfo(null);
+            if (info != null) {
+                Call<AuthenticationInfo> call = service.refreshToken(info.getRefreshToken());
+                retrofit2.Response<AuthenticationInfo> response = call.execute();
+                if (response.isSuccessful()) {
+                    checkAuthenticationInfo(response.body());
+                } else {
+                    setAuthenticationInfo(null);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();

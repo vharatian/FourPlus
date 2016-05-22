@@ -23,6 +23,8 @@ public class MatchPreviewFragment extends Fragment {
 
     private static final String DATA = "data";
 
+
+
     public static Fragment newInstance(MatchData data) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(DATA, data);
@@ -31,23 +33,32 @@ public class MatchPreviewFragment extends Fragment {
         return fragment;
     }
 
+    private MatchData data;
+    private PlayerView myPlayerView;
+    private PlayerView opponentPlayerView;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_match_preview, container, false);
 
-        MatchData data = (MatchData) getArguments().getSerializable(DATA);
+        data = (MatchData) getArguments().getSerializable(DATA);
 
 
-        PlayerView myPlayerView = (PlayerView) rootView.findViewById(R.id.myPlayerView);
-        PlayerView opponentPlayerView = (PlayerView) rootView.findViewById(R.id.opponentPlayerView);
-
-        myPlayerView.setData(new PlayerData(data.getMyInfo()));
-        opponentPlayerView.setData(new PlayerData(data.getOpponentInfo()));
+        myPlayerView = (PlayerView) rootView.findViewById(R.id.myPlayerView);
+        opponentPlayerView = (PlayerView) rootView.findViewById(R.id.opponentPlayerView);
 
         createConnection(data);
 
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        myPlayerView.setData(new PlayerData(data.getMyInfo()));
+        opponentPlayerView.setData(new PlayerData(data.getOpponentInfo()));
     }
 
     private void createConnection(MatchData data) {

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/leaderBoardBackground">
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/recyclerView"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_marginBottom="50dp"/>
+
+    <com.anashidgames.gerdoo.pages.topic.view.RankingFooter
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rankingFooterHeight"
+        android:id="@+id/rankingFooter"
+        android:layout_gravity="bottom"/>
+
+    <ImageView
+        android:id="@+id/myRankButton"
+        android:layout_width="@dimen/myRankButtonSize"
+        android:layout_height="@dimen/myRankButtonSize"
+        android:src="@drawable/my_rank"
+        android:layout_marginBottom="80dp"
+        android:layout_gravity="center_horizontal|bottom"
+        app:layout_behavior="com.anashidgames.gerdoo.pages.topic.ScrollAwareFABBehavior"/>
+
+</FrameLayout>

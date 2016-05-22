@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.anashidgames.gerdoo.R;
-import com.bumptech.glide.Glide;
+import com.anashidgames.gerdoo.core.PsychoImageLoader;
 
 /**
  * Created by psycho on 3/29/16.
@@ -52,7 +52,9 @@ public class RowItemView extends LinearLayout{
 
     public void setItem(RowItem item){
         titleView.setText(item.getTitle());
-        Glide.with(getContext()).load(item.getImageUrl()).placeholder(R.drawable.home_topic_place_holder).crossFade().into(imageView);
+        PsychoImageLoader.loadImage(getContext(), item.getImageUrl(), R.drawable.home_topic_place_holder, imageView);
+
+
         if (item.getSubTitle() != null){
             categoryTitleView.setVisibility(VISIBLE);
             categoryTitleView.setText(item.getSubTitle());

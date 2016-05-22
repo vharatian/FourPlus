@@ -22,10 +22,11 @@
         <activity android:name=".pages.auth.AuthenticationActivity" />
         <activity android:name=".pages.intro.IntroductionActivity" />
         <activity android:name=".pages.home.HomeActivity" />
-        <activity android:name=".pages.game.UserMatchingActivity" />
         <activity android:name=".pages.topic.TopicActivity"/>
         <activity android:name=".pages.profile.ProfileActivity"/>
         <activity android:name=".pages.game.GameActivity"/>
+        <activity android:name=".pages.TextActivity"/>
+        <activity android:name=".pages.home.MainLeaderBoardActivity"/>
     </application>
 
 </manifest>

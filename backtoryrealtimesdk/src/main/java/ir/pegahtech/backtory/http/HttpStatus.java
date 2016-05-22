@@ -23,7 +23,7 @@ package ir.pegahtech.backtory.http;
  *
  * @author Arjen Poutsma
  * @author Sebastien Deleuze
- * @see HttpStatus.Series
+ * @see Series
  * @see <a href="http://www.iana.org/assignments/http-status-codes">HTTP Status Code Registry</a>
  * @see <a href="http://en.wikipedia.org/wiki/List_of_HTTP_status_codes">List of HTTP status codes - Wikipedia</a>
  */
@@ -458,7 +458,7 @@ public enum HttpStatus {
 
 	/**
 	 * Returns the HTTP status series of this status code.
-	 * @see HttpStatus.Series
+	 * @see Series
 	 */
 	public Series series() {
 		return Series.valueOf(this);

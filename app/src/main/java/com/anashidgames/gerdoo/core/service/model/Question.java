@@ -16,7 +16,7 @@ public class Question {
     @SerializedName("questionImageUrl")
     private String questionImageUrl;
     @SerializedName("options")
-    private List<Option> options = new ArrayList<>();
+    private List<String> options = new ArrayList<>();
 
     public String getQuestionText() {
         return questionText;
@@ -26,7 +26,7 @@ public class Question {
         return questionImageUrl;
     }
 
-    public List<Option> getOptions() {
+    public List<String> getOptions() {
         return options;
     }
 

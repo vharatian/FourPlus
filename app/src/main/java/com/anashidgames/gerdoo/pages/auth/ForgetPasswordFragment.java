@@ -37,6 +37,7 @@ public class ForgetPasswordFragment extends FormFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_forget_password, container, false);
 
         server = GerdooServer.INSTANCE;

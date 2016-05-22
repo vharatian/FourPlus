@@ -9,8 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.anashidgames.gerdoo.R;
+import com.anashidgames.gerdoo.core.PsychoImageLoader;
 import com.anashidgames.gerdoo.pages.game.PlayerData;
-import com.bumptech.glide.Glide;
 
 /**
  * Created by psycho on 4/24/16.
@@ -60,7 +60,7 @@ public class PlayerView extends FrameLayout {
 
     public void setData(PlayerData data){
 
-        Glide.with(getContext()).load(data.getImageUrl()).placeholder(R.drawable.user_image_place_holder).crossFade().into(avatarView);
+        PsychoImageLoader.loadImage(getContext(), data.getImageUrl(), R.drawable.user_image_place_holder, avatarView);
 
         nameView.setText(data.getName());
         if (data.hasScore()){

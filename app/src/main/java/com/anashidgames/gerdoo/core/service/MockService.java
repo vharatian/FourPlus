@@ -2,6 +2,9 @@ package com.anashidgames.gerdoo.core.service;
 
 import com.anashidgames.gerdoo.core.service.model.Category;
 import com.anashidgames.gerdoo.core.service.model.CategoryTopic;
+import com.anashidgames.gerdoo.core.service.model.ChangeImageParams;
+import com.anashidgames.gerdoo.core.service.model.FileParams;
+import com.anashidgames.gerdoo.core.service.model.GetScoreParams;
 import com.anashidgames.gerdoo.core.service.model.GetSkillResponse;
 import com.anashidgames.gerdoo.core.service.model.LeaderBoardParams;
 import com.anashidgames.gerdoo.core.service.model.MatchData;
@@ -20,6 +23,7 @@ import com.anashidgames.gerdoo.core.service.model.server.LeaderBoardResponse;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
@@ -27,7 +31,9 @@ import ir.pegahtech.backtory.models.messages.MatchFoundMessage;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Header;
 import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 import retrofit2.http.Url;
 import retrofit2.mock.BehaviorDelegate;
@@ -181,7 +187,7 @@ class MockService implements GerdooService {
     }
 
     @Override
-    public Call<GetSkillResponse> getSkill(@Path("cloudCodeId") String cloudId) {
+    public Call<GetSkillResponse> getScore(@Path("cloudCodeId") String cloudId, @Body GetScoreParams params) {
         return null;
     }
 
@@ -276,15 +282,20 @@ class MockService implements GerdooService {
     }
 
     @Override
-    public Call<ChangeImageResponse> changeImage(@Url String url, @Part("image") RequestBody body) {
+    public Call<ChangeImageResponse> changeImage(@Url String cdnUrl, @Header("x-backtory-cdn-secret") String instanceId, @PartMap Map<String, RequestBody> parts){
         boolean done = random.nextBoolean();
         String newUrl = null;
         if (done)
-            newUrl = url;
+            newUrl = instanceId;
 
         ChangeImageResponse response = new ChangeImageResponse(done, newUrl);
 
-        return behaviorDelegate.returningResponse(response).changeImage(url, body);
+        return behaviorDelegate.returningResponse(response).changeImage(cdnUrl, instanceId, parts);
 
+    }
+
+    @Override
+    public Call<ChangeImageResponse> changeImage(@Path("cloudCodeId") String cloudId, @Body ChangeImageParams params) {
+        return null;
     }
 }

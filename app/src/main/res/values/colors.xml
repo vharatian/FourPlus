@@ -20,7 +20,7 @@
     <color name="categoryItemsRowColor2">@color/colorPrimarySide</color>
     <color name="categoryBackgroundClose">@color/colorPrimarySide</color>
     <color name="categoryBackgroundOpen">@color/colorPrimary</color>
-    <color name="topicBackground">#ebf3f6</color>
+    <color name="leaderBoardBackground">#ebf3f6</color>
     <color name="rankingBackground1">#ffffff</color>
     <color name="rankingBackground2">#e5e5e5</color>
     <color name="topic_decrease" >@color/red</color>
@@ -35,6 +35,8 @@
     <color name="profileGradientStartColor">#99000000</color>
     <color name="gamePageBackground">#e4e4e4</color>
     <color name="option_gray">#bfbfbf</color>
+    <color name="redOverlay">#88ff0000</color>
+    <color name="greenOverlay">#8800ff00</color>
 
 
 </resources>

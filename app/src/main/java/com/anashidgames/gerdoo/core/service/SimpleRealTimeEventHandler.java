@@ -89,7 +89,7 @@ public class SimpleRealTimeEventHandler implements BacktoryRealtimeEventHandler 
 
     @Override
     public void onChallengeEventMessage(ChallengeEventMessage challengeEventMessage) {
-        Log.i("psycho", "Challenge event message received : " + challengeEventMessage.getMessage());
+        Log.i("psycho", "Challenge event message received : " + challengeEventMessage.getRawMessage());
     }
 
     @Override
@@ -99,7 +99,7 @@ public class SimpleRealTimeEventHandler implements BacktoryRealtimeEventHandler 
 
     @Override
     public void onResultReceived(BacktoryRealtimeMessage resultReceived) {
-        Log.i("psycho", "result received : " + resultReceived.get_class());
+        Log.i("psycho", "result received : " + resultReceived.get_type());
     }
 
     @Override

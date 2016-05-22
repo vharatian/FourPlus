@@ -2,16 +2,25 @@ package com.anashidgames.gerdoo.core.service;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 
+import com.anashidgames.gerdoo.core.MultipartUtility;
 import com.anashidgames.gerdoo.core.service.auth.AuthenticationInterceptor;
 import com.anashidgames.gerdoo.core.service.auth.AuthenticationManager;
+import com.anashidgames.gerdoo.core.service.call.CallbackWithErrorDialog;
+import com.anashidgames.gerdoo.core.service.call.PsychoCallBack;
 import com.anashidgames.gerdoo.core.service.model.AuthenticationInfo;
 import com.anashidgames.gerdoo.core.service.model.Category;
 import com.anashidgames.gerdoo.core.service.model.CategoryTopic;
+import com.anashidgames.gerdoo.core.service.model.ChangeImageParams;
+import com.anashidgames.gerdoo.core.service.model.GetScoreParams;
 import com.anashidgames.gerdoo.core.service.model.GetSkillResponse;
 import com.anashidgames.gerdoo.core.service.model.LeaderBoardParams;
 import com.anashidgames.gerdoo.core.service.model.MatchData;
 import com.anashidgames.gerdoo.core.service.model.Rank;
+import com.anashidgames.gerdoo.core.service.model.UploadResponse;
 import com.anashidgames.gerdoo.core.service.model.parameters.GetCategoryTopicsParams;
 import com.anashidgames.gerdoo.core.service.model.parameters.GetSubCategoriesParams;
 import com.anashidgames.gerdoo.core.service.model.server.ChangeImageResponse;
@@ -23,8 +32,17 @@ import com.anashidgames.gerdoo.core.service.model.ProfileInfo;
 import com.anashidgames.gerdoo.core.service.model.UserInfo;
 import com.anashidgames.gerdoo.core.service.realTime.GameManager;
 import com.anashidgames.gerdoo.core.service.realTime.MatchMakingManager;
+import com.anashidgames.gerdoo.utils.PsychoUtils;
+import com.google.gson.Gson;
 
+import org.apache.commons.io.IOUtils;
+
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ir.pegahtech.backtory.models.messages.MatchFoundMessage;
 import okhttp3.MediaType;
@@ -53,6 +71,10 @@ public class GerdooServer{
 
 //    public static final String HOST = "http://192.168.0.99:8585";
     public static final String HOST = "http://api.backtory.com/";
+//    public static final String CDN_URL = "http://192.168.0.115:8034";/files";
+    public static final String CDN_URL = "http://cdn.backtory.ir/files";
+    public static final String CDN_SECRET_KEY = "JUFPBDNVNUWBLOEQIOVDJXZYDUOXUU";
+    public static final String CDN_DOWNLOAD_PREFIX = "http://cdn.backtory.ir/chahar";
 
 
     private GerdooService mockService;
@@ -118,12 +140,12 @@ public class GerdooServer{
         return realService.getSubCategories(CLOUD_CODE_ID, new GetSubCategoriesParams(categoryId));
     }
 
-    public Call<List<Rank>> getTopPlayers(String leaderBoardId) {
-        return realService.getTopPlayers(CLOUD_CODE_ID, new LeaderBoardParams(leaderBoardId));
+    public Call<List<Rank>> getTopPlayers(String leaderBoardId, int page) {
+        return realService.getTopPlayers(CLOUD_CODE_ID, new LeaderBoardParams(leaderBoardId, page));
     }
 
     public Call<List<Rank>> getAroundMe(String leaderBoardId) {
-        return realService.getAroundMe(CLOUD_CODE_ID, new LeaderBoardParams(leaderBoardId));
+        return realService.getAroundMe(CLOUD_CODE_ID, new LeaderBoardParams(leaderBoardId, 0));
     }
 
     public Call<UserInfo> getUserInfo() {
@@ -147,12 +169,12 @@ public class GerdooServer{
     }
 
     public Call<ChangeImageResponse> changeImage(String url, Uri selectedImage) {
-        RequestBody body = RequestBody.create(MediaType.parse("image/*"), selectedImage.getPath());
-        return service.changeImage(url, body);
+        RequestBody file = RequestBody.create(MediaType.parse("image/*"), selectedImage.getPath());
+        return service.changeImage(CDN_URL, url, null);
     }
 
-    public Call<GetSkillResponse> getSkill() {
-        return realService.getSkill(CLOUD_CODE_ID);
+    public Call<GetSkillResponse> getScore(String matchMakingName) {
+        return realService.getScore(CLOUD_CODE_ID, new GetScoreParams(matchMakingName));
     }
 
     public AuthenticationManager getAuthenticationManager() {
@@ -173,5 +195,65 @@ public class GerdooServer{
 
     public void gustSignUp(Callback<AuthenticationInfo> callback) {
         authenticationManager.gustSignUp(callback);
+    }
+
+    private Call<ChangeImageResponse> changeImage(String newUrl) {
+        return realService.changeImage(CLOUD_CODE_ID, new ChangeImageParams(newUrl));
+    }
+
+    public void changeImage(final InputStream inputStream, final PsychoCallBack<ChangeImageResponse> callback) {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final String name = PsychoUtils.randomString();
+                try {
+                    String dir = "/profiles/";
+                    Calendar calendar = Calendar.getInstance();
+                    dir += calendar.get(Calendar.YEAR) + "_" + calendar.get(Calendar.MONTH)
+                            + "_" + calendar.get(Calendar.DAY_OF_MONTH) + "/";
+                    String fileName = PsychoUtils.randomString() + ".jpg";
+
+                    Log.i("four+", "Start requesting");
+                    Map<String, String> headers = new HashMap<String, String>();
+                    headers.put("x-backtory-cdn-secret", CDN_SECRET_KEY);
+                    MultipartUtility utility = new MultipartUtility(CDN_URL, "UTF-8", "bow", headers);
+                    utility.addFormField("fileItems[0].path", dir);
+                    utility.addFormField("fileItems[0].extract", "false");
+                    utility.addFormField("fileItems[0].replacing", "false");
+                    utility.addFormField("secretKey", PsychoUtils.randomString());
+                    utility.addFilePart("fileItems[0].fileToUpload", inputStream, fileName);
+                    HttpURLConnection connection = utility.execute();
+                    String response = IOUtils.toString(connection.getInputStream());
+                    Log.i("four+", "Response is: " + response);
+
+                    final List<String> urls = new Gson().fromJson(response, UploadResponse.class).getSavedFilesUrls();
+                    if (!urls.isEmpty()) {
+                        String newUrl = CDN_DOWNLOAD_PREFIX + urls.get(0);
+                        Call<ChangeImageResponse> call = changeImage(newUrl);
+                        call.enqueue(new CallbackWithErrorDialog<ChangeImageResponse>(context) {
+                            @Override
+                            public void handleSuccessful(ChangeImageResponse data) {
+                                callback.handleSuccessful(data);
+                            }
+                        });
+                    }
+                } catch (final Exception e) {
+                    e.printStackTrace();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.handleFailure(null, e);
+                        }
+                    });
+                }
+            }
+        }).start();
+    }
+
+
+
+    private void runOnUiThread(Runnable runnable) {
+        new Handler(Looper.getMainLooper()).post(runnable);
     }
 }

@@ -20,7 +20,7 @@
             android:id="@+id/backButton"
             android:src="@drawable/back"
             android:layout_gravity="left"
-            android:layout_margin="@dimen/largeBreak"/>
+            android:padding="@dimen/smallBreak"/>
 
         <com.anashidgames.gerdoo.view.basic.TextView
             android:layout_width="wrap_content"

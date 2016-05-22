@@ -38,6 +38,7 @@ public class SignInFragment extends FormFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_sign_in, container, false);
 
         server = GerdooServer.INSTANCE;

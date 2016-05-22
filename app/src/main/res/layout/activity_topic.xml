@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/topicBackground">
+    android:background="@color/leaderBoardBackground">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -16,7 +16,7 @@
             android:layout_height="match_parent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             android:minHeight="@dimen/toolbarHeight"
-            app:statusBarScrim="@color/topicBackground"
+            app:statusBarScrim="@color/leaderBoardBackground"
             android:id="@+id/bannerLayout">
 
             <ImageView
@@ -38,8 +38,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:src="@drawable/back"
-                    android:layout_marginTop="@dimen/xlargeBreak"
-                    android:layout_marginBottom="@dimen/xlargeBreak"
+                    android:padding="@dimen/xlargeBreak"
                     android:layout_gravity="center_vertical|left"
                     android:id="@+id/backButton"/>
 
@@ -85,19 +84,11 @@
 
     </LinearLayout>
 
-
-    <android.support.v7.widget.RecyclerView
+    <com.anashidgames.gerdoo.pages.LeaderBoardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:id="@+id/recyclerView"
-        android:layout_marginBottom="50dp"/>
-
-    <com.anashidgames.gerdoo.pages.topic.view.RankingFooter
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/rankingFooterHeight"
-        android:id="@+id/rankingFooter"
-        android:layout_gravity="bottom"/>
+        android:id="@+id/leaderBoardView"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/playButton"
@@ -109,15 +100,5 @@
         android:src="@android:drawable/ic_media_play"
         android:layout_marginTop="@dimen/smallBreak"
         app:layout_behavior="com.anashidgames.gerdoo.pages.topic.RemainingFab"/>
-
-    <ImageView
-        android:id="@+id/myRankButton"
-        android:layout_width="@dimen/myRankButtonSize"
-        android:layout_height="@dimen/myRankButtonSize"
-        android:src="@drawable/my_rank"
-        app:layout_anchor="@id/recyclerView"
-        app:layout_anchorGravity="bottom|center"
-        android:layout_marginBottom="70dp"
-        app:layout_behavior="com.anashidgames.gerdoo.pages.topic.ScrollAwareFABBehavior"/>
 
 </android.support.design.widget.CoordinatorLayout>

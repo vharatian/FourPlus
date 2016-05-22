@@ -32,7 +32,7 @@ public class SignUpFragment extends FormFragment {
 
     //Views
     private ValidatableInput mailInput;
-    private ValidatableInput phoneNumberInpute;
+    private ValidatableInput phoneNumberInput;
     private ValidatableInput passwordInput;
     private ValidatableInput passwordRepeatInput;
 
@@ -46,6 +46,7 @@ public class SignUpFragment extends FormFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_sign_up, container, false);
 
         dataHelper = new DataHelper(getActivity());
@@ -56,12 +57,17 @@ public class SignUpFragment extends FormFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
     protected void callServer(int formId, Callback callback) {
         if(formId == ANONYMOUS_FORM_ID){
             GerdooServer.INSTANCE.gustSignUp(callback);
         }else  {
             String email = mailInput.getText();
-            String phoneNumber = phoneNumberInpute.getText();
+            String phoneNumber = phoneNumberInput.getText();
             String password = passwordInput.getText();
             server.signUp(email, phoneNumber, password, callback);
         }
@@ -123,13 +129,13 @@ public class SignUpFragment extends FormFragment {
     }
 
     private void initPhoneNumber(View rootView) {
-        phoneNumberInpute = (ValidatableInput) rootView.findViewById(R.id.phoneNumber);
-        phoneNumberInpute.setValidator(new PhoneNumberValidator());
-        phoneNumberInpute.setHintMessage(R.string.phoneNumber);
-        phoneNumberInpute.setInputType(InputType.TYPE_CLASS_PHONE);
-        phoneNumberInpute.setErrorMessage(R.string.phoneNumberIsNeeded, R.string.wrongPhoneNumber);
+        phoneNumberInput = (ValidatableInput) rootView.findViewById(R.id.phoneNumber);
+        phoneNumberInput.setValidator(new PhoneNumberValidator());
+        phoneNumberInput.setHintMessage(R.string.phoneNumber);
+        phoneNumberInput.setInputType(InputType.TYPE_CLASS_PHONE);
+        phoneNumberInput.setErrorMessage(R.string.phoneNumberIsNeeded, R.string.wrongPhoneNumber);
 
-        addInput(phoneNumberInpute);
+        addInput(phoneNumberInput);
     }
 
     private void initPasswordInput(View rootView) {

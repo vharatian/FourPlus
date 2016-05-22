@@ -16,20 +16,14 @@ import ir.pegahtech.backtory.models.messages.MatchFoundMessage;
  * Created by psycho on 5/9/16.
  */
 public class MatchData implements Serializable{
-    @SerializedName("myInfo")
     private ParticipantInfo myInfo;
-    @SerializedName("opponentInfo")
     private ParticipantInfo opponentInfo;
-    @SerializedName("challengeId")
     private String challengeId;
-    @SerializedName("address")
     private String address;
-    @SerializedName("port")
     private int port;
-    @SerializedName("requestId")
     private String requestId;
-
     private String ownerUserId;
+    private String matchMakingName;
 
     public MatchData(MatchFoundMessage message) {
         this.challengeId = message.getRealtimeChallengeId();
@@ -37,6 +31,7 @@ public class MatchData implements Serializable{
         this.requestId = message.getRequestId();
         this.address = message.getAddress();
         this.ownerUserId = message.getOwnerUserId();
+        this.matchMakingName = message.getMatchmakingName();
 
         String extraMessage = message.getExtraMessage();
         Log.i("psycho", "extraMessage : " + extraMessage);
@@ -93,5 +88,9 @@ public class MatchData implements Serializable{
 
     public String getOwnerUserId() {
         return ownerUserId;
+    }
+
+    public String getMatchMakingName() {
+        return matchMakingName;
     }
 }

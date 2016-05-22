@@ -12,6 +12,7 @@ public class BacktoryConnectivityMessage {
     public static String MATCH_UPDATE_MESSAGE = ".MatchUpdateMessage";
     public static String MATCHMAKING_RESPONSE = ".MatchmakingResponse";
     public static String MATCH_NOT_FOUND_MESSAGE = ".MatchNotFoundMessage";
+    public static String MATCHMAKING_CANCELLATION_RESPONSE = ".MatchmakingCancellationResponse";
 
     private String _class;
 

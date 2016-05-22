@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Map;
 
 import ir.pegahtech.backtory.http.GsonHelper;
@@ -18,6 +19,7 @@ import ir.pegahtech.backtory.models.messages.ChatMessage;
 import ir.pegahtech.backtory.models.messages.MatchFoundMessage;
 import ir.pegahtech.backtory.models.messages.MatchNotFoundMessage;
 import ir.pegahtech.backtory.models.messages.MatchUpdateMessage;
+import ir.pegahtech.backtory.models.messages.MatchmakingCancellationResponseMessage;
 import ir.pegahtech.backtory.models.messages.MatchmakingResponseMessage;
 import ir.pegahtech.backtory.models.messages.BacktoryRealtimeMessage;
 import ir.pegahtech.backtory.models.messages.PushNotifMessage;
@@ -30,18 +32,24 @@ public class ConnectivityWebSocket extends WebSocket {
 
     private BacktoryConnectivityEventHandler connectivityEventHandler = null;
 
-    public ConnectivityWebSocket(URI url, String connectivityInstanceId, String token) {
-        this(url, null, null, connectivityInstanceId, token);
+    @Override
+    protected URI generateURI() throws URISyntaxException {
+//        return new URI("wss://" + CommonConfiguration.WS_BASE_URL + "/ws");
+        return new URI("wss://" + CommonConfiguration.WS_BASE_URL + "/ws");
     }
 
-    public ConnectivityWebSocket(URI url, String protocol, String connectivityInstanceId,
-                                 String token) {
-        this(url, protocol, null, connectivityInstanceId, token);
+    public ConnectivityWebSocket(String connectivityInstanceId, String token) throws URISyntaxException {
+        this(null, null, connectivityInstanceId, token);
     }
 
-    public ConnectivityWebSocket(URI url, String protocol, Map<String, String> extraHeaders,
-                                 String connectivityInstanceId, String token) {
-        super(url, protocol, extraHeaders, connectivityInstanceId, token);
+    public ConnectivityWebSocket(String protocol, String connectivityInstanceId,
+                                 String token) throws URISyntaxException {
+        this(protocol, null, connectivityInstanceId, token);
+    }
+
+    public ConnectivityWebSocket(String protocol, Map<String, String> extraHeaders,
+                                 String connectivityInstanceId, String token) throws URISyntaxException {
+        super(protocol, extraHeaders, connectivityInstanceId, token);
 
         setEventHandler(new WebSocketEventHandler() {
             public void onMessage(WebsocketMessage message) {
@@ -107,7 +115,7 @@ public class ConnectivityWebSocket extends WebSocket {
                         return;
                     }
 
-                    String _class = backtoryRealtimeMessage.get_class();
+                    String _class = backtoryRealtimeMessage.get_type();
                     if (_class == null) {
                         Log.i("backtory websocket", messageText);
                         getConnectivityEventHandler().onMessage(messageText);
@@ -121,12 +129,20 @@ public class ConnectivityWebSocket extends WebSocket {
                         ExceptionListResponse response = gson.fromJson(body, ExceptionListResponse.class);
                         getConnectivityEventHandler().onException(response.getExceptions(),
                                 response.exceptionsToString());
+                    } else if (_class.equals(BacktoryConnectivityMessage.MATCHMAKING_CANCELLATION_RESPONSE)) {
+                        MatchmakingCancellationResponseMessage responseMessage =
+                                gson.fromJson(body, MatchmakingCancellationResponseMessage.class);
+                        requestsList.remove(responseMessage.getRequestId());
+                        Log.i("backtory websocket", "--Matchmaking cancellation done for requestId: " +
+                                responseMessage.getRequestId());
+                        getConnectivityEventHandler().onMatchCancellationResponse(responseMessage.getRequestId());
                     } else if (_class.equals(BacktoryConnectivityMessage.MATCHMAKING_RESPONSE)) {
-                        MatchmakingResponseMessage matchmakingResponseMessage =
+                        MatchmakingResponseMessage responseMessage =
                                 gson.fromJson(body, MatchmakingResponseMessage.class);
-                        requestsList.add(matchmakingResponseMessage.getRequestId());
+                        requestsList.add(responseMessage.getRequestId());
                         Log.i("backtory websocket", "--Matchmaking request sent and id " +
-                                matchmakingResponseMessage.getRequestId() + " received");
+                                responseMessage.getRequestId() + " received");
+                        getConnectivityEventHandler().onMatchResponse(responseMessage.getRequestId());
                     } else if (_class.equals(BacktoryConnectivityMessage.MATCH_FOUND_MESSAGE)) {
                         MatchFoundMessage matchFoundMessage =
                                 gson.fromJson(body, MatchFoundMessage.class);
@@ -178,6 +194,7 @@ public class ConnectivityWebSocket extends WebSocket {
                         "X-Backtory-Connectivity-Id:" + getInstanceId() + "\n" +
                         "receipt:77\n" +
                         "\n\0");
+
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -235,6 +252,22 @@ public class ConnectivityWebSocket extends WebSocket {
         send("SEND\n" +
                 "X-Backtory-Connectivity-Id:" + getInstanceId() + "\n" +
                 "destination:" + "/app/MatchmakingRequest" + "\n\n" +
+                jsonObject.toString()
+                + "\n\0");
+    }
+
+    public void matchmakingCancellationRequest(String matchmakingName, String requestId) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("matchmakingName", matchmakingName);
+            jsonObject.put("requestId", requestId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        send("SEND\n" +
+                "X-Backtory-Connectivity-Id:" + getInstanceId() + "\n" +
+                "destination:" + "/app/MatchmakingCancellation" + "\n\n" +
                 jsonObject.toString()
                 + "\n\0");
     }

@@ -20,6 +20,8 @@ public class Rank {
     private String userId;
     @SerializedName("isMe")
     private boolean isMe;
+    @SerializedName("imageUrl")
+    private String imageUrl;
 
     public Rank(int rank, int score, String name, String userId) {
         this.rank = rank;
@@ -46,5 +48,9 @@ public class Rank {
 
     public boolean isMe() {
         return isMe;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 }

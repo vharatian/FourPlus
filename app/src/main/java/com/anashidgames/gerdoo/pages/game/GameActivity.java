@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 
 import com.anashidgames.gerdoo.R;
 import com.anashidgames.gerdoo.core.service.realTime.GameManager;
+import com.anashidgames.gerdoo.core.service.realTime.MatchMakingManager;
 import com.anashidgames.gerdoo.pages.FragmentContainerActivity;
 
 /**
@@ -24,6 +25,7 @@ public class GameActivity extends FragmentContainerActivity {
 
 
     private GameManager gameManager;
+    private MatchMakingManager matchMakingManager;
 
     public GameActivity() {
         super(R.id.fragmentPlace, false);
@@ -47,5 +49,28 @@ public class GameActivity extends FragmentContainerActivity {
 
     public GameManager getGameManager() {
         return gameManager;
+    }
+
+    public MatchMakingManager getMatchMakingManager() {
+        return matchMakingManager;
+    }
+
+    public void setMatchMakingManager(MatchMakingManager matchMakingManager) {
+        this.matchMakingManager = matchMakingManager;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (matchMakingManager != null){
+            matchMakingManager.close();
+        }
+
+        if (gameManager != null){
+            gameManager.close();
+        }
+
+        finish();
     }
 }

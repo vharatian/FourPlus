@@ -4,28 +4,31 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.anashidgames.gerdoo.R;
+import com.anashidgames.gerdoo.core.PsychoImageLoader;
+import com.anashidgames.gerdoo.core.service.model.MatchHistoryItem;
+import com.anashidgames.gerdoo.core.service.model.Question;
+import com.anashidgames.gerdoo.core.service.realTime.GameManager;
+import com.anashidgames.gerdoo.core.service.realTime.MatchMakingManager;
 import com.anashidgames.gerdoo.pages.game.view.ScoreView;
 import com.anashidgames.gerdoo.utils.PsychoUtils;
 import com.anashidgames.gerdoo.view.FitToWidthWithAspectRatioImageView;
 import com.anashidgames.gerdoo.view.chart.pie.PieChart;
 import com.anashidgames.gerdoo.view.chart.pie.PieChartItem;
-import com.bumptech.glide.Glide;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -33,36 +36,36 @@ import java.util.List;
  */
 public class ScoresFragment extends Fragment {
 
-    public static final String INFO = "info";
+    public static final int FINISHING_SCORE = 20;
 
     public static Fragment newInstance(){
-        ScorePageInfo.Scores scores = new ScorePageInfo.Scores(113, 1, 20, 133);
-        ScorePageInfo.LevelChartInfo levelChartInfo = new ScorePageInfo.LevelChartInfo(23, 8, 69);
-        ScorePageInfo.AdInfo adInfo = new ScorePageInfo.AdInfo("https://i.imgsafe.org/5b75feb.jpg", 8.372, "www.google.com");
-        List<String> images = Arrays.asList("/sdcard/Pictures/1.jpeg", "/sdcard/Pictures/1.jpeg", "/sdcard/Pictures/1.jpeg", "/sdcard/Pictures/1.jpeg", "/sdcard/Pictures/1.jpeg", "/sdcard/Pictures/1.jpeg");
-        ScorePageInfo info = new ScorePageInfo(scores, levelChartInfo, adInfo, images);
-
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(INFO, info);
-        Fragment fragment = new ScoresFragment();
-        fragment.setArguments(bundle);
-        return fragment;
+        return new ScoresFragment();
     }
 
-    private ViewPager questionsImagePager;
+    private ViewPager gameHistoryPager;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_scores, container, false);
 
-        Bundle bundle = getArguments();
-        ScorePageInfo info = (ScorePageInfo) bundle.getSerializable(INFO);
+        GameActivity activity = (GameActivity) getActivity();
+        GameManager gameManager = activity.getGameManager();
+        MatchMakingManager matchMakingManager = activity.getMatchMakingManager();
 
-        initScores(rootView, info.getScores());
-        initLevelChart(rootView, info.getLevelChartInfo());
-        initAdBanner(rootView, info.getAdInfo());
-        initQuestionsImagePager(rootView, info.getQuestionsImage());
+        ScorePageInfo.Scores scores = new ScorePageInfo.Scores(
+                gameManager.getMyScore() - FINISHING_SCORE,
+                1,
+                FINISHING_SCORE,
+                gameManager.getMyScore());
+        initScores(rootView, scores);
+
+        int score = matchMakingManager.getScore() + gameManager.getMyScore();
+        initLevelChart(rootView, new ScorePageInfo.LevelChartInfo(score));
+
+//        initAdBanner(rootView, info.getAdInfo());
+
+        initMatchHistory(rootView, gameManager.getQuestions(), gameManager.getCorrectAnswers(), gameManager.getMyAnswers());
 
         rootView.findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +74,43 @@ public class ScoresFragment extends Fragment {
             }
         });
 
+        rootView.findViewById(R.id.reportQuestionButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendReportMail();
+            }
+        });
+
         return rootView;
+    }
+
+    private void sendReportMail() {
+        final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+
+        emailIntent.setType("plain/text");
+        emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"feedback@fourapp.ir"});
+        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Report");
+        emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Reporting question");
+
+        getActivity().startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+    }
+
+    private void initMatchHistory(View rootView, List<Question> questions, List<String> correctAnswers, List<String> myAnswers) {
+        if (questions == null)
+            return;
+
+        List<MatchHistoryItem> history = new ArrayList<>();
+        int size = Math.min(questions.size(), Math.min(correctAnswers.size(), myAnswers.size()));
+        for (int i=0; i<size; i++){
+            history.add(new MatchHistoryItem(questions.get(i), correctAnswers.get(i), myAnswers.get(i)));
+        }
+
+        HistoryAdapter adapter = new HistoryAdapter(getFragmentManager(), history);
+        gameHistoryPager = (ViewPager) rootView.findViewById(R.id.viewPager);
+        gameHistoryPager.setAdapter(adapter);
+
+        CirclePageIndicator indicator = (CirclePageIndicator)rootView.findViewById(R.id.indicator);
+        indicator.setViewPager(gameHistoryPager);
     }
 
     private void initAdBanner(View rootView, ScorePageInfo.AdInfo adInfo) {
@@ -80,25 +119,8 @@ public class ScoresFragment extends Fragment {
 
         FitToWidthWithAspectRatioImageView adBanner = (FitToWidthWithAspectRatioImageView) rootView.findViewById(R.id.adBanner);
         adBanner.setAspectRatio(adInfo.getAspectRatio());
-        Glide.with(getActivity()).load(adInfo.getBannerUrl()).placeholder(R.drawable.banner_place_holder).crossFade().into(adBanner);
+        PsychoImageLoader.loadImage(getActivity(), adInfo.getBannerUrl(), R.drawable.banner_place_holder, adBanner);
         adBanner.setOnClickListener(new UrlOpener(adInfo.getClickUrl()));
-    }
-
-    @NonNull
-    private void initQuestionsImagePager(View rootView, List<String> questionsImage) {
-        if (questionsImage == null)
-            return;
-
-        List<Fragment> fragments = new ArrayList<>();
-        for (String path: questionsImage)
-            fragments.add(ImageFragment.newInstance(path));
-
-        QuestionsImageAdapter adapter = new QuestionsImageAdapter(getFragmentManager(), fragments);
-        questionsImagePager = (ViewPager) rootView.findViewById(R.id.viewPager);
-        questionsImagePager.setAdapter(adapter);
-
-        CirclePageIndicator indicator = (CirclePageIndicator)rootView.findViewById(R.id.indicator);
-        indicator.setViewPager(questionsImagePager);
     }
 
     @Override
@@ -109,7 +131,7 @@ public class ScoresFragment extends Fragment {
         Point size = new Point();
         display.getSize(size);
 
-        questionsImagePager.getLayoutParams().height = (int) (size.y * 0.7);
+        gameHistoryPager.getLayoutParams().height = (int) (size.y * 0.7);
     }
 
     private void initLevelChart(View rootView, ScorePageInfo.LevelChartInfo levelChartInfo) {
@@ -117,11 +139,10 @@ public class ScoresFragment extends Fragment {
             return;
 
         PieChart levelChart = (PieChart) rootView.findViewById(R.id.levelChart);
-        levelChart.setBoldCenterText(14 + "");
+        levelChart.setBoldCenterText(levelChartInfo.getLevel() + "");
         levelChart.setSmallCenterText(getString(R.string.level));
 
-        levelChart.addData(new PieChartItem("امتیاز موجود", levelChartInfo.getExistingScore(), getResources().getColor(R.color.red)));
-        levelChart.addData(new PieChartItem("امتیاز این دست", levelChartInfo.getThisRoundScore(), getResources().getColor(R.color.colorAccent)));
+        levelChart.addData(new PieChartItem("امتیاز موجود", levelChartInfo.getCurrentScore(), getResources().getColor(R.color.red)));
         levelChart.addData(new PieChartItem("امتیاز مانده تا سطح بعد", levelChartInfo.getRemainingScoresToNextLevel(), getResources().getColor(R.color.white)));
     }
 
@@ -145,23 +166,24 @@ public class ScoresFragment extends Fragment {
         totalScore.setScore("" + scores.getTotalScore());
     }
 
-    private class QuestionsImageAdapter extends FragmentPagerAdapter {
+    private class HistoryAdapter extends FragmentPagerAdapter {
 
-        private List<Fragment> fragments;
+        private List<MatchHistoryItem> history;
 
-        public QuestionsImageAdapter(FragmentManager fm, List<Fragment> fragments) {
+        public HistoryAdapter(FragmentManager fm, List<MatchHistoryItem> history) {
             super(fm);
-            this.fragments = fragments;
+            this.history = history;
         }
 
         @Override
         public Fragment getItem(int position) {
-            return fragments.get(position);
+            MatchHistoryItem history = this.history.get(position);
+            return GameHistoryFragment.getInstance(history);
         }
 
         @Override
         public int getCount() {
-            return fragments.size();
+            return history.size();
         }
     }
 

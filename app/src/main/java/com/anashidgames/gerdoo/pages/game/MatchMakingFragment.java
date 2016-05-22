@@ -56,6 +56,7 @@ public class MatchMakingFragment extends Fragment {
 
 
         MatchMakingManager matchMakingManager = GerdooServer.INSTANCE.createMatchMakingManager(matchMakingName);
+        ((GameActivity) getActivity()).setMatchMakingManager(matchMakingManager);
         matchMakingManager.connect(new MatchMakingConnectionCallBack());
 
 

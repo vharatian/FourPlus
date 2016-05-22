@@ -13,7 +13,7 @@ public class GetSkillResponse {
         this.mySkill = mySkill;
     }
 
-    public int getMyRank() {
+    public int getMyScore() {
         return mySkill;
     }
 }

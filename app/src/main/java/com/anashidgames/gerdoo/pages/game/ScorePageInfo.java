@@ -1,5 +1,8 @@
 package com.anashidgames.gerdoo.pages.game;
 
+import com.anashidgames.gerdoo.core.LevelCalculator;
+import com.anashidgames.gerdoo.core.service.model.MatchHistoryItem;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -10,13 +13,19 @@ public class ScorePageInfo implements Serializable{
     private Scores scores;
     private LevelChartInfo levelChartInfo;
     private AdInfo adInfo;
-    private List<String> questionsImage;
+    private List<MatchHistoryItem> histories;
+    private String userId;
 
-    public ScorePageInfo(Scores scores, LevelChartInfo levelChartInfo, AdInfo adInfo, List<String> questionsImage) {
+    public ScorePageInfo(String userId, Scores scores, LevelChartInfo levelChartInfo, AdInfo adInfo, List<MatchHistoryItem> histories) {
+        this.userId = userId;
         this.scores = scores;
         this.levelChartInfo = levelChartInfo;
         this.adInfo = adInfo;
-        this.questionsImage = questionsImage;
+        this.histories = histories;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 
     public Scores getScores() {
@@ -31,8 +40,8 @@ public class ScorePageInfo implements Serializable{
         return adInfo;
     }
 
-    public List<String> getQuestionsImage() {
-        return questionsImage;
+    public List<MatchHistoryItem> getHistories() {
+        return histories;
     }
 
     public static class Scores implements Serializable{
@@ -66,26 +75,26 @@ public class ScorePageInfo implements Serializable{
     }
 
     public static class LevelChartInfo implements Serializable{
-        private int existingScore;
-        private int thisRoundScore;
+        private int currentScore;
         private int remainingScoresToNextLevel;
+        private int level;
 
-        public LevelChartInfo(int existingScore, int thisRoundScore, int remainingScoresToNextLevel) {
-            this.existingScore = existingScore;
-            this.thisRoundScore = thisRoundScore;
-            this.remainingScoresToNextLevel = remainingScoresToNextLevel;
+        public LevelChartInfo(int score) {
+            this.level = LevelCalculator.calculateLevel(score);
+            this.currentScore = LevelCalculator.calculateOverLevelScore(score);
+            this.remainingScoresToNextLevel = LevelCalculator.calculateRemainingScore(score);
         }
 
-        public int getExistingScore() {
-            return existingScore;
-        }
-
-        public int getThisRoundScore() {
-            return thisRoundScore;
+        public int getCurrentScore() {
+            return currentScore;
         }
 
         public int getRemainingScoresToNextLevel() {
             return remainingScoresToNextLevel;
+        }
+
+        public int getLevel() {
+            return level;
         }
     }
 

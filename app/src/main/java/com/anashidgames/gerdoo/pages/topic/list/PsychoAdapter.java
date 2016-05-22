@@ -26,6 +26,8 @@ public abstract class PsychoAdapter<T> extends RecyclerView.Adapter<PsychoViewHo
 
     private DataReadyCallback dataReadyCallback;
 
+    private OnLoadingChangedListener loadingListener;
+
 
     public PsychoAdapter(Activity activity, PsychoDataProvider<T> dataProvider) {
         this.activity = activity;
@@ -63,6 +65,10 @@ public abstract class PsychoAdapter<T> extends RecyclerView.Adapter<PsychoViewHo
             return VIEW_ITEM;
     }
 
+    public void setLoadingListener(OnLoadingChangedListener loadingListener) {
+        this.loadingListener = loadingListener;
+    }
+
     @Override
     public void onBindViewHolder(PsychoViewHolder holder, int position) {
         if (getItemViewType(position) == VIEW_LOADING) {
@@ -96,6 +102,10 @@ public abstract class PsychoAdapter<T> extends RecyclerView.Adapter<PsychoViewHo
 
         Log.i(TAG, "attach more data");
         loading = true;
+
+        if (loadingListener != null) {
+            loadingListener.onLoadingChanged(loading);
+        }
 
         if (dataReadyCallback != null)
             dataReadyCallback.cancel();
@@ -135,6 +145,11 @@ public abstract class PsychoAdapter<T> extends RecyclerView.Adapter<PsychoViewHo
                         dataBucket.attachNewData();
                     }
                     loading = false;
+                    if (loadingListener != null) {
+                        loadingListener.onLoadingChanged(loading);
+                    }
+
+
                     int endCount = dataBucket.getCount();
                     if (startCount != endCount || dataBucket.isFinished())
                         notifyDataSetChanged();
@@ -164,5 +179,9 @@ public abstract class PsychoAdapter<T> extends RecyclerView.Adapter<PsychoViewHo
 
             addDataToUI();
         }
+    }
+
+    public interface OnLoadingChangedListener {
+        void onLoadingChanged(boolean loading);
     }
 }

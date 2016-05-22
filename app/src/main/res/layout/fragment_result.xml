@@ -93,7 +93,7 @@
             <com.anashidgames.gerdoo.view.FitToHeightImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:id="@+id/replayButton"
+                android:id="@+id/rematchButton"
                 android:src="@drawable/replay"
                 android:layout_marginRight="@dimen/normalBreak"/>
 

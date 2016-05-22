@@ -5,10 +5,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbarHeight">
+
+        <com.anashidgames.gerdoo.view.FitToHeightImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/back"
+            android:padding="@dimen/smallBreak"
+            android:layout_gravity="left"
+            android:id="@+id/backButton"/>
+
+        <com.anashidgames.gerdoo.view.basic.BoldTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="17dp"
+            android:layout_marginRight="@dimen/normalBreak"
+            android:id="@+id/titleView"/>
+
+    </android.support.v7.widget.Toolbar>
+
+    <com.anashidgames.gerdoo.view.basic.BoldTextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="right"
+        android:textColor="@color/white"
         android:layout_margin="@dimen/xlargeBreak"
         android:id="@+id/textView"/>
 

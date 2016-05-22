@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -13,7 +14,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="10"
+            android:layout_weight="7"
             android:orientation="horizontal"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/rankMargin"
@@ -22,7 +23,7 @@
             <com.anashidgames.gerdoo.view.FitToHeightImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/largeBreak"
+                android:layout_marginLeft="@dimen/normalBreak"
                 android:layout_gravity="center"
                 android:paddingTop="@dimen/normalBreak"
                 android:paddingBottom="@dimen/normalBreak"
@@ -34,6 +35,7 @@
                 android:layout_gravity="center"
                 android:textColor="@color/black"
                 android:lines="1"
+                android:ellipsize="end"
                 android:gravity="left"
                 android:layout_marginLeft="@dimen/normalBreak"
                 android:textSize="17dp"
@@ -60,6 +62,15 @@
             android:id="@+id/nameView"
             android:layout_marginTop="@dimen/rankMargin"
             android:layout_marginBottom="@dimen/rankMargin"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="@dimen/rankTableRowUserImageSize"
+            android:layout_height="@dimen/rankTableRowUserImageSize"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="@dimen/lineHeight"
+            android:layout_gravity="center"
+            android:id="@+id/userImageView"
+            android:layout_marginRight="@dimen/normalBreak"/>
 
         <View
             android:layout_width="@dimen/lineHeight"

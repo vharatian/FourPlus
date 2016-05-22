@@ -65,8 +65,8 @@ public class IntroductionActivity extends GerdooActivity {
     private ViewPager initViewPager() {
         List<Fragment> fragments = Arrays.asList(
                 (Fragment) IntroductionFragment.newInstance(R.drawable.intro1, R.string.introTitle, R.string.introDescription1),
-                IntroductionFragment.newInstance(R.drawable.intro2, R.string.introTitle, R.string.introDescription1),
-                IntroductionFragment.newInstance(R.drawable.intro3, R.string.introTitle, R.string.introDescription1)
+                IntroductionFragment.newInstance(R.drawable.intro2, R.string.introTitle, R.string.introDescription2),
+                IntroductionFragment.newInstance(R.drawable.intro3, R.string.introTitle, R.string.introDescription3)
         );
 
         adapter = new InnerAdapter(getSupportFragmentManager(), fragments);

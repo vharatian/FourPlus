@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.anashidgames.gerdoo.R;
+import com.anashidgames.gerdoo.pages.home.HomeActivity;
 
 /**
  * Created by psycho on 4/15/16.
@@ -86,28 +87,36 @@ public class DrawerItemView extends LinearLayout {
     private class ActivityRunner implements OnClickListener {
         @Override
         public void onClick(View v) {
-            if (item.getIntent() != null) {
-                getContext().startActivity(item.getIntent());
-            }else if(item.getListener() != null){
-                item.getListener().onClick(v);
+            try {
+                item.getHomeActivity().closeDrawer();
+                if (item.getIntent() != null) {
+                    getContext().startActivity(item.getIntent());
+                }else if(item.getListener() != null){
+                    item.getListener().onClick(v);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
 
 
     public static class DrawerItem {
+        private HomeActivity homeActivity;
         private int titleResource;
         private int iconResource;
         private Intent intent;
         private OnClickListener listener;
 
-        public DrawerItem(int titleResource, int iconResource, Intent intent) {
+        public DrawerItem(HomeActivity homeActivity, int titleResource, int iconResource, Intent intent) {
+            this.homeActivity = homeActivity;
             this.titleResource = titleResource;
             this.iconResource = iconResource;
             this.intent = intent;
         }
 
-        public DrawerItem(int titleResource, int iconResource, OnClickListener listener) {
+        public DrawerItem(HomeActivity homeActivity, int titleResource, int iconResource, OnClickListener listener) {
+            this.homeActivity = homeActivity;
             this.titleResource = titleResource;
             this.iconResource = iconResource;
             this.listener = listener;
@@ -127,6 +136,10 @@ public class DrawerItemView extends LinearLayout {
 
         public OnClickListener getListener() {
             return listener;
+        }
+
+        public HomeActivity getHomeActivity() {
+            return homeActivity;
         }
     }
 }

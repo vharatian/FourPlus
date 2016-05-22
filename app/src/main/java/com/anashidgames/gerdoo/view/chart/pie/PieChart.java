@@ -250,7 +250,7 @@ public class PieChart extends View {
             distance = desiredWidth - textWidth;
         }
 
-        return textSize - 2;
+        return textSize - 4;
     }
 
     private Rect calculateTextBounds(String text, float textSize) {
@@ -275,7 +275,7 @@ public class PieChart extends View {
     }
 
     private String getDescriptionText(PieChartItem item) {
-        return PsychoUtils.toPersianNumber(item.getTitle() + " %" + ((int) item.getValue()));
+        return PsychoUtils.toPersianNumber(item.getTitle() + " %" + (int)(100 * item.getValue()/totalValues));
     }
 
     private RectF getOval(float radius) {

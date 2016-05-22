@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.anashidgames.gerdoo.R;
+import com.anashidgames.gerdoo.core.PsychoImageLoader;
 import com.anashidgames.gerdoo.core.service.GerdooServer;
 import com.anashidgames.gerdoo.core.service.call.CallbackWithErrorDialog;
 import com.anashidgames.gerdoo.core.service.model.HomeItem;
@@ -19,7 +20,6 @@ import com.anashidgames.gerdoo.pages.FragmentContainerActivity;
 import com.anashidgames.gerdoo.pages.home.view.CategoryView;
 import com.anashidgames.gerdoo.utils.PsychoUtils;
 import com.anashidgames.gerdoo.view.FitToWidthWithAspectRatioImageView;
-import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -122,8 +122,7 @@ public class HomeFragment extends Fragment {
         FitToWidthWithAspectRatioImageView banner = new FitToWidthWithAspectRatioImageView(getContext());
         banner.setAspectRatio(aspectRatio);
         addRow(banner);
-        Glide.with(this).load(imageUrl).placeholder(R.drawable.banner_place_holder).crossFade().into(banner);
-
+        PsychoImageLoader.loadImage(getActivity(), imageUrl, R.drawable.banner_place_holder, banner);
         banner.setOnClickListener(new BannerOnCLickListener(category, clickData, title));
     }
 

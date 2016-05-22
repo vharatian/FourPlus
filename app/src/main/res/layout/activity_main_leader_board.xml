@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbarHeight"
+        android:background="@color/colorPrimaryDark"
+        android:id="@+id/toolbar">
+
+        <com.anashidgames.gerdoo.view.FitToHeightImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/backButton"
+            android:src="@drawable/back"
+            android:layout_gravity="left"
+            android:padding="@dimen/smallBreak"/>
+
+        <com.anashidgames.gerdoo.view.basic.TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/mainLeaderBord"
+            android:layout_gravity="center|center_vertical"
+            android:textColor="@color/red"
+            android:textSize="16dp"/>
+
+    </android.support.v7.widget.Toolbar>
+
+    <com.anashidgames.gerdoo.pages.LeaderBoardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/leaderBoardView"/>
+
+</LinearLayout>

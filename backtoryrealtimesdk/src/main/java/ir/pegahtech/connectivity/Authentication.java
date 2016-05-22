@@ -31,8 +31,6 @@ public class Authentication {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme("http")
                 .host(CommonConfiguration.AUTH_BASE_URL)
-//                .port(8045)
-                .addPathSegment("api")
                 .addPathSegment("auth")
                 .addPathSegment("login")
                 .addQueryParameter("username", logInRequest.getUsername())
@@ -43,10 +41,8 @@ public class Authentication {
                 .Builder()
                 .url(url)
                 .post(requestBody)
-                .addHeader("X-Backtory-Authentication-Id", "57163ee5e4b0cad8c4dd1844")
-                .addHeader("X-Backtory-Authentication-Key", "57163ee5e4b093ed2821a011")
-//                .addHeader("X-Backtory-Authentication-Id", "56f36a9fe4b068b5aa21e335")
-//                .addHeader("X-Backtory-Authentication-Key", "56f36a9fe4b05b7e94953be0")
+                .addHeader("X-Backtory-Authentication-Id", "5734df81e4b05a0b0e955409")
+                .addHeader("X-Backtory-Authentication-Key", "5734df81e4b09a527aa07444")
                 .build();
 
         Call newCall = httpClient.newCall(request);
@@ -70,5 +66,4 @@ public class Authentication {
             }
         });
     }
-
 }

@@ -20,12 +20,14 @@ public class ResultFragment extends Fragment {
 
     public static final String OPPONENT = "opponent";
     public static final String ME = "me";
+    public static final String MATCH_MAKING_NAME = "matchMakingName";
 
 
-    public static Fragment newInstance(PlayerData myPlayer, PlayerData opponentPlayer) {
+    public static Fragment newInstance(PlayerData myPlayer, PlayerData opponentPlayer, String matchMakingName) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(OPPONENT, opponentPlayer);
         bundle.putSerializable(ME, myPlayer);
+        bundle.putString(MATCH_MAKING_NAME, matchMakingName);
         ResultFragment fragment = new ResultFragment();
         fragment.setArguments(bundle);
         return fragment;
@@ -37,6 +39,8 @@ public class ResultFragment extends Fragment {
 
     private PlayerData opponent;
     private PlayerData me;
+
+    private String matchMakingName;
 
     @Nullable
     @Override
@@ -58,7 +62,7 @@ public class ResultFragment extends Fragment {
 
         rootView.findViewById(R.id.doneButton).setOnClickListener(clickListener);
         rootView.findViewById(R.id.scoresPageButton).setOnClickListener(clickListener);
-        rootView.findViewById(R.id.replayButton).setOnClickListener(clickListener);
+        rootView.findViewById(R.id.rematchButton).setOnClickListener(clickListener);
         rootView.findViewById(R.id.homeButton).setOnClickListener(clickListener);
     }
 
@@ -79,6 +83,7 @@ public class ResultFragment extends Fragment {
         Bundle bundle = getArguments();
         opponent = (PlayerData) bundle.getSerializable(OPPONENT);
         me = (PlayerData) bundle.getSerializable(ME);
+        matchMakingName = bundle.getString(MATCH_MAKING_NAME);
     }
 
     private class InnerClickListener implements View.OnClickListener {
@@ -87,11 +92,15 @@ public class ResultFragment extends Fragment {
             switch (v.getId()){
                 case R.id.homeButton:
                     getActivity().finish();
-                    Intent intent = HomeActivity.newIntent(getActivity());
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
+                    Intent homeIntent = HomeActivity.newIntent(getActivity());
+                    homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(homeIntent);
                     break;
-                case R.id.replayButton:
+                case R.id.rematchButton:
+                    getActivity().finish();
+                    Intent gameIntent = GameActivity.newIntent(getActivity(), matchMakingName);
+                    getActivity().startActivity(gameIntent);
+                    break;
                 case R.id.doneButton:
                     getActivity().finish();
                     break;

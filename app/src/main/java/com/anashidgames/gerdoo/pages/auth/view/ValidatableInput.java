@@ -161,6 +161,10 @@ public class ValidatableInput extends LinearLayout implements PsychoChangeable {
         return messageResource;
     }
 
+    public void setText(String text) {
+        editText.setText(text);
+    }
+
 
     private class InnerTextWatcher implements TextWatcher {
         @Override

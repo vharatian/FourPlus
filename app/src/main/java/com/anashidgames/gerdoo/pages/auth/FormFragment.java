@@ -4,7 +4,9 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import com.anashidgames.gerdoo.pages.KeyboardHiderFragment;
 import com.anashidgames.gerdoo.R;
@@ -31,7 +33,7 @@ public abstract class FormFragment extends KeyboardHiderFragment {
     private TextView messageView;
     private View submitButton;
     private AuthStateChangeListener stateChangeListener;
-    private List<ValidatableInput> inputs = new ArrayList<>();
+    private List<ValidatableInput> inputs;
 
     private ProgressDialog progressDialog;
     private Call requestCall;
@@ -39,20 +41,33 @@ public abstract class FormFragment extends KeyboardHiderFragment {
     public FormFragment(int messageViewId, int submitButtonId) {
         this.messageViewId = messageViewId;
         this.submitButtonId = submitButtonId;
-
-        stateChangeListener = new AuthStateChangeListener(new InputStateChangeListener());
     }
 
     protected abstract void callServer(int formId, Callback callback);
     protected abstract void submitted(Object result);
 
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        cancelRequesting();
+        stateChangeListener = new AuthStateChangeListener(new InputStateChangeListener());
+        inputs = new ArrayList<>();
 
-
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         init(view);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        for (ValidatableInput input: inputs){
+            input.clearText();
+        }
     }
 
     public void onPause() {

@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.anashidgames.gerdoo.R;
+import com.anashidgames.gerdoo.pages.LeaderBoardView;
 import com.anashidgames.gerdoo.pages.topic.TopicActivity;
 
 /**
@@ -20,6 +21,7 @@ public class RankingFooter extends LinearLayout {
     private ToggleButton followingRanking;
     private View generalRankingArrow;
     private View followingRankingArrow;
+    private boolean disabled;
 
     public RankingFooter(Context context) {
         super(context);
@@ -87,16 +89,19 @@ public class RankingFooter extends LinearLayout {
     }
 
     private void select(boolean general){
+        if (disabled)
+            return;
+
         if (general){
             changeGenereralButtonState(true);
             changeFollowingButtonState(false);
 
-            pageSelectedListener.pageSelected(TopicActivity.GENERAL_RANKING_PAGE);
+            pageSelectedListener.pageSelected(LeaderBoardView.GENERAL_RANKING_PAGE);
         }else{
             changeFollowingButtonState(true);
             changeGenereralButtonState(false);
 
-            pageSelectedListener.pageSelected(TopicActivity.FOLLOWING_RANKING_PAGE);
+            pageSelectedListener.pageSelected(LeaderBoardView.FOLLOWING_RANKING_PAGE);
         }
     }
 
@@ -107,6 +112,10 @@ public class RankingFooter extends LinearLayout {
 
     public void setPageSelectedListener(PageSelectedListener pageSelectedListener) {
         this.pageSelectedListener = pageSelectedListener;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
     }
 
     private class ToggleListener implements View.OnClickListener {

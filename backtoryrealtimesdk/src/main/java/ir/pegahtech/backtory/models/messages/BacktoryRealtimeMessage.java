@@ -20,14 +20,13 @@ public class BacktoryRealtimeMessage {
     public static String CHALLENGE_DISCONNECT = ".ChallengeDisconnectedMessage";
     public static String RESPONSE_RECEIVED = ".ResponseReceivedMessage";
 
-    private String _class;
+    private String _type;
 
-    public String get_class() {
-        return _class;
+    public String get_type() {
+        return _type;
     }
 
-    public void set_class(String _class) {
-        this._class = _class;
+    public void set_type(String _type) {
+        this._type = _type;
     }
-
 }

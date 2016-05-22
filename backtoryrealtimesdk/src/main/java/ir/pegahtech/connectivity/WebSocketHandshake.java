@@ -16,6 +16,10 @@
 
 package ir.pegahtech.connectivity;
 
+import android.util.Log;
+
+import com.google.gson.Gson;
+
 import java.net.URI;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -97,7 +101,6 @@ public class WebSocketHandshake {
     }
 
     public void setSessionId(String statusLine) {
-
     }
 
     public void verifyServerStatusLine(String statusLine)
@@ -115,6 +118,12 @@ public class WebSocketHandshake {
 
     public void verifyServerHandshakeHeaders(HashMap<String, String> headers)
             throws WebSocketException {
+//        if (headers == null) {
+//            Log.e("test", "dont have");
+//            return;
+//        } else {
+//            Log.e("test", (new Gson()).toJson(headers).toString());
+//        }
         if (!headers.get("Upgrade").toLowerCase().equals("websocket")) {
             throw new WebSocketException("connection failed: missing header field in server handshake: Upgrade");
         }
@@ -127,5 +136,4 @@ public class WebSocketHandshake {
         int rand = (int) (Math.random() * max + min);
         return rand;
     }
-
 }

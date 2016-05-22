@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.anashidgames.gerdoo.R;
+import com.anashidgames.gerdoo.core.PsychoImageLoader;
 import com.anashidgames.gerdoo.core.service.GerdooServer;
 import com.anashidgames.gerdoo.core.service.call.CallbackWithErrorDialog;
 import com.anashidgames.gerdoo.core.service.model.server.ChangeImageResponse;
@@ -24,7 +25,6 @@ import com.anashidgames.gerdoo.pages.profile.view.FriendsRow;
 import com.anashidgames.gerdoo.pages.profile.view.GiftsRow;
 import com.anashidgames.gerdoo.view.chart.pie.PieChart;
 import com.anashidgames.gerdoo.view.chart.pie.PieChartItem;
-import com.bumptech.glide.Glide;
 
 import retrofit2.Call;
 
@@ -213,8 +213,8 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void setImages() {
-        Glide.with(this).load(info.getCoverUrl()).placeholder(R.drawable.cover_place_holder).crossFade().into(coverView);
-        Glide.with(this).load(info.getImageUrl()).placeholder(R.drawable.user_image_place_holder).crossFade().into(profilePictureView);
+        PsychoImageLoader.loadImage(this, info.getCoverUrl(), R.drawable.cover_place_holder, coverView);
+        PsychoImageLoader.loadImage(this, info.getImageUrl(), R.drawable.user_image_place_holder, profilePictureView);
     }
 
     private void setToggleFollowState() {

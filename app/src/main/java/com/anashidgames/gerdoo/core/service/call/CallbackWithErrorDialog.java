@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.anashidgames.gerdoo.R;
 
@@ -31,6 +32,7 @@ public abstract class CallbackWithErrorDialog<T> extends PsychoCallBack<T>{
 
     @Override
     public void handleServerError(Response<T> response) {
+        Log.e("Four+", "server error: " + response.body());
         ShowErrorDialog(R.string.serverError);
     }
 
@@ -44,7 +46,9 @@ public abstract class CallbackWithErrorDialog<T> extends PsychoCallBack<T>{
             lastErrorTime = currentTime;
         }
 
-        dialog = new AlertDialog.Builder(context)
+//        Toast.makeText(context, errorResource, Toast.LENGTH_SHORT);
+
+        dialog = new AlertDialog.Builder(context, R.style.myDialog)
                 .setTitle(R.string.error)
                 .setMessage(errorResource)
                 .setPositiveButton(R.string.ok, new CloseClickListener())

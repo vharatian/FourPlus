@@ -32,7 +32,7 @@ public class CacheControlBuilder {
      * be made.
      *
      * @param maxAge a non-negative integer. This is stored and transmitted with
-     *     {@link java.util.concurrent.TimeUnit#SECONDS} precision; finer precision will be lost.
+     *     {@link TimeUnit#SECONDS} precision; finer precision will be lost.
      */
     public CacheControlBuilder maxAge(int maxAge, TimeUnit timeUnit) {
         if (maxAge < 0) throw new IllegalArgumentException("maxAge < 0: " + maxAge);
@@ -49,7 +49,7 @@ public class CacheControlBuilder {
      * used.
      *
      * @param maxStale a non-negative integer. This is stored and transmitted
-     *     with {@link java.util.concurrent.TimeUnit#SECONDS} precision; finer precision will be
+     *     with {@link TimeUnit#SECONDS} precision; finer precision will be
      *     lost.
      */
     public CacheControlBuilder maxStale(int maxStale, TimeUnit timeUnit) {
@@ -68,7 +68,7 @@ public class CacheControlBuilder {
      * be made.
      *
      * @param minFresh a non-negative integer. This is stored and transmitted
-     *     with {@link java.util.concurrent.TimeUnit#SECONDS} precision; finer precision will be
+     *     with {@link TimeUnit#SECONDS} precision; finer precision will be
      *     lost.
      */
     public CacheControlBuilder minFresh(int minFresh, TimeUnit timeUnit) {

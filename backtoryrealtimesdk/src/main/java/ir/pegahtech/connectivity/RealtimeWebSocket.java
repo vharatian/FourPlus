@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 
@@ -37,17 +38,29 @@ public class RealtimeWebSocket extends WebSocket {
 
     private String realtimeChallengeId;
     private BacktoryRealtimeEventHandler realtimeEventHandler;
+    private String address;
 
-    public RealtimeWebSocket(URI url, String connectivityInstanceId, String token, String realtimeChallengeId) {
-        this(url, null, null, connectivityInstanceId, token, realtimeChallengeId);
+    @Override
+    protected URI generateURI() throws URISyntaxException {
+//        return new URI("wss://" + address + "ws");
+        return new URI("wss://" + address + "ws");
     }
 
-    public RealtimeWebSocket(URI url, String protocol, String connectivityInstanceId, String token, String realtimeChallengeId) {
-        this(url, protocol, null, connectivityInstanceId, token, realtimeChallengeId);
+    public RealtimeWebSocket(String address, String connectivityInstanceId, String token,
+                             String realtimeChallengeId) throws URISyntaxException {
+        this(address, null, null, connectivityInstanceId, token, realtimeChallengeId);
     }
 
-    public RealtimeWebSocket(URI url, String protocol, Map<String, String> extraHeaders, String connectivityInstanceId, String token, String realtimeChallengeId) {
-        super(url, protocol, extraHeaders, connectivityInstanceId, token);
+    public RealtimeWebSocket(String address, String protocol, String connectivityInstanceId, String token,
+                             String realtimeChallengeId) throws URISyntaxException {
+        this(address, protocol, null, connectivityInstanceId, token, realtimeChallengeId);
+    }
+
+    public RealtimeWebSocket(String address, String protocol, Map<String, String> extraHeaders,
+                             String connectivityInstanceId, String token,
+                             String realtimeChallengeId) throws URISyntaxException {
+        super(protocol, extraHeaders, connectivityInstanceId, token);
+        setAddress(address);
         setRealtimeChallengeId(realtimeChallengeId);
 
         setEventHandler(new WebSocketEventHandler() {
@@ -103,7 +116,7 @@ public class RealtimeWebSocket extends WebSocket {
                         return;
                     }
 
-                    String _class = backtoryRealtimeMessage.get_class();
+                    String _class = backtoryRealtimeMessage.get_type();
                     if (_class == null) {
                         Log.i("backtory websocket", messageText);
                         getRealtimeEventHandler().onMessage(messageText);
@@ -188,6 +201,7 @@ public class RealtimeWebSocket extends WebSocket {
                         }
                     }
                 }).start();
+
                 Log.i("backtory websocket", "--open");
             }
 
@@ -217,6 +231,16 @@ public class RealtimeWebSocket extends WebSocket {
 
     public void setRealtimeEventHandler(BacktoryRealtimeEventHandler realtimeEventHandler) {
         this.realtimeEventHandler = realtimeEventHandler;
+    }
+
+    public void sendToChallenge(Object obj) {
+        Gson gson = GsonHelper.getCustomGson();
+        String json = gson.toJson(obj);
+        String data = "SEND\n" +
+                "X-Backtory-Connectivity-Id:" + getInstanceId() + "\n" +
+                "destination:" + "/app/challenge." + realtimeChallengeId + "\n\n" +
+                "{\"message\":" + json + "}" + "\n\0";
+        send(data);
     }
 
     public void sendToChallenge(JSONObject jsonObject) {
@@ -266,5 +290,9 @@ public class RealtimeWebSocket extends WebSocket {
                 "destination:" + "/app/challenge.result." + realtimeChallengeId + "\n\n" +
                 jsonObject.toString() +
                 "\n\0");
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

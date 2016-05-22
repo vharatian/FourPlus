@@ -12,8 +12,8 @@
     <string name="passwordRepeat">تکرار رمز عبور</string>
     <string name="signIn">ورود</string>
     <string name="forgotPassword">رمز عبور یادت رفته ؟</string>
-    <string name="introTitle">عنوان ۱</string>
-    <string name="introDescription1">توضیحات توضیحات توضیحات توضیحات توضیحات</string>
+    <string name="introTitle"></string>
+    <string name="introDescription1">از هر جايي كه هستي ميتوني به صورت همزمان با دیگران رقابت کنی</string>
     <string name="error">خطا</string>
     <string name="networkError">خطا در اتصال به سرور</string>
     <string name="ok">باشه</string>
@@ -56,7 +56,7 @@
     <string name="total">مجموع</string>
     <string name="level">سطح</string>
     <string name="reportQuestion">گزارش سوال غلط</string>
-    <string name="aboutUsText">درباره ما</string>
+    <string name="aboutUsText">بازی دوئل یکی از جذابترین و با کیفیت ترین بازی های دونفره می باشد که میزان اطلاعات شما را در موضوعات مختلف به چالش می کشد .در این بازی شرکت آناشید تلاش کرده تا از طریق پیاده سازی یک بازی روان و زیبا لحظات شاد و هیجان انگیزی را برای شما ایجاد کند. لازم به ذکر است تمامی حقوق مادی و معنوی محتواهای ارائه شده در این نسخه متعلق به شرکت آناشید میباشد. </string>
     <string name="cancel">انصراف</string>
     <string name="guide">راهنمایی</string>
     <string name="signOut">خروج</string>
@@ -64,4 +64,9 @@
     <string name="wrongPhoneNumber">شماره تلفن اشتباه است</string>
     <string name="phoneNumberIsNeeded">لطفا شماره تلفن را وارد کنید</string>
     <string name="score">امتیاز: score</string>
+    <string name="roundText">سوال roundNumber</string>
+    <string name="mainLeaderBord">رده بندی کلی</string>
+    <string name="doubleScore">امتیاز دو برابر</string>
+    <string name="introDescription2">یه عالمه موضوعای مختلف هست كه ميتوني انتخاب کنی</string>
+    <string name="introDescription3">كلي چيزاي جديد كه ميتوني ياد بگيري و پیشرفت کنی</string>
 </resources>

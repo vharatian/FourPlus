@@ -23,6 +23,7 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import ir.pegahtech.backtory.models.messages.BacktoryRealtimeMessage;
@@ -46,6 +47,11 @@ public class GameManager {
     public static final String SCORES = "scores";
     public static final int FINISH_INDEX = 7;
     public static final String IS_ANSWER_CORRECT = "isAnswerCorrect";
+    public static final String CORRECT_ANSWERS = "correctAnswers";
+    public static final String TYPE = "type";
+    public static final int HINT_TYPE = 1;
+    public static final int ANSWER_TYPE = 0;
+    public static final String HINTS = "hints";
 
 
     private final MatchData matchData;
@@ -55,12 +61,12 @@ public class GameManager {
 
 
     private Gson gson;
-
-
-
-    private Question currentQuestion;
     private RealtimeWebSocket socket;
-    private int questionIndex = -1;
+
+    private List<Question> questions = new ArrayList<>();
+    private List<String> myAnswers = new ArrayList<>();
+    private List<String> correctAnswers = new ArrayList<>();
+    private int myScore;
 
     public GameManager(AuthenticationManager authenticationManager, String instanceId, MatchData matchData) {
         this.matchData = matchData;
@@ -74,55 +80,68 @@ public class GameManager {
             @Override
             public void run() {
                 AuthenticationInfo info = authenticationManager.checkInfo(true);
-                URI uri = URI.create("wss://" + matchData.getAddress() + "/ws");
-                socket = new RealtimeWebSocket(uri, instanceId, info.getAccessToken(), matchData.getChallengeId());
-                realTimeEventHandler = new RealTimeEventHandler();
-                realTimeEventHandler.setStartCallback(callBack);
-                socket.setRealtimeEventHandler(realTimeEventHandler);
+
                 try {
+                    socket = new RealtimeWebSocket(matchData.getAddress(), instanceId, info.getAccessToken(), matchData.getChallengeId());
+                    realTimeEventHandler = new RealTimeEventHandler();
+                    realTimeEventHandler.setStartCallback(callBack);
+                    socket.setRealtimeEventHandler(realTimeEventHandler);
                     socket.connect();
-                } catch (WebSocketException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
-                    callBack.onError(e);
+                    if (callBack != null) {
+                        callBack.onError(e);
+                    }
                 }
             }
         }).start();
     }
 
     private boolean setCurrentQuestion(Question currentQuestion) {
-        questionIndex ++;
-        if (questionIndex == FINISH_INDEX){
+        questions.add(currentQuestion);
+        if (getQuestionIndex() >= FINISH_INDEX){
             answerToQuestion(null, NOT_ANSWERED);
             return false;
         }
 
-        this.currentQuestion = currentQuestion;
         return true;
+    }
 
+    public List<String> getMyAnswers() {
+        return myAnswers;
+    }
+
+    public List<String> getCorrectAnswers() {
+        return correctAnswers;
+    }
+
+    public List<Question> getQuestions() {
+        return questions;
     }
 
     public Question getCurrentQuestion() {
-        return currentQuestion;
+        return questions.get(getQuestionIndex());
+    }
+
+    private int getQuestionIndex() {
+        return questions.size() - 1;
     }
 
     public MatchData getMatchData() {
         return matchData;
     }
 
-    public void answerToQuestion(final Option option, final int remainingTIme) {
+    public void answerToQuestion(final String option, final int remainingTIme) {
+        myAnswers.add(option);
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    int optionIndex = NOT_ANSWERED;
-                    if (option != null){
-                        optionIndex = 1 + currentQuestion.getOptions().indexOf(option);
-                    }
-
                     JSONObject event = new JSONObject();
                     event.put(CHALLENGE_ID, matchData.getChallengeId());
-                    event.put(QUESTION_NUMBER, questionIndex);
-                    event.put(SELECTED_ANSWER, optionIndex);
+                    event.put(QUESTION_NUMBER, getAnswerIndex());
+                    event.put(TYPE, ANSWER_TYPE);
+                    event.put(SELECTED_ANSWER, option);
                     event.put(REMAINING_TIME, remainingTIme);
                     Log.i("psycho", "sending message: " + event.toString());
                     socket.sendToChallenge(event);
@@ -133,6 +152,10 @@ public class GameManager {
         }).start();
     }
 
+    private int getAnswerIndex() {
+        return myAnswers.size()-1;
+    }
+
     public void setGameEventHandler(GameEventHandler gameEventHandler){
         if (realTimeEventHandler != null){
             realTimeEventHandler.setGameEventHandler(gameEventHandler);
@@ -141,6 +164,42 @@ public class GameManager {
 
     public void notAnswered() {
         answerToQuestion(null, -1);
+    }
+
+    public void close() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    socket.close();
+                } catch (WebSocketException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    public int getMyScore() {
+        return myScore;
+    }
+
+    public void getHint() {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    JSONObject event = new JSONObject();
+                    event.put(CHALLENGE_ID, matchData.getChallengeId());
+                    event.put(QUESTION_NUMBER, getQuestionIndex());
+                    event.put(TYPE, HINT_TYPE);
+                    Log.i("psycho", "sending message: " + event.toString());
+                    socket.sendToChallenge(event);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     private class RealTimeEventHandler extends SimpleRealTimeEventHandler {
@@ -165,16 +224,39 @@ public class GameManager {
         public void onChallengeEventMessage(final ChallengeEventMessage challengeEventMessage) {
             try {
                 super.onChallengeEventMessage(challengeEventMessage);
-                String message = challengeEventMessage.getMessage();
+                String message = challengeEventMessage.getRawMessage();
                 JsonObject jsonObject = gson.fromJson(message, JsonObject.class);
 
                 checkAnswerCorrectness(challengeEventMessage.getUserId(), jsonObject);
                 checkQuestion(jsonObject);
                 checkScores(jsonObject);
+                checkCorrectAnswers(jsonObject);
+                checkHint(jsonObject);
 
             } catch (JsonSyntaxException e) {
                 e.printStackTrace();
 
+            }
+        }
+
+        private void checkHint(JsonObject jsonObject) {
+            if (jsonObject.has(HINTS)){
+                final List<String> hints = Arrays.asList(gson.fromJson(jsonObject.get(HINTS), String[].class));
+
+                if (gameEventHandler != null){
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            gameEventHandler.onHint(hints);
+                        }
+                    });
+                }
+            }
+        }
+
+        private void checkCorrectAnswers(JsonObject jsonObject) {
+            if (jsonObject.has(CORRECT_ANSWERS)){
+                correctAnswers = Arrays.asList(gson.fromJson(jsonObject.get(CORRECT_ANSWERS), String[].class));
             }
         }
 
@@ -212,6 +294,10 @@ public class GameManager {
                     }
                 }
 
+                if (myScore > GameManager.this.myScore){
+                    GameManager.this.myScore = myScore;
+                }
+
                 if (gameEventHandler != null){
                     runOnUiThread(new PsychoRunnable<Integer>(myScore, opponentScore) {
                         @Override
@@ -233,7 +319,7 @@ public class GameManager {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    gameEventHandler.onNewQuestion(question);
+                                    gameEventHandler.onNewQuestion(question, getQuestionIndex());
                                 }
                             });
                         }
@@ -267,10 +353,11 @@ public class GameManager {
     }
 
     public interface GameEventHandler {
-        void onNewQuestion(Question question);
+        void onNewQuestion(Question question, int questionIndex);
         void onGameFinished();
         void onScore(int myScore, int opponentScore);
         void onAnswer(boolean isMe, boolean isAnswerCorrect);
+        void onHint(List<String> hints);
     }
 
     public interface GameStartCallBack {

@@ -14,7 +14,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:id="@+id/opponentPlayerView"
-            android:layout_margin="@dimen/longBreak"/>
+            android:layout_margin="@dimen/normalBreak"/>
 
         <View
             android:layout_width="match_parent"
@@ -26,7 +26,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:id="@+id/myPlayerView"
-            android:layout_margin="@dimen/longBreak"/>
+            android:layout_margin="@dimen/normalBreak"/>
 
     </LinearLayout>
 

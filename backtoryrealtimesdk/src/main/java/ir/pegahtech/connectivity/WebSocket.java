@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.security.SecureRandom;
@@ -28,7 +29,7 @@ public abstract class WebSocket {
     static final byte OPCODE_PING = 0x9;
     static final byte OPCODE_PONG = 0xA;
 
-    private URI url = null;
+    private URI uri = null;
     private WebSocketEventHandler eventHandler = null;
     private Integer heartBeat = null;
 
@@ -46,23 +47,28 @@ public abstract class WebSocket {
     private String connectivityInstanceId;
     private String token;
 
+    private String protocol;
+    private Map<String, String> extraHeaders;
+
     List<String> requestsList = new ArrayList();
 
-    public WebSocket(URI url, String connectivityInstanceId, String token) {
-        this(url, null, null, connectivityInstanceId, token);
+    public WebSocket(String connectivityInstanceId, String token) throws URISyntaxException {
+        this(null, null, connectivityInstanceId, token);
     }
 
-    public WebSocket(URI url, String protocol, String connectivityInstanceId, String token) {
-        this(url, protocol, null, connectivityInstanceId, token);
+    public WebSocket(String protocol, String connectivityInstanceId, String token) throws URISyntaxException {
+        this(protocol, null, connectivityInstanceId, token);
     }
 
-    public WebSocket(URI url, String protocol, Map<String, String> extraHeaders,
-                     final String connectivityInstanceId, String token) {
-        this.url = url;
+    public WebSocket(String protocol, Map<String, String> extraHeaders,
+                     final String connectivityInstanceId, String token) throws URISyntaxException {
         setToken(token);
         setConnectivityInstanceId(connectivityInstanceId);
-        handshake = new WebSocketHandshake(url, protocol, extraHeaders);
+        setProtocol(protocol);
+        setExtraHeaders(extraHeaders);
     }
+
+    protected abstract URI generateURI() throws URISyntaxException;
 
     protected void setEventHandler(WebSocketEventHandler eventHandler) {
         this.eventHandler = eventHandler;
@@ -72,7 +78,9 @@ public abstract class WebSocket {
         return this.eventHandler;
     }
 
-    public void connect() throws WebSocketException {
+    public void connect() throws WebSocketException, URISyntaxException {
+        this.uri = generateURI();
+        handshake = new WebSocketHandshake(uri, protocol, extraHeaders);
         if (connectivityInstanceId == null) {
             throw new RuntimeException("Instance id should not be null");
         }
@@ -280,9 +288,9 @@ public abstract class WebSocket {
     }
 
     private Socket createSocket() throws WebSocketException {
-        String scheme = url.getScheme();
-        String host = url.getHost();
-        int port = url.getPort();
+        String scheme = uri.getScheme();
+        String host = uri.getHost();
+        int port = uri.getPort();
 
         Socket socket = null;
 
@@ -295,7 +303,7 @@ public abstract class WebSocket {
             } catch (UnknownHostException uhe) {
                 throw new WebSocketException("unknown host: " + host, uhe);
             } catch (IOException ioe) {
-                throw new WebSocketException("error while creating socket to " + url, ioe);
+                throw new WebSocketException("error while creating socket to " + uri, ioe);
             }
         } else if (scheme != null && scheme.equals("wss")) {
             if (port == -1) {
@@ -307,7 +315,7 @@ public abstract class WebSocket {
             } catch (UnknownHostException uhe) {
                 throw new WebSocketException("unknown host: " + host, uhe);
             } catch (IOException ioe) {
-                throw new WebSocketException("error while creating secure socket to " + url, ioe);
+                throw new WebSocketException("error while creating secure socket to " + uri, ioe);
             }
         } else {
             throw new WebSocketException("unsupported protocol: " + scheme);
@@ -370,5 +378,13 @@ public abstract class WebSocket {
                 "X-Backtory-Connectivity-Id:" + getInstanceId() + "\n" +
                 "\n\0");
         // ToDo: close the socket!
+    }
+
+    public void setProtocol(String protocol) {
+        this.protocol = protocol;
+    }
+
+    public void setExtraHeaders(Map<String, String> extraHeaders) {
+        this.extraHeaders = extraHeaders;
     }
 }

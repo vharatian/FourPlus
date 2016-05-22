@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.anashidgames.gerdoo.R;
+import com.anashidgames.gerdoo.core.PsychoImageLoader;
 import com.anashidgames.gerdoo.core.service.model.Rank;
 import com.anashidgames.gerdoo.pages.topic.list.PsychoSettable;
 
@@ -35,6 +36,7 @@ public class RankingTableRow extends LinearLayout implements PsychoSettable<Rank
     private TextView rankChangeAmount;
 
     private View mainLayout;
+    private ImageView userImageView;
 
 
     public RankingTableRow(Context context) {
@@ -69,6 +71,8 @@ public class RankingTableRow extends LinearLayout implements PsychoSettable<Rank
         rankChangeAmount = (TextView) findViewById(R.id.rankChangeAmount);
         rankChangeDirection = (ImageView) findViewById(R.id.rankChangeDirection);
 
+        userImageView = (ImageView) findViewById(R.id.userImageView);
+
         mainLayout = findViewById(R.id.mainLayout);
     }
 
@@ -92,6 +96,8 @@ public class RankingTableRow extends LinearLayout implements PsychoSettable<Rank
         scoreView.setTextColor(textColor);
         nameView.setTextColor(textColor);
         rankTextView.setTextColor(textColor);
+
+        PsychoImageLoader.loadImage(getContext(), rank.getImageUrl(), R.drawable.user_image_place_holder, userImageView);
     }
 
     private void setRank(int rank) {

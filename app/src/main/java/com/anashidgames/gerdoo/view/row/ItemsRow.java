@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.anashidgames.gerdoo.R;
-import com.bumptech.glide.Glide;
+import com.anashidgames.gerdoo.core.PsychoImageLoader;
 
 /**
  * Created by psycho on 4/3/16.
@@ -102,7 +102,7 @@ public abstract class ItemsRow<T> extends LinearLayout implements ScrollableRow.
     private void setIcon(Row row) {
         if (row.getIconUrl() != null){
             iconView.setVisibility(VISIBLE);
-            Glide.with(iconView.getContext()).load(row.getIconUrl()).into(iconView);
+            PsychoImageLoader.loadImage(iconView.getContext(), row.getIconUrl(), iconView);
         }else{
             iconView.setVisibility(GONE);
         }
@@ -118,7 +118,8 @@ public abstract class ItemsRow<T> extends LinearLayout implements ScrollableRow.
 
     private void setArrowIcon() {
         if (expandableLayout.isExpanded() || !toggleable)
-            arrowView.setImageResource(R.drawable.back);
+//            arrowView.setImageResource(R.drawable.back);
+            arrowView.setImageDrawable(null);
         else
             arrowView.setImageResource(R.drawable.open);
     }
@@ -180,7 +181,8 @@ public abstract class ItemsRow<T> extends LinearLayout implements ScrollableRow.
         else
             expandableLayout.setExpanded(true);
 
-        arrowView.setImageResource(R.drawable.back);
+//        arrowView.setImageResource(R.drawable.back);
+        arrowView.setImageDrawable(null);
     }
 
     public void setShowAllListener(ShowAllListener showAllListener) {

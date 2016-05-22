@@ -8,6 +8,11 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
+import java.util.Random;
+import java.util.UUID;
+
 /**
  * Created by psycho on 3/17/16.
  */
@@ -90,5 +95,10 @@ public class PsychoUtils {
         Point size = new Point();
         display.getSize(size);
         return size;
+    }
+
+    public static String randomString() {
+        Random random = new SecureRandom();
+        return new BigInteger(130, random).toString(32);
     }
 }
