@@ -1,4 +1,4 @@
-package com.anashidgames.gerdoo.pages.game;
+package com.anashidgames.gerdoo.pages.game.match;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,6 +15,7 @@ import com.anashidgames.gerdoo.core.service.model.MatchData;
 import com.anashidgames.gerdoo.core.service.realTime.CallBack;
 import com.anashidgames.gerdoo.core.service.realTime.MatchMakingManager;
 import com.anashidgames.gerdoo.pages.FragmentContainerActivity;
+import com.anashidgames.gerdoo.pages.game.GameActivity;
 import com.google.gson.Gson;
 
 import pl.droidsonroids.gif.GifImageView;

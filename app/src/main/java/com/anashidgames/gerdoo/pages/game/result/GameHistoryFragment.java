@@ -1,4 +1,4 @@
-package com.anashidgames.gerdoo.pages.game;
+package com.anashidgames.gerdoo.pages.game.result;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

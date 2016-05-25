@@ -35,13 +35,13 @@ public class ProfileActivity extends AppCompatActivity {
     private static final int PICK_COVER = 5678;
 
 
-    public static Intent newIntent(Context context, Long userId) {
+    public static Intent newIntent(Context context, String userId) {
         Intent intent = new Intent(context, ProfileActivity.class);
         intent.putExtra(USER_ID, userId);
         return intent;
     }
 
-    private Long userId;
+    private String userId;
     private ProfileInfo info;
 
     private View progressView;
@@ -74,8 +74,8 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        userId = getIntent().getLongExtra(USER_ID, -1);
-        if (userId < 0)
+        userId = getIntent().getStringExtra(USER_ID);
+        if (userId == null || userId.isEmpty())
             userId = null;
 
         initViews();
@@ -160,7 +160,7 @@ public class ProfileActivity extends AppCompatActivity {
         call.enqueue(new FollowToggleCallback(this));
     }
 
-    private void loadData(Long userId) {
+    private void loadData(String userId) {
         mainLayout.setVisibility(View.GONE);
         progressView.setVisibility(View.VISIBLE);
 

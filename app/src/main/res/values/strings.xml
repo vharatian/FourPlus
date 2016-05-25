@@ -69,4 +69,8 @@
     <string name="doubleScore">امتیاز دو برابر</string>
     <string name="introDescription2">یه عالمه موضوعای مختلف هست كه ميتوني انتخاب کنی</string>
     <string name="introDescription3">كلي چيزاي جديد كه ميتوني ياد بگيري و پیشرفت کنی</string>
+    <string name="invite">دعوت از دوستان</string>
+    <string name="inviteFriends">دوستان خود را دعوت کنید</string>
+    <string name="price">قیمت: price تومان</string>
+    <string name="connectingToCafeBazaar">در حال اتصال به کافه بازار</string>
 </resources>

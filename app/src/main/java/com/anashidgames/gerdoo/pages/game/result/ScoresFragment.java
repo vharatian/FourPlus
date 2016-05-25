@@ -1,4 +1,4 @@
-package com.anashidgames.gerdoo.pages.game;
+package com.anashidgames.gerdoo.pages.game.result;
 
 import android.content.Intent;
 import android.graphics.Point;
@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +20,7 @@ import com.anashidgames.gerdoo.core.service.model.MatchHistoryItem;
 import com.anashidgames.gerdoo.core.service.model.Question;
 import com.anashidgames.gerdoo.core.service.realTime.GameManager;
 import com.anashidgames.gerdoo.core.service.realTime.MatchMakingManager;
+import com.anashidgames.gerdoo.pages.game.GameActivity;
 import com.anashidgames.gerdoo.pages.game.view.ScoreView;
 import com.anashidgames.gerdoo.utils.PsychoUtils;
 import com.anashidgames.gerdoo.view.FitToWidthWithAspectRatioImageView;

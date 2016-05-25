@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.anashidgames.gerdoo.R;
 import com.anashidgames.gerdoo.core.PsychoImageLoader;
 import com.anashidgames.gerdoo.core.service.model.Rank;
+import com.anashidgames.gerdoo.pages.profile.ProfileActivity;
 import com.anashidgames.gerdoo.pages.topic.list.PsychoSettable;
 
 import java.util.Arrays;
@@ -37,6 +38,7 @@ public class RankingTableRow extends LinearLayout implements PsychoSettable<Rank
 
     private View mainLayout;
     private ImageView userImageView;
+    private Rank rank;
 
 
     public RankingTableRow(Context context) {
@@ -74,10 +76,13 @@ public class RankingTableRow extends LinearLayout implements PsychoSettable<Rank
         userImageView = (ImageView) findViewById(R.id.userImageView);
 
         mainLayout = findViewById(R.id.mainLayout);
+
+        setOnClickListener(new ProfileListener());
     }
 
     @Override
     public void setData(Rank rank) {
+        this.rank = rank;
         scoreView.setText("" + rank.getScore());
         nameView.setText(rank.getName());
 
@@ -140,6 +145,15 @@ public class RankingTableRow extends LinearLayout implements PsychoSettable<Rank
             }
 
             rankChangeAmount.setText(Math.abs(rankChange) + "");
+        }
+    }
+
+    private class ProfileListener implements OnClickListener {
+        @Override
+        public void onClick(View v) {
+            if (rank != null && rank.getUserId() != null) {
+                getContext().startActivity(ProfileActivity.newIntent(getContext(), rank.getUserId()));
+            }
         }
     }
 }

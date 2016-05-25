@@ -48,6 +48,11 @@
             
         </LinearLayout>
 
+        <com.anashidgames.gerdoo.pages.game.view.ScoreClock
+            android:layout_width="@dimen/scoreClockWidth"
+            android:layout_height="@dimen/scoreClockHeight"
+            android:layout_gravity="bottom"
+            android:id="@+id/scoreClock"/>
 
         <LinearLayout
             android:layout_width="0dp"

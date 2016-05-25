@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.anashidgames.gerdoo.R;
 import com.anashidgames.gerdoo.core.PsychoImageLoader;
-import com.anashidgames.gerdoo.pages.game.PlayerData;
+import com.anashidgames.gerdoo.pages.game.match.PlayerData;
 
 /**
  * Created by psycho on 4/24/16.

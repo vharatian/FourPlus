@@ -20,7 +20,7 @@ import retrofit2.Call;
  */
 public class FriendsRow extends ItemsRow<Friend> {
 
-    private Long userId;
+    private String userId;
 
     public FriendsRow(Context context) {
         super(context);
@@ -38,7 +38,7 @@ public class FriendsRow extends ItemsRow<Friend> {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-    public void setUserId(Long userId){
+    public void setUserId(String userId){
         this.userId = userId;
         setData(getResources().getString(R.string.friends));
     }

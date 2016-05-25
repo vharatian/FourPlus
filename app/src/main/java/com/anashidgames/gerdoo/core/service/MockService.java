@@ -3,12 +3,12 @@ package com.anashidgames.gerdoo.core.service;
 import com.anashidgames.gerdoo.core.service.model.Category;
 import com.anashidgames.gerdoo.core.service.model.CategoryTopic;
 import com.anashidgames.gerdoo.core.service.model.ChangeImageParams;
-import com.anashidgames.gerdoo.core.service.model.FileParams;
 import com.anashidgames.gerdoo.core.service.model.GetScoreParams;
 import com.anashidgames.gerdoo.core.service.model.GetSkillResponse;
 import com.anashidgames.gerdoo.core.service.model.LeaderBoardParams;
 import com.anashidgames.gerdoo.core.service.model.MatchData;
 import com.anashidgames.gerdoo.core.service.model.Rank;
+import com.anashidgames.gerdoo.core.service.model.ShopItem;
 import com.anashidgames.gerdoo.core.service.model.parameters.GetCategoryTopicsParams;
 import com.anashidgames.gerdoo.core.service.model.parameters.GetSubCategoriesParams;
 import com.anashidgames.gerdoo.core.service.model.server.ChangeImageResponse;
@@ -32,7 +32,6 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Header;
-import retrofit2.http.Part;
 import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 import retrofit2.http.Url;
@@ -203,7 +202,7 @@ class MockService implements GerdooService {
     }
 
     @Override
-    public Call<ProfileInfo> getProfile(Long userId) {
+    public Call<ProfileInfo> getProfile(String userId) {
         String proPicUrl = "http://indiabright.com/wp-content/uploads/2015/11/profile_picture_by_kyo_tux-d4hrimy.png";
         String coverUrl = "https://i.imgsafe.org/c77e5e5.jpg";
 
@@ -226,7 +225,7 @@ class MockService implements GerdooService {
     }
 
     @Override
-    public Call<List<Friend>> getFriends(Long userId) {
+    public Call<List<Friend>> getFriends(String userId) {
         List<Friend> response = new ArrayList<>();
         List<String> images = Arrays.asList(
                 "https://i.imgsafe.org/2fb7d09.png",
@@ -248,14 +247,14 @@ class MockService implements GerdooService {
 
             name += i;
 
-            response.add(new Friend(imageUrl, name, Math.abs(random.nextLong())));
+            response.add(new Friend(imageUrl, name, UUID.randomUUID().toString()));
         }
 
         return behaviorDelegate.returningResponse(response).getFriends(userId);
     }
 
     @Override
-    public Call<List<Gift>> getGifts(Long userId) {
+    public Call<List<Gift>> getGifts(String userId) {
         List<Gift> response = new ArrayList<>();
         List<String> images = Arrays.asList(
                 "https://i.imgsafe.org/2fb7d09.png",
@@ -297,5 +296,19 @@ class MockService implements GerdooService {
     @Override
     public Call<ChangeImageResponse> changeImage(@Path("cloudCodeId") String cloudId, @Body ChangeImageParams params) {
         return null;
+    }
+
+    @Override
+    public Call<List<ShopItem>> getShopItems(@Path("cloudCodeId") String cloudId) {
+        List<ShopItem> items = new ArrayList<>();
+        String proPicUrl = "http://indiabright.com/wp-content/uploads/2015/11/profile_picture_by_kyo_tux-d4hrimy.png";
+
+
+
+        for (int i = 0; i<20; i++){
+            items.add(new ShopItem("", proPicUrl, "پکیج فروشی", 2000));
+        }
+
+        return behaviorDelegate.returningResponse(items).getShopItems(cloudId);
     }
 }

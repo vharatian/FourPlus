@@ -1,4 +1,4 @@
-package com.anashidgames.gerdoo.pages.game;
+package com.anashidgames.gerdoo.pages.game.result;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,8 +10,11 @@ import android.view.ViewGroup;
 
 import com.anashidgames.gerdoo.R;
 import com.anashidgames.gerdoo.pages.FragmentContainerActivity;
+import com.anashidgames.gerdoo.pages.game.GameActivity;
+import com.anashidgames.gerdoo.pages.game.match.PlayerData;
 import com.anashidgames.gerdoo.pages.game.view.PlayerView;
 import com.anashidgames.gerdoo.pages.home.HomeActivity;
+import com.anashidgames.gerdoo.pages.profile.ProfileActivity;
 
 /**
  * Created by psycho on 4/24/16.
@@ -56,6 +59,7 @@ public class ResultFragment extends Fragment {
 
     private void initViews(View rootView) {
         opponentView = (PlayerView) rootView.findViewById(R.id.oponnentView);
+        opponentView.setOnClickListener(new OpponentProfileListener());
         meView = (PlayerView) rootView.findViewById(R.id.meView);
 
         clickListener = new InnerClickListener();
@@ -108,6 +112,13 @@ public class ResultFragment extends Fragment {
                     ((FragmentContainerActivity) getActivity()).changeFragment(ScoresFragment.newInstance());
                     break;
             }
+        }
+    }
+
+    private class OpponentProfileListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            getActivity().startActivity(ProfileActivity.newIntent(getActivity(), opponent.getUserId()));
         }
     }
 }

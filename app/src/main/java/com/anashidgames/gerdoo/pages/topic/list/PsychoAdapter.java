@@ -2,7 +2,9 @@ package com.anashidgames.gerdoo.pages.topic.list;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -130,7 +132,12 @@ public abstract class PsychoAdapter<T> extends RecyclerView.Adapter<PsychoViewHo
     public PsychoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         if (viewType == VIEW_LOADING){
-            return new PsychoViewHolder(inflater.inflate(R.layout.view_progress_wheel, parent, false));
+            PsychoViewHolder holder = new PsychoViewHolder(inflater.inflate(R.layout.view_progress_wheel, parent, false));
+            ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
+            if (layoutParams instanceof StaggeredGridLayoutManager.LayoutParams){
+                ((StaggeredGridLayoutManager.LayoutParams) layoutParams).setFullSpan(true);
+            }
+            return holder;
         }else
             return createViewHolder(inflater, parent, viewType);
     }

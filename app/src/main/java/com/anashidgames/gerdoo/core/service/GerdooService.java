@@ -10,6 +10,7 @@ import com.anashidgames.gerdoo.core.service.model.GetSkillResponse;
 import com.anashidgames.gerdoo.core.service.model.LeaderBoardParams;
 import com.anashidgames.gerdoo.core.service.model.MatchData;
 import com.anashidgames.gerdoo.core.service.model.Rank;
+import com.anashidgames.gerdoo.core.service.model.ShopItem;
 import com.anashidgames.gerdoo.core.service.model.parameters.GetCategoryTopicsParams;
 import com.anashidgames.gerdoo.core.service.model.parameters.GetSubCategoriesParams;
 import com.anashidgames.gerdoo.core.service.model.server.ChangeImageResponse;
@@ -20,6 +21,7 @@ import com.anashidgames.gerdoo.core.service.model.HomeItem;
 import com.anashidgames.gerdoo.core.service.model.ProfileInfo;
 import com.anashidgames.gerdoo.core.service.model.UserInfo;
 import com.anashidgames.gerdoo.core.service.model.server.LeaderBoardResponse;
+import com.anashidgames.gerdoo.pages.topic.list.PsychoListResponse;
 
 import java.util.List;
 import java.util.Map;
@@ -89,13 +91,13 @@ interface GerdooService {
     );
 
     @GET("/")
-    Call<ProfileInfo> getProfile(Long userId);
+    Call<ProfileInfo> getProfile(String userId);
 
     @GET("/")
-    Call<List<Friend>> getFriends(Long userId);
+    Call<List<Friend>> getFriends(String userId);
 
     @GET("/")
-    Call<List<Gift>> getGifts(Long userId);
+    Call<List<Gift>> getGifts(String userId);
 
     @GET("/")
     Call<FollowToggleResponse> toggleFollow(@Url String followToggleUrl);
@@ -113,4 +115,7 @@ interface GerdooService {
             @Path("cloudCodeId") String cloudId,
             @Body ChangeImageParams params
     );
+
+    @POST("/lambda/{cloudCodeId}/getShopItems")
+    Call<List<ShopItem>> getShopItems(@Path("cloudCodeId") String cloudId);
 }

@@ -27,6 +27,8 @@ import com.anashidgames.gerdoo.core.service.model.server.ChangeImageResponse;
 import com.anashidgames.gerdoo.pages.FragmentContainerActivity;
 import com.anashidgames.gerdoo.pages.TextActivity;
 import com.anashidgames.gerdoo.pages.home.view.DrawerItemView;
+import com.anashidgames.gerdoo.pages.profile.ProfileActivity;
+import com.anashidgames.gerdoo.pages.shop.ShopActivity;
 
 import java.io.FileNotFoundException;
 import java.util.Arrays;
@@ -37,6 +39,7 @@ import retrofit2.Call;
 public class HomeActivity extends FragmentContainerActivity {
 
     public static final int PIC_IMAGE_REQUEST_CODE = 235;
+    public static final String CAFE_BAZAAR_PACKAGE_NAME = "com.farsitel.bazaar";
     private static HomeActivity INSTANCE;
 
 
@@ -120,15 +123,24 @@ public class HomeActivity extends FragmentContainerActivity {
     private void initDrawerItems() {
         Intent rateIntent = new Intent(Intent.ACTION_EDIT);
         String packageName = getPackageName();
-        rateIntent.setData(Uri.parse("bazaar://details?id=" + packageName));
-        rateIntent.setPackage(packageName);
+        Uri cafeBazaarUri = Uri.parse("bazaar://details?id=" + packageName);
+        rateIntent.setData(cafeBazaarUri);
+        rateIntent.setPackage(CAFE_BAZAAR_PACKAGE_NAME);
+
+        String message = "http://cafebazaar.ir/app/" + packageName;
+        Intent inviteIntent = new Intent(Intent.ACTION_SEND);
+        inviteIntent.setType("text/plain");
+        inviteIntent.putExtra(Intent.EXTRA_TEXT, message);
+
+        inviteIntent = Intent.createChooser(inviteIntent, getString(R.string.inviteFriends));
 
         drawerItems = Arrays.asList(
-//                new DrawerItemView.DrawerItem(R.string.profile, R.drawable.profile_icon, ProfileActivity.newIntent(this, null)),
-//                new DrawerItemView.DrawerItem(R.string.gifts, R.drawable.gifts_icon, rateIntent),
-//                new DrawerItemView.DrawerItem(R.string.shop, R.drawable.shop_icon, rateIntent),
-//                new DrawerItemView.DrawerItem(this, R.string.vote, R.drawable.vote_icon, rateIntent),
+                new DrawerItemView.DrawerItem(this, R.string.profile, R.drawable.profile_icon, ProfileActivity.newIntent(this, null)),
+//                new DrawerItemView.DrawerItem(this, R.string.gifts, R.drawable.gifts_icon, rateIntent),
+                new DrawerItemView.DrawerItem(this, R.string.shop, R.drawable.shop_icon, ShopActivity.newIntent(this)),
+                new DrawerItemView.DrawerItem(this, R.string.vote, R.drawable.vote_icon, rateIntent),
                 new DrawerItemView.DrawerItem(this, R.string.mainLeaderBord, R.drawable.vote_icon, MainLeaderBoardActivity.newIntent(this)),
+                new DrawerItemView.DrawerItem(this, R.string.invite, R.drawable.about_us_icon, inviteIntent),
                 new DrawerItemView.DrawerItem(this, R.string.about_us, R.drawable.about_us_icon, TextActivity.newIntent(this, R.string.about_us, R.string.aboutUsText))
 //                new DrawerItemView.DrawerItem(this, R.string.signOut, R.drawable.sign_out, new SignOutListener())
         );

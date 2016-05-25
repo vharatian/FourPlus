@@ -9,6 +9,7 @@ import com.anashidgames.gerdoo.R;
 import com.anashidgames.gerdoo.core.service.realTime.GameManager;
 import com.anashidgames.gerdoo.core.service.realTime.MatchMakingManager;
 import com.anashidgames.gerdoo.pages.FragmentContainerActivity;
+import com.anashidgames.gerdoo.pages.game.match.MatchMakingFragment;
 
 /**
  * Created by psycho on 4/24/16.

@@ -1,4 +1,4 @@
-package com.anashidgames.gerdoo.pages.game;
+package com.anashidgames.gerdoo.pages.game.match;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,10 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.anashidgames.gerdoo.R;
-import com.anashidgames.gerdoo.core.service.model.Question;
 import com.anashidgames.gerdoo.core.service.realTime.GameManager;
 import com.anashidgames.gerdoo.core.service.GerdooServer;
 import com.anashidgames.gerdoo.core.service.model.MatchData;
+import com.anashidgames.gerdoo.pages.game.GameActivity;
 import com.anashidgames.gerdoo.pages.game.view.PlayerView;
 
 /**

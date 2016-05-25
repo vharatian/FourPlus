@@ -1,4 +1,4 @@
-package com.anashidgames.gerdoo.pages.game;
+package com.anashidgames.gerdoo.pages.game.match;
 
 import android.util.Log;
 import android.view.animation.Animation;

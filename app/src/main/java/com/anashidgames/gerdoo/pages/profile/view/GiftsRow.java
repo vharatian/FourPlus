@@ -21,7 +21,7 @@ import retrofit2.Call;
  */
 public class GiftsRow extends ItemsRow<Gift> {
 
-    private Long userId;
+    private String userId;
 
     public GiftsRow(Context context) {
         super(context);
@@ -39,7 +39,7 @@ public class GiftsRow extends ItemsRow<Gift> {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-    public void setUserId(Long userId){
+    public void setUserId(String userId){
         this.userId = userId;
         setData(getResources().getString(R.string.gifts));
     }

@@ -1,4 +1,4 @@
-package com.anashidgames.gerdoo.pages.game;
+package com.anashidgames.gerdoo.pages.game.match;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,7 +20,10 @@ import com.anashidgames.gerdoo.core.service.model.MatchData;
 import com.anashidgames.gerdoo.core.service.model.Question;
 import com.anashidgames.gerdoo.core.service.realTime.GameManager;
 import com.anashidgames.gerdoo.pages.FragmentContainerActivity;
+import com.anashidgames.gerdoo.pages.game.GameActivity;
+import com.anashidgames.gerdoo.pages.game.result.ResultFragment;
 import com.anashidgames.gerdoo.pages.game.view.OptionView;
+import com.anashidgames.gerdoo.pages.game.view.ScoreClock;
 import com.anashidgames.gerdoo.utils.PsychoUtils;
 
 import java.util.ArrayList;
@@ -37,7 +40,7 @@ public class GameFragment extends Fragment {
     public static final int QUESTION_TIME = 10 * 1000;
     public static final String SCORE = "score";
     public static final int NEXT_ROUND_DELAY = 2000;
-
+    public static final int QURTER_CIRCLE = 90;
 
 
     public static Fragment newInstance() {
@@ -81,6 +84,7 @@ public class GameFragment extends Fragment {
     private boolean gotHint;
 
     private FlashingAnimation flashingAnimation;
+    private ScoreClock scoreClock;
 
     @Nullable
     @Override
@@ -95,6 +99,7 @@ public class GameFragment extends Fragment {
         optionsLayout = (LinearLayout) rootView.findViewById(R.id.optionsLayout);
         roundTextView = (TextView) rootView.findViewById(R.id.roundText);
         initHintViews(rootView);
+        scoreClock = (ScoreClock) rootView.findViewById(R.id.scoreClock);
 
         setMatchData(gameManager.getMatchData());
         setScores(0, 0);
@@ -298,6 +303,18 @@ public class GameFragment extends Fragment {
 
         myScoreView.setText(getResources().getString(R.string.score).replace(SCORE, "" + this.myScore));
         opponentScoreView.setText(getResources().getString(R.string.score).replace(SCORE, "" + this.opponentScore));
+        setScoreClock();
+    }
+
+    private void setScoreClock() {
+        int totalScores = myScore + opponentScore;
+        int angle;
+        if (totalScores == 0){
+            angle = 0;
+        }else {
+            angle = (int) ((((myScore - opponentScore)*1.0) / totalScores) * QURTER_CIRCLE);
+        }
+        scoreClock.setAngle(angle);
     }
 
     private void showResultPage() {

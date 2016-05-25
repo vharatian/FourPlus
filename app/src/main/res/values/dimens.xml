@@ -67,5 +67,7 @@
     <dimen name="optionStatusIconSize">60dp</dimen>
     <dimen name="gameGuideIconSize">70dp</dimen>
     <dimen name="rankTableRowUserImageSize">40dp</dimen>
+    <dimen name="scoreClockHeight">30dp</dimen>
+    <dimen name="scoreClockWidth">60dp</dimen>
 
 </resources>

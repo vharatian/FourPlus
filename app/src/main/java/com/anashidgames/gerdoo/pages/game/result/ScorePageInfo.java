@@ -1,4 +1,4 @@
-package com.anashidgames.gerdoo.pages.game;
+package com.anashidgames.gerdoo.pages.game.result;
 
 import com.anashidgames.gerdoo.core.LevelCalculator;
 import com.anashidgames.gerdoo.core.service.model.MatchHistoryItem;

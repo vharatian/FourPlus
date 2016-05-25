@@ -6,9 +6,9 @@ package com.anashidgames.gerdoo.core.service.model;
 public class Friend {
     private String imageUrl;
     private String name;
-    private Long userId;
+    private String userId;
 
-    public Friend(String imageUrl, String name, Long userId) {
+    public Friend(String imageUrl, String name, String userId) {
         this.imageUrl = imageUrl;
         this.name = name;
         this.userId = userId;
@@ -22,7 +22,7 @@ public class Friend {
         return name;
     }
 
-    public Long getUserId() {
+    public String getUserId() {
         return userId;
     }
 }

@@ -10,6 +10,7 @@ import com.anashidgames.gerdoo.core.MultipartUtility;
 import com.anashidgames.gerdoo.core.service.auth.AuthenticationInterceptor;
 import com.anashidgames.gerdoo.core.service.auth.AuthenticationManager;
 import com.anashidgames.gerdoo.core.service.call.CallbackWithErrorDialog;
+import com.anashidgames.gerdoo.core.service.call.ConverterCall;
 import com.anashidgames.gerdoo.core.service.call.PsychoCallBack;
 import com.anashidgames.gerdoo.core.service.model.AuthenticationInfo;
 import com.anashidgames.gerdoo.core.service.model.Category;
@@ -20,6 +21,7 @@ import com.anashidgames.gerdoo.core.service.model.GetSkillResponse;
 import com.anashidgames.gerdoo.core.service.model.LeaderBoardParams;
 import com.anashidgames.gerdoo.core.service.model.MatchData;
 import com.anashidgames.gerdoo.core.service.model.Rank;
+import com.anashidgames.gerdoo.core.service.model.ShopItem;
 import com.anashidgames.gerdoo.core.service.model.UploadResponse;
 import com.anashidgames.gerdoo.core.service.model.parameters.GetCategoryTopicsParams;
 import com.anashidgames.gerdoo.core.service.model.parameters.GetSubCategoriesParams;
@@ -32,6 +34,7 @@ import com.anashidgames.gerdoo.core.service.model.ProfileInfo;
 import com.anashidgames.gerdoo.core.service.model.UserInfo;
 import com.anashidgames.gerdoo.core.service.realTime.GameManager;
 import com.anashidgames.gerdoo.core.service.realTime.MatchMakingManager;
+import com.anashidgames.gerdoo.pages.topic.list.PsychoListResponse;
 import com.anashidgames.gerdoo.utils.PsychoUtils;
 import com.google.gson.Gson;
 
@@ -152,15 +155,15 @@ public class GerdooServer{
         return realService.getUserInfo(CLOUD_CODE_ID);
     }
 
-    public Call<ProfileInfo> getProfile(Long userId) {
+    public Call<ProfileInfo> getProfile(String userId) {
         return service.getProfile(userId);
     }
 
-    public Call<List<Friend>> getFriends(Long userId) {
+    public Call<List<Friend>> getFriends(String userId) {
         return service.getFriends(userId);
     }
 
-    public Call<List<Gift>> getGifts(Long userId) {
+    public Call<List<Gift>> getGifts(String userId) {
         return service.getGifts(userId);
     }
 
@@ -201,6 +204,10 @@ public class GerdooServer{
         return realService.changeImage(CLOUD_CODE_ID, new ChangeImageParams(newUrl));
     }
 
+    public Call<List<ShopItem>> getShopItems() {
+        return service.getShopItems(CLOUD_CODE_ID);
+    }
+
     public void changeImage(final InputStream inputStream, final PsychoCallBack<ChangeImageResponse> callback) {
 
         new Thread(new Runnable() {
@@ -221,7 +228,7 @@ public class GerdooServer{
                     utility.addFormField("fileItems[0].path", dir);
                     utility.addFormField("fileItems[0].extract", "false");
                     utility.addFormField("fileItems[0].replacing", "false");
-                    utility.addFormField("secretKey", PsychoUtils.randomString());
+//                    utility.addFormField("secretToken", "BBB" + PsychoUtils.randomString());
                     utility.addFilePart("fileItems[0].fileToUpload", inputStream, fileName);
                     HttpURLConnection connection = utility.execute();
                     String response = IOUtils.toString(connection.getInputStream());
@@ -256,4 +263,5 @@ public class GerdooServer{
     private void runOnUiThread(Runnable runnable) {
         new Handler(Looper.getMainLooper()).post(runnable);
     }
+
 }

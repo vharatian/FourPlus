@@ -56,4 +56,5 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.0.0'
     compile 'commons-io:commons-io:2.0.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'it.sephiroth.android.library.horizontallistview:hlistview:1.2.2'
 }

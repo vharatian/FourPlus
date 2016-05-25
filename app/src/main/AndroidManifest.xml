@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="com.farsitel.bazaar.permission.PAY_THROUGH_BAZAAR"/>
 
     <application
         android:name=".core.GerdooApplication"
@@ -27,6 +28,7 @@
         <activity android:name=".pages.game.GameActivity"/>
         <activity android:name=".pages.TextActivity"/>
         <activity android:name=".pages.home.MainLeaderBoardActivity"/>
+        <activity android:name=".pages.shop.ShopActivity"/>
     </application>
 
 </manifest>
