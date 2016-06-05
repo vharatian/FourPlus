@@ -67,6 +67,7 @@ public class GameManager {
     private List<String> myAnswers = new ArrayList<>();
     private List<String> correctAnswers = new ArrayList<>();
     private int myScore;
+    private int opponentScore;
 
     public GameManager(AuthenticationManager authenticationManager, String instanceId, MatchData matchData) {
         this.matchData = matchData;
@@ -183,6 +184,10 @@ public class GameManager {
         return myScore;
     }
 
+    public int getOpponentScore() {
+        return opponentScore;
+    }
+
     public void getHint() {
 
         new Thread(new Runnable() {
@@ -200,6 +205,10 @@ public class GameManager {
                 }
             }
         }).start();
+    }
+
+    public boolean completed() {
+        return getQuestionIndex() >= 7;
     }
 
     private class RealTimeEventHandler extends SimpleRealTimeEventHandler {
@@ -229,7 +238,7 @@ public class GameManager {
 
                 checkAnswerCorrectness(challengeEventMessage.getUserId(), jsonObject);
                 checkQuestion(jsonObject);
-                checkScores(jsonObject);
+                checkScores(challengeEventMessage.getUserId(), jsonObject);
                 checkCorrectAnswers(jsonObject);
                 checkHint(jsonObject);
 
@@ -278,7 +287,7 @@ public class GameManager {
             }
         }
 
-        private void checkScores(JsonObject jsonObject) {
+        private void checkScores(String senderUserId, JsonObject jsonObject) {
             if (jsonObject.has(SCORES)){
                 Score[] scores = gson.fromJson(jsonObject.get(SCORES), Score[].class);
                 Log.i("psycho", "Scores: " + scores);
@@ -296,6 +305,18 @@ public class GameManager {
 
                 if (myScore > GameManager.this.myScore){
                     GameManager.this.myScore = myScore;
+                }
+
+                if (opponentScore > GameManager.this.opponentScore){
+                    GameManager.this.opponentScore = opponentScore;
+                }
+
+                if (getQuestionIndex() >= 6){
+                    if (myUserId.equals(senderUserId)){
+                        myScore -= 20;
+                    }else{
+                        opponentScore -= 20;
+                    }
                 }
 
                 if (gameEventHandler != null){

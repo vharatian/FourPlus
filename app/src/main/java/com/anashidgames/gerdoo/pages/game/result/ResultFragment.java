@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.anashidgames.gerdoo.R;
+import com.anashidgames.gerdoo.core.service.model.MatchData;
+import com.anashidgames.gerdoo.core.service.realTime.GameManager;
 import com.anashidgames.gerdoo.pages.FragmentContainerActivity;
 import com.anashidgames.gerdoo.pages.game.GameActivity;
 import com.anashidgames.gerdoo.pages.game.match.PlayerData;
@@ -44,6 +46,7 @@ public class ResultFragment extends Fragment {
     private PlayerData me;
 
     private String matchMakingName;
+    private boolean completed;
 
     @Nullable
     @Override
@@ -74,20 +77,31 @@ public class ResultFragment extends Fragment {
         opponentView.setData(opponent);
         meView.setData(me);
 
-        if (opponent.getScore() > me.getScore()){
-            meView.setBanner(PlayerView.LOOS_BANNER);
-        }else if (opponent.getScore() < me.getScore()){
+
+        if(!completed || opponent.getScore() < me.getScore()){
             meView.setBanner(PlayerView.WIN_BANNER);
+        }else if (opponent.getScore() > me.getScore()){
+            meView.setBanner(PlayerView.LOOS_BANNER);
         }else {
             meView.setBanner(PlayerView.TIE_BANNER);
         }
     }
 
     private void initData() {
-        Bundle bundle = getArguments();
-        opponent = (PlayerData) bundle.getSerializable(OPPONENT);
-        me = (PlayerData) bundle.getSerializable(ME);
-        matchMakingName = bundle.getString(MATCH_MAKING_NAME);
+        GameManager gameManager = ((GameActivity) getActivity()).getGameManager();
+        MatchData matchData = gameManager.getMatchData();
+
+        completed = gameManager.completed();
+
+        int myScore = gameManager.getMyScore();
+        int opponentScore = gameManager.getOpponentScore();
+        if (!completed){
+            opponentScore = PlayerData.LEAVE_SCORE;
+        }
+        me = new PlayerData(matchData.getMyInfo(), myScore);
+        opponent = new PlayerData(matchData.getOpponentInfo(), opponentScore);
+        matchMakingName = matchData.getMatchMakingName();
+
     }
 
     private class InnerClickListener implements View.OnClickListener {

@@ -135,12 +135,12 @@ public class HomeActivity extends FragmentContainerActivity {
         inviteIntent = Intent.createChooser(inviteIntent, getString(R.string.inviteFriends));
 
         drawerItems = Arrays.asList(
-                new DrawerItemView.DrawerItem(this, R.string.profile, R.drawable.profile_icon, ProfileActivity.newIntent(this, null)),
+//                new DrawerItemView.DrawerItem(this, R.string.profile, R.drawable.profile_icon, ProfileActivity.newIntent(this, null)),
 //                new DrawerItemView.DrawerItem(this, R.string.gifts, R.drawable.gifts_icon, rateIntent),
-                new DrawerItemView.DrawerItem(this, R.string.shop, R.drawable.shop_icon, ShopActivity.newIntent(this)),
-                new DrawerItemView.DrawerItem(this, R.string.vote, R.drawable.vote_icon, rateIntent),
+//                new DrawerItemView.DrawerItem(this, R.string.shop, R.drawable.shop_icon, ShopActivity.newIntent(this)),
+//                new DrawerItemView.DrawerItem(this, R.string.vote, R.drawable.vote_icon, rateIntent),
                 new DrawerItemView.DrawerItem(this, R.string.mainLeaderBord, R.drawable.vote_icon, MainLeaderBoardActivity.newIntent(this)),
-                new DrawerItemView.DrawerItem(this, R.string.invite, R.drawable.about_us_icon, inviteIntent),
+//                new DrawerItemView.DrawerItem(this, R.string.invite, R.drawable.about_us_icon, inviteIntent),
                 new DrawerItemView.DrawerItem(this, R.string.about_us, R.drawable.about_us_icon, TextActivity.newIntent(this, R.string.about_us, R.string.aboutUsText))
 //                new DrawerItemView.DrawerItem(this, R.string.signOut, R.drawable.sign_out, new SignOutListener())
         );

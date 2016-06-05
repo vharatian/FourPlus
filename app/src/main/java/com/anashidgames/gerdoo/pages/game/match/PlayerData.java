@@ -9,6 +9,7 @@ import java.io.Serializable;
  */
 public class PlayerData implements Serializable {
     public static final int DEFAULT_SCORE = -1;
+    public static final int LEAVE_SCORE = -5;
 
 
     private String userId;
@@ -53,6 +54,6 @@ public class PlayerData implements Serializable {
     }
 
     public boolean hasScore(){
-        return score >= 0;
+        return score >= 0 || score == LEAVE_SCORE;
     }
 }

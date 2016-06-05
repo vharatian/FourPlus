@@ -73,4 +73,5 @@
     <string name="inviteFriends">دوستان خود را دعوت کنید</string>
     <string name="price">قیمت: price تومان</string>
     <string name="connectingToCafeBazaar">در حال اتصال به کافه بازار</string>
+    <string name="leaved">از بازی خارج شد</string>
 </resources>

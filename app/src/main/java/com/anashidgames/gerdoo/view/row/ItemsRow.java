@@ -173,6 +173,8 @@ public abstract class ItemsRow<T> extends LinearLayout implements ScrollableRow.
             expandableLayout.collapse();
         else
             expandableLayout.setExpanded(false);
+
+        setArrowIcon();
     }
 
     public void open(boolean animate) {
@@ -182,7 +184,7 @@ public abstract class ItemsRow<T> extends LinearLayout implements ScrollableRow.
             expandableLayout.setExpanded(true);
 
 //        arrowView.setImageResource(R.drawable.back);
-        arrowView.setImageDrawable(null);
+        setArrowIcon();
     }
 
     public void setShowAllListener(ShowAllListener showAllListener) {
@@ -200,7 +202,6 @@ public abstract class ItemsRow<T> extends LinearLayout implements ScrollableRow.
             else if(toggleable)
                 expandableLayout.toggle();
 
-            setArrowIcon();
             checkItemsState();
             checkBackgroundColor();
         }

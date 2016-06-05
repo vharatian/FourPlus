@@ -65,7 +65,11 @@ public class PlayerView extends FrameLayout {
         nameView.setText(data.getName());
         if (data.hasScore()){
             scoreView.setVisibility(VISIBLE);
-            scoreView.setText("" + data.getScore());
+            String scoreText = "" + data.getScore();
+            if (data.getScore() == PlayerData.LEAVE_SCORE){
+                scoreText = getResources().getString(R.string.leaved);
+            }
+            scoreView.setText(scoreText);
         } else {
           scoreView.setVisibility(INVISIBLE);
         }
