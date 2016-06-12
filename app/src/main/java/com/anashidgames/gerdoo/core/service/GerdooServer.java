@@ -7,26 +7,37 @@ import android.os.Looper;
 import android.util.Log;
 
 import com.anashidgames.gerdoo.core.MultipartUtility;
+import com.anashidgames.gerdoo.core.payment.Purchase;
 import com.anashidgames.gerdoo.core.service.auth.AuthenticationInterceptor;
 import com.anashidgames.gerdoo.core.service.auth.AuthenticationManager;
 import com.anashidgames.gerdoo.core.service.call.CallbackWithErrorDialog;
-import com.anashidgames.gerdoo.core.service.call.ConverterCall;
 import com.anashidgames.gerdoo.core.service.call.PsychoCallBack;
-import com.anashidgames.gerdoo.core.service.model.AuthenticationInfo;
+import com.anashidgames.gerdoo.core.service.model.AchievementItem;
+import com.anashidgames.gerdoo.core.service.model.AnswerFriendRequestParameter;
 import com.anashidgames.gerdoo.core.service.model.Category;
 import com.anashidgames.gerdoo.core.service.model.CategoryTopic;
 import com.anashidgames.gerdoo.core.service.model.ChangeImageParams;
+import com.anashidgames.gerdoo.core.service.model.DoneResponse;
+import com.anashidgames.gerdoo.core.service.model.EditProfileParameters;
+import com.anashidgames.gerdoo.core.service.model.EditProfileResponse;
+import com.anashidgames.gerdoo.core.service.model.FriendRequestParameters;
 import com.anashidgames.gerdoo.core.service.model.GetScoreParams;
 import com.anashidgames.gerdoo.core.service.model.GetSkillResponse;
 import com.anashidgames.gerdoo.core.service.model.LeaderBoardParams;
 import com.anashidgames.gerdoo.core.service.model.MatchData;
+import com.anashidgames.gerdoo.core.service.model.Message;
 import com.anashidgames.gerdoo.core.service.model.Rank;
+import com.anashidgames.gerdoo.core.service.model.SearchParameters;
+import com.anashidgames.gerdoo.core.service.model.SearchedTopic;
+import com.anashidgames.gerdoo.core.service.model.SearchedUser;
+import com.anashidgames.gerdoo.core.service.model.ShopCategoryData;
+import com.anashidgames.gerdoo.core.service.model.ShopCategoryItemsParameter;
 import com.anashidgames.gerdoo.core.service.model.ShopItem;
 import com.anashidgames.gerdoo.core.service.model.UploadResponse;
 import com.anashidgames.gerdoo.core.service.model.parameters.GetCategoryTopicsParams;
 import com.anashidgames.gerdoo.core.service.model.parameters.GetSubCategoriesParams;
 import com.anashidgames.gerdoo.core.service.model.server.ChangeImageResponse;
-import com.anashidgames.gerdoo.core.service.model.server.FollowToggleResponse;
+import com.anashidgames.gerdoo.core.service.model.server.FriendRequestResponse;
 import com.anashidgames.gerdoo.core.service.model.Friend;
 import com.anashidgames.gerdoo.core.service.model.Gift;
 import com.anashidgames.gerdoo.core.service.model.HomeItem;
@@ -34,7 +45,6 @@ import com.anashidgames.gerdoo.core.service.model.ProfileInfo;
 import com.anashidgames.gerdoo.core.service.model.UserInfo;
 import com.anashidgames.gerdoo.core.service.realTime.GameManager;
 import com.anashidgames.gerdoo.core.service.realTime.MatchMakingManager;
-import com.anashidgames.gerdoo.pages.topic.list.PsychoListResponse;
 import com.anashidgames.gerdoo.utils.PsychoUtils;
 import com.google.gson.Gson;
 
@@ -53,7 +63,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.mock.BehaviorDelegate;
@@ -119,18 +128,6 @@ public class GerdooServer{
         authenticationManager.setContext(context);
     }
 
-    public void signUp(String email, String phoneNumber, String password, Callback<AuthenticationInfo> callback) {
-        authenticationManager.signUp(email, phoneNumber, password, callback);
-    }
-
-    public Call<Boolean> sendForgetPasswordMail(String email) {
-        return authenticationManager.sendForgetPasswordMail(email);
-    }
-
-    public Call<AuthenticationInfo>  signIn(String email, String password) {
-        return authenticationManager.signIn(email, password);
-    }
-
     public Call<List<HomeItem>> getHome() {
         return realService.getHome(CLOUD_CODE_ID);
     }
@@ -167,8 +164,12 @@ public class GerdooServer{
         return service.getGifts(userId);
     }
 
-    public Call<FollowToggleResponse> toggleFollow(String followToggleUrl) {
-        return service.toggleFollow(followToggleUrl);
+    public Call<FriendRequestResponse> friendRequest(String userId) {
+        return service.friendRequest(new FriendRequestParameters(userId));
+    }
+
+    public Call<FriendRequestResponse> unfriendRequest(String userId) {
+        return service.unfriendRequest(new FriendRequestParameters(userId));
     }
 
     public Call<ChangeImageResponse> changeImage(String url, Uri selectedImage) {
@@ -196,16 +197,16 @@ public class GerdooServer{
         return new GameManager(authenticationManager, REAL_TIME_INSTANCE_ID, matchData);
     }
 
-    public void gustSignUp(Callback<AuthenticationInfo> callback) {
-        authenticationManager.gustSignUp(callback);
-    }
-
     private Call<ChangeImageResponse> changeImage(String newUrl) {
         return realService.changeImage(CLOUD_CODE_ID, new ChangeImageParams(newUrl));
     }
 
-    public Call<List<ShopItem>> getShopItems() {
-        return service.getShopItems(CLOUD_CODE_ID);
+    public Call<List<ShopCategoryData>> getShopCategories() {
+        return service.getShopCategories(CLOUD_CODE_ID);
+    }
+
+    public Call<EditProfileResponse> editProfile(String firstName, String lastName) {
+        return service.editProfile(new EditProfileParameters(firstName, lastName));
     }
 
     public void changeImage(final InputStream inputStream, final PsychoCallBack<ChangeImageResponse> callback) {
@@ -264,4 +265,32 @@ public class GerdooServer{
         new Handler(Looper.getMainLooper()).post(runnable);
     }
 
+    public Call<List<AchievementItem>> getAllAchievements() {
+        return service.getAllAchievements(CLOUD_CODE_ID);
+    }
+
+    public Call<List<Message>> getMessages() {
+        return service.getMessages(CLOUD_CODE_ID);
+    }
+
+
+    public Call<List<SearchedTopic>> searchTopics(String query, int receivedCount) {
+        return service.searchTopics(new SearchParameters(query, receivedCount));
+    }
+
+    public Call<List<SearchedUser>> searchUser(String query, int receivedCount) {
+        return service.searchUser(new SearchParameters(query, receivedCount));
+    }
+
+    public Call<List<ShopItem>> getShopCategoryItems(String categoryId) {
+        return service.getShopCategoryItems(new ShopCategoryItemsParameter(categoryId));
+    }
+
+    public Call<DoneResponse> sendPurchaseInfo(Purchase info) {
+        return service.sendPurchaseInfo(info);
+    }
+
+    public Call<DoneResponse> answerFriendRequest(String userId, boolean answer) {
+        return service.answerFriendRequest(new AnswerFriendRequestParameter(userId, answer));
+    }
 }

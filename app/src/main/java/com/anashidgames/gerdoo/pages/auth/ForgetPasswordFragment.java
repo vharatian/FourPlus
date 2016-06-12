@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.anashidgames.gerdoo.core.service.GerdooServer;
+import com.anashidgames.gerdoo.core.service.auth.AuthenticationManager;
 import com.anashidgames.gerdoo.pages.auth.view.ValidatableInput;
 import com.anashidgames.gerdoo.pages.auth.view.validator.EmailValidator;
 import com.anashidgames.gerdoo.R;
@@ -27,7 +28,7 @@ public class ForgetPasswordFragment extends FormFragment {
     private ValidatableInput mailInput;
     private AlertDialog okDialog;
 
-    private GerdooServer server;
+    private AuthenticationManager authenticationManager;
 
 
     public ForgetPasswordFragment() {
@@ -40,7 +41,7 @@ public class ForgetPasswordFragment extends FormFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_forget_password, container, false);
 
-        server = GerdooServer.INSTANCE;
+        authenticationManager = GerdooServer.INSTANCE.getAuthenticationManager();
 
         initViews(rootView);
 
@@ -66,7 +67,7 @@ public class ForgetPasswordFragment extends FormFragment {
     @Override
     protected void callServer(int formId, Callback callBack) {
         String email = mailInput.getText();
-        Call<Boolean> call = server.sendForgetPasswordMail(email);
+        Call<Boolean> call = authenticationManager.sendForgetPasswordMail(email);
         call.enqueue(callBack);
     }
 

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/smallBreak">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/smallBreak"
+            android:orientation="vertical">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="@dimen/friendImageSize"
+                android:layout_height="@dimen/friendImageSize"
+                android:id="@+id/imageView"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/nameView"
+                android:lines="2"
+                android:ellipsize="end"
+                android:textColor="@color/black"
+                android:textSize="16dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="left"
+                android:layout_marginTop="@dimen/smallBreak"
+                android:id="@+id/requestLayout">
+
+                <com.anashidgames.gerdoo.view.FitToWidthImageView
+                    android:layout_width="@dimen/requestIconSize"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/circle_check"
+                    android:layout_marginRight="@dimen/smallBreak"
+                    android:id="@+id/acceptButton"/>
+
+                <com.anashidgames.gerdoo.view.FitToWidthImageView
+                    android:layout_width="@dimen/requestIconSize"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/circle_cross"
+                    android:id="@+id/denyButton"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

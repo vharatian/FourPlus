@@ -22,12 +22,14 @@ import retrofit2.Call;
 /**
  * Created by psycho on 3/29/16.
  */
-public class ScrollableRow<T> extends FrameLayout {
+public class ScrollableRow<V extends View, T> extends FrameLayout {
 
     private View progressView;
     private AbsHListView.LayoutParams layoutParams;
 
+
     private DataProvider dataProvider;
+    private RowAdapter<V, T> rowAdapter;
     private HListView listView;
 
     public ScrollableRow(Context context) {
@@ -87,7 +89,7 @@ public class ScrollableRow<T> extends FrameLayout {
         progressView.setVisibility(GONE);
     }
 
-    private void addItems(final List<RowItem> items) {
+    private void addItems(final List<T> items) {
         listView.setAdapter(new ItemsAdapter(items));
 //        for (int i = items.size() - 1; i >= 0; i--){
 //            RowItem item = items.get(i);
@@ -124,19 +126,27 @@ public class ScrollableRow<T> extends FrameLayout {
 
         @Override
         public void handleSuccessful(List<T> data) {
-            addItems(dataProvider.convert(data));
+            addItems(data);
         }
     }
 
-    public static interface DataProvider<T> {
+    public void setRowAdapter(RowAdapter<V, T> rowAdapter) {
+        this.rowAdapter = rowAdapter;
+    }
+
+    public interface DataProvider<T> {
         Call<List<T>> getItems();
-        List<RowItem> convert(List<T> items);
+    }
+
+    public interface RowAdapter<V extends View, T>{
+        V newItemView(Context context);
+        void bind(V view, T data);
     }
 
     private class ItemsAdapter extends BaseAdapter {
-        private final List<RowItem> items;
+        private final List<T> items;
 
-        public ItemsAdapter(List<RowItem> items) {
+        public ItemsAdapter(List<T> items) {
             if (items == null){
                 items = new ArrayList<>();
             }
@@ -161,14 +171,14 @@ public class ScrollableRow<T> extends FrameLayout {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            RowItemView view;
-            if (convertView == null || !(convertView instanceof RowItemView)){
-                view = new RowItemView(getContext());
+            View view;
+            if (convertView == null || !(convertView instanceof SimpleRowItemView)){
+                view = rowAdapter.newItemView(getContext());
             }else {
-                view = (RowItemView) convertView;
+                view = convertView;
             }
 
-            view.setItem(items.get(position));
+            rowAdapter.bind((V) view, items.get(position));
             view.setLayoutParams(layoutParams);
             return view;
         }

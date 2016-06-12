@@ -1,26 +1,17 @@
 package com.anashidgames.gerdoo.pages.home.view;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
 import android.util.AttributeSet;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.anashidgames.gerdoo.R;
 import com.anashidgames.gerdoo.core.service.GerdooServer;
 import com.anashidgames.gerdoo.core.service.model.Category;
 import com.anashidgames.gerdoo.core.service.model.CategoryTopic;
-import com.anashidgames.gerdoo.pages.FragmentContainerActivity;
-import com.anashidgames.gerdoo.pages.home.CategoryFragment;
 import com.anashidgames.gerdoo.pages.topic.TopicActivity;
 import com.anashidgames.gerdoo.view.row.ItemsRow;
 import com.anashidgames.gerdoo.view.row.Row;
 import com.anashidgames.gerdoo.view.row.RowItem;
-import com.anashidgames.gerdoo.view.row.ScrollableRow;
-import com.anashidgames.gerdoo.view.row.ExpandableRelativeLayout;
+import com.anashidgames.gerdoo.view.row.SimpleItemsRow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +21,7 @@ import retrofit2.Call;
 /**
  * Created by psycho on 4/3/16.
  */
-public class CategoryView extends ItemsRow<CategoryTopic> {
+public class CategoryView extends SimpleItemsRow<CategoryTopic> {
 
 
     private Category category;
@@ -58,7 +49,7 @@ public class CategoryView extends ItemsRow<CategoryTopic> {
     }
 
     @Override
-    public Call<List<CategoryTopic>> getItems() {
+    public Call<List<CategoryTopic>> getList() {
         return GerdooServer.INSTANCE.getCategoryTopics(category.getCategoryId());
     }
 

@@ -26,15 +26,20 @@ import com.anashidgames.gerdoo.core.service.model.UserInfo;
 import com.anashidgames.gerdoo.core.service.model.server.ChangeImageResponse;
 import com.anashidgames.gerdoo.pages.FragmentContainerActivity;
 import com.anashidgames.gerdoo.pages.TextActivity;
+import com.anashidgames.gerdoo.pages.auth.CompleteRegistrationActivity;
+import com.anashidgames.gerdoo.pages.home.drawer.AchievementsActivity;
+import com.anashidgames.gerdoo.pages.home.drawer.MainLeaderBoardActivity;
+import com.anashidgames.gerdoo.pages.home.drawer.MessagesActivity;
 import com.anashidgames.gerdoo.pages.home.view.DrawerItemView;
 import com.anashidgames.gerdoo.pages.profile.ProfileActivity;
 import com.anashidgames.gerdoo.pages.shop.ShopActivity;
 
 import java.io.FileNotFoundException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
+
 
 public class HomeActivity extends FragmentContainerActivity {
 
@@ -56,7 +61,6 @@ public class HomeActivity extends FragmentContainerActivity {
 
     private View logoView;
     private TextView titleView;
-    private View menuIcon;
 
     private ImageView userPictureView;
     private TextView userNameView;
@@ -94,6 +98,13 @@ public class HomeActivity extends FragmentContainerActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        loadDrawer();
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         cancelRequesting();
@@ -113,14 +124,17 @@ public class HomeActivity extends FragmentContainerActivity {
         userNameView = (TextView) findViewById(R.id.nameView);
         optionLayout = (LinearLayout) findViewById(R.id.optionLayout);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-        drawerLayout.addDrawerListener(new DrawerListener());
+//        drawerLayout.addDrawerListener(new DrawerListener());
 
-        loadUserInfo();
-        initDrawerItems();
-        initDrawerOptions();
     }
 
-    private void initDrawerItems() {
+    private void loadDrawer() {
+        loadUserInfo();
+        initDrawerOptions();
+        addDrawerOptions();
+    }
+
+    private void initDrawerOptions() {
         Intent rateIntent = new Intent(Intent.ACTION_EDIT);
         String packageName = getPackageName();
         Uri cafeBazaarUri = Uri.parse("bazaar://details?id=" + packageName);
@@ -134,19 +148,27 @@ public class HomeActivity extends FragmentContainerActivity {
 
         inviteIntent = Intent.createChooser(inviteIntent, getString(R.string.inviteFriends));
 
-        drawerItems = Arrays.asList(
-//                new DrawerItemView.DrawerItem(this, R.string.profile, R.drawable.profile_icon, ProfileActivity.newIntent(this, null)),
-//                new DrawerItemView.DrawerItem(this, R.string.gifts, R.drawable.gifts_icon, rateIntent),
-//                new DrawerItemView.DrawerItem(this, R.string.shop, R.drawable.shop_icon, ShopActivity.newIntent(this)),
-//                new DrawerItemView.DrawerItem(this, R.string.vote, R.drawable.vote_icon, rateIntent),
-                new DrawerItemView.DrawerItem(this, R.string.mainLeaderBord, R.drawable.vote_icon, MainLeaderBoardActivity.newIntent(this)),
-//                new DrawerItemView.DrawerItem(this, R.string.invite, R.drawable.about_us_icon, inviteIntent),
-                new DrawerItemView.DrawerItem(this, R.string.about_us, R.drawable.about_us_icon, TextActivity.newIntent(this, R.string.about_us, R.string.aboutUsText))
-//                new DrawerItemView.DrawerItem(this, R.string.signOut, R.drawable.sign_out, new SignOutListener())
-        );
+        drawerItems = new ArrayList<>();
+        drawerItems.add(new DrawerItemView.DrawerItem(this, R.string.profile, R.drawable.profile_icon, ProfileActivity.newIntent(this, null)));
+        drawerItems.add(new DrawerItemView.DrawerItem(this, R.string.gifts, R.drawable.gifts_icon, AchievementsActivity.newIntent(this)));
+        drawerItems.add(new DrawerItemView.DrawerItem(this, R.string.shop, R.drawable.shop_icon, ShopActivity.newIntent(this)));
+        drawerItems.add(new DrawerItemView.DrawerItem(this, R.string.messages, R.drawable.messages_icon, MessagesActivity.newIntent(this)));
+        drawerItems.add(new DrawerItemView.DrawerItem(this, R.string.vote, R.drawable.vote_icon, rateIntent));
+//        drawerItems.add(new DrawerItemView.DrawerItem(this, R.string.mainLeaderBord, R.drawable.vote_icon, MainLeaderBoardActivity.newIntent(this)));
+//        drawerItems.add(new DrawerItemView.DrawerItem(this, R.string.invite, R.drawable.about_us_icon, inviteIntent));
+        drawerItems.add(new DrawerItemView.DrawerItem(this, R.string.about_us, R.drawable.about_us_icon, TextActivity.newIntent(this, R.string.about_us, R.string.aboutUsText)));
+
+
+        if (GerdooServer.INSTANCE.getAuthenticationManager().isGustUser()){
+            drawerItems.add(new DrawerItemView.DrawerItem(this, R.string.completeRegistration,
+                    R.drawable.about_us_icon, CompleteRegistrationActivity.newIntent(this)));
+        }
+
+        drawerItems.add(new DrawerItemView.DrawerItem(this, R.string.signOut, R.drawable.sign_out, new SignOutListener()));
     }
 
-    private void initDrawerOptions() {
+    private void addDrawerOptions() {
+        optionLayout.removeAllViews();
         addLineToDrawer();
         for (DrawerItemView.DrawerItem item : drawerItems){
             DrawerItemView view = new DrawerItemView(this);
@@ -205,11 +227,18 @@ public class HomeActivity extends FragmentContainerActivity {
 
         logoView = findViewById(R.id.logoView);
         titleView = (TextView) findViewById(R.id.titleView);
-        menuIcon = findViewById(R.id.menu);
+        View menuIcon = findViewById(R.id.menu);
         menuIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 toggleDrawer();
+            }
+        });
+        View searchIcon = findViewById(R.id.searchButton);
+        searchIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(SearchActivity.newIntent(HomeActivity.this));
             }
         });
     }

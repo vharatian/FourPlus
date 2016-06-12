@@ -5,11 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,7 +17,7 @@ import com.anashidgames.gerdoo.core.PsychoImageLoader;
 import com.anashidgames.gerdoo.core.service.GerdooServer;
 import com.anashidgames.gerdoo.core.service.call.CallbackWithErrorDialog;
 import com.anashidgames.gerdoo.core.service.model.server.ChangeImageResponse;
-import com.anashidgames.gerdoo.core.service.model.server.FollowToggleResponse;
+import com.anashidgames.gerdoo.core.service.model.server.FriendRequestResponse;
 import com.anashidgames.gerdoo.core.service.model.ProfileInfo;
 import com.anashidgames.gerdoo.pages.profile.view.FriendsRow;
 import com.anashidgames.gerdoo.pages.profile.view.GiftsRow;
@@ -47,7 +45,6 @@ public class ProfileActivity extends AppCompatActivity {
     private View progressView;
     private View mainLayout;
 
-    private ImageView coverView;
     private ImageView profilePictureView;
 
     private TextView nameView;
@@ -58,13 +55,9 @@ public class ProfileActivity extends AppCompatActivity {
     private FriendsRow friendsRow;
     private GiftsRow giftsRow;
 
-    private View followLayout;
-    private ImageView followIcon;
-    private TextView followTextView;
-
-    private ImageView coverEditView;
-
-    private View userDataLayout;
+    private View requestLayout;
+    private ImageView requestIcon;
+    private TextView requestTextView;
 
     private ProgressDialog progressDialog;
     private Call<ChangeImageResponse> call;
@@ -87,40 +80,46 @@ public class ProfileActivity extends AppCompatActivity {
         progressView = findViewById(R.id.progress);
         mainLayout = findViewById(R.id.mainLayout);
 
-        coverView = (ImageView) findViewById(R.id.coverView);
-        profilePictureView = (ImageView) findViewById(R.id.profilePictureView);
-
-        nameView = (TextView) findViewById(R.id.nameView);
-        onlineStatusView = (ImageView) findViewById(R.id.onlineStatusView);
-
-        statusChart = (PieChart) findViewById(R.id.statusChart);
-        statusChart.setCenterColor(getResources().getColor(R.color.colorPrimaryDark));
+        initToolbar();
+        initUserInfoViews();
+        initStatusChart();
 
         friendsRow = (FriendsRow) findViewById(R.id.friendRow);
         giftsRow = (GiftsRow) findViewById(R.id.giftsRow);
 
-        followLayout = findViewById(R.id.followLayout);
-        followIcon = (ImageView) findViewById(R.id.followIcon);
-        followTextView = (TextView) findViewById(R.id.followTextView);
-        followLayout.setOnClickListener(new View.OnClickListener() {
+        initProgressDialog();
+    }
+
+    private void initToolbar() {
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleFollow();
+                finish();
             }
         });
+    }
 
-        userDataLayout = findViewById(R.id.userDataLayout);
+    private void initStatusChart() {
+        statusChart = (PieChart) findViewById(R.id.statusChart);
+        statusChart.setCenterColor(getResources().getColor(R.color.colorPrimaryDark));
+    }
 
-        coverEditView = (ImageView) findViewById(R.id.coverEditButton);
-        if(userId != null)
-            coverEditView.setVisibility(View.GONE);
-        else
-            coverEditView.setVisibility(View.VISIBLE);
-
-        coverEditView.setOnClickListener(new ImageChooser(PICK_COVER));
+    private void initUserInfoViews() {
+        profilePictureView = (ImageView) findViewById(R.id.profilePictureView);
         profilePictureView.setOnClickListener(new ImageChooser(REQUEST_IMAGE_PICK_PROFILE_IMAGE));
 
-        initProgressDialog();
+        nameView = (TextView) findViewById(R.id.nameView);
+        onlineStatusView = (ImageView) findViewById(R.id.onlineStatusView);
+
+        requestLayout = findViewById(R.id.requestLayout);
+        requestIcon = (ImageView) findViewById(R.id.requestIcon);
+        requestTextView = (TextView) findViewById(R.id.requestTextView);
+        requestLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                doRequest();
+            }
+        });
     }
 
     private void initProgressDialog() {
@@ -151,13 +150,20 @@ public class ProfileActivity extends AppCompatActivity {
         startActivityForResult(pickPhotoIntent, requestCode);
     }
 
-    private void toggleFollow() {
-        if (info.getFollowing() == null)
-            return;
-
-        followLayout.setEnabled(false);
-        Call<FollowToggleResponse> call = GerdooServer.INSTANCE.toggleFollow(info.getFollowToggleUrl());
-        call.enqueue(new FollowToggleCallback(this));
+    private void doRequest() {
+        int state = info.getFriendShipState();
+        if (state == ProfileInfo.FRIEND_SHIP_STATE_NON){
+            startActivity(EditProfileActivity.newIntent(this));
+        }else {
+            requestLayout.setEnabled(false);
+            if (state == ProfileInfo.FRIEND_SHIP_STATE_FRIEND){
+                Call<FriendRequestResponse> call = GerdooServer.INSTANCE.unfriendRequest(info.getUserId());
+                call.enqueue(new FriendRequestCallback(this));
+            }else if (state == ProfileInfo.FRIEND_SHIP_STATE_NOT_FRIEND){
+                Call<FriendRequestResponse> call = GerdooServer.INSTANCE.friendRequest(info.getUserId());
+                call.enqueue(new FriendRequestCallback(this));
+            }
+        }
     }
 
     private void loadData(String userId) {
@@ -175,6 +181,16 @@ public class ProfileActivity extends AppCompatActivity {
 
         setImages();
 
+        setName(info);
+        setRequestLayoutState();
+
+        setStatusChartInfo(info);
+
+        friendsRow.setUserId(userId);
+        giftsRow.setUserId(userId);
+    }
+
+    private void setName(ProfileInfo info) {
         nameView.setText(info.getName());
         if(info.getOnline() == null){
             onlineStatusView.setVisibility(View.GONE);
@@ -188,50 +204,40 @@ public class ProfileActivity extends AppCompatActivity {
 
             onlineStatusView.setColorFilter(getResources().getColor(colorCode));
         }
+    }
 
+    private void setStatusChartInfo(ProfileInfo info) {
         statusChart.addData(new PieChartItem(getString(R.string.loss), info.getLoss(), getResources().getColor(R.color.red)));
         statusChart.addData(new PieChartItem(getString(R.string.tie), info.getTie(), getResources().getColor(R.color.yellow)));
         statusChart.addData(new PieChartItem(getString(R.string.win), info.getWin(), getResources().getColor(R.color.green)));
 
         statusChart.setBoldCenterText("" + info.getMatchesCount());
         statusChart.setSmallCenterText(getString(R.string.playedCount));
-
-        friendsRow.setUserId(userId);
-        giftsRow.setUserId(userId);
-
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                ((ViewGroup.MarginLayoutParams)userDataLayout.getLayoutParams()).topMargin =
-                        coverView.getHeight() - (profilePictureView.getHeight()/2);
-            }
-        });
-
-
-        setToggleFollowState();
-
     }
 
     private void setImages() {
-        PsychoImageLoader.loadImage(this, info.getCoverUrl(), R.drawable.cover_place_holder, coverView);
         PsychoImageLoader.loadImage(this, info.getImageUrl(), R.drawable.user_image_place_holder, profilePictureView);
     }
 
-    private void setToggleFollowState() {
-        if (info.getFollowing() == null){
-            followLayout.setVisibility(View.GONE);
+    private void setRequestLayoutState() {
+        int state = info.getFriendShipState();
+        if (state == ProfileInfo.FRIEND_SHIP_STATE_NON){
+            requestIcon.setImageResource(R.drawable.settings_icon);
+            requestTextView.setText(getString(R.string.changeProfile));
+            requestLayout.setBackgroundResource(R.drawable.gray_background);
         }else {
-            followLayout.setVisibility(View.VISIBLE);
-            if (info.getFollowing()){
-                followIcon.setImageResource(R.drawable.follow);
-                followTextView.setText(R.string.follow);
-                followTextView.setTextColor(getResources().getColor(R.color.green));
-                followTextView.setBackgroundResource(R.drawable.follow_background);
-            }else{
-                followIcon.setImageResource(R.drawable.unfollow);
-                followTextView.setText(R.string.unfollow);
-                followTextView.setTextColor(getResources().getColor(R.color.red));
-                followTextView.setBackgroundResource(R.drawable.unfollow_background);
+            if (state == ProfileInfo.FRIEND_SHIP_STATE_FRIEND){
+                requestIcon.setImageResource(R.drawable.followed);
+                requestTextView.setText(R.string.followed);
+                requestLayout.setBackgroundResource(R.drawable.followed_background);
+            }else if (state == ProfileInfo.FRIEND_SHIP_STATE_NOT_FRIEND){
+                requestIcon.setImageResource(R.drawable.add);
+                requestTextView.setText(R.string.follow);
+                requestLayout.setBackgroundResource(R.drawable.gray_background);
+            }else if(state == ProfileInfo.FRIEND_SHIP_STATE_WAITING){
+                requestIcon.setImageDrawable(null);
+                requestTextView.setText(R.string.waiting);
+                requestLayout.setBackgroundResource(R.drawable.gray_background);
             }
         }
     }
@@ -269,16 +275,23 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
-    private class FollowToggleCallback extends CallbackWithErrorDialog<FollowToggleResponse> {
-        public FollowToggleCallback(Context context) {
+    private class FriendRequestCallback extends CallbackWithErrorDialog<FriendRequestResponse> {
+        public FriendRequestCallback(Context context) {
             super(context);
         }
 
         @Override
-        public void handleSuccessful(FollowToggleResponse data) {
+        public void handleSuccessful(FriendRequestResponse data) {
             if (data.isDone()){
-                info.toggleFollow(data.getToggleUrl());
-                setToggleFollowState();
+                int newState;
+                if (info.getFriendShipState() == ProfileInfo.FRIEND_SHIP_STATE_FRIEND){
+                    newState = ProfileInfo.FRIEND_SHIP_STATE_NOT_FRIEND;
+                }else {
+                    newState = ProfileInfo.FRIEND_SHIP_STATE_WAITING;
+                }
+
+                info.setFriendShipState(newState);
+                setRequestLayoutState();
             }else{
                 Toast.makeText(ProfileActivity.this, R.string.couldNotPerform, Toast.LENGTH_SHORT);
             }
@@ -288,7 +301,7 @@ public class ProfileActivity extends AppCompatActivity {
         protected void postExecution() {
             super.postExecution();
 
-            followLayout.setEnabled(true);
+            requestLayout.setEnabled(true);
         }
     }
 

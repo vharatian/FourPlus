@@ -425,7 +425,7 @@ public class GameFragment extends Fragment {
 
         for (int i=0; i<options.size(); i++){
             if (hints.contains(options.get(i))){
-                optionsView.get(i).setStatus(OptionView.STATUS_LEFT_WRONG);
+                optionsView.get(i).setVisibility(View.INVISIBLE);
             }
         }
     }

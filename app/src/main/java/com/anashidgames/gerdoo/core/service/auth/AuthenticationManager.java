@@ -10,6 +10,7 @@ import com.anashidgames.gerdoo.core.service.call.CallbackWithErrorDialog;
 import com.anashidgames.gerdoo.core.service.call.PsychoCall;
 import com.anashidgames.gerdoo.core.service.call.PsychoCallBack;
 import com.anashidgames.gerdoo.core.service.model.AuthenticationInfo;
+import com.anashidgames.gerdoo.core.service.model.CompleteRegistrationParameters;
 import com.anashidgames.gerdoo.core.service.model.GustSignUpInfo;
 import com.anashidgames.gerdoo.core.service.model.SignInInfo;
 import com.anashidgames.gerdoo.core.service.model.SignUpInfo;
@@ -79,6 +80,13 @@ public class AuthenticationManager {
     public void gustSignUp(Callback<AuthenticationInfo> callBack) {
         Call<GustSignUpInfo> call = service.gustSignUp();
         call.enqueue(new GustSignUpCallBack(context, callBack));
+    }
+
+    public void completeRegistration(String email, String phoneNumber, String password, Callback callback) {
+        GustSignUpInfo gustInfo = dataHelper.getGustSignUpInfo();
+        CompleteRegistrationParameters params = new CompleteRegistrationParameters(gustInfo.getUserId(), gustInfo.getPassword(), email, password);
+        Call<SignUpInfo> call = service.completeRegistration(params);
+        call.enqueue(new SignUpCallback(context, email, password, callback));
     }
 
     public Call<AuthenticationInfo> signIn(String email, String password) {
@@ -185,6 +193,9 @@ public class AuthenticationManager {
         }
     }
 
+    public boolean isGustUser() {
+        return dataHelper.getGustSignUpInfo() != null;
+    }
 
 
     private class AuthenticationInfoInterceptor implements Interceptor {

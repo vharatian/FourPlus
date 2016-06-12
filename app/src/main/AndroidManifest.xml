@@ -27,8 +27,13 @@
         <activity android:name=".pages.profile.ProfileActivity"/>
         <activity android:name=".pages.game.GameActivity"/>
         <activity android:name=".pages.TextActivity"/>
-        <activity android:name=".pages.home.MainLeaderBoardActivity"/>
+        <activity android:name=".pages.home.drawer.MainLeaderBoardActivity"/>
         <activity android:name=".pages.shop.ShopActivity"/>
+        <activity android:name=".pages.auth.CompleteRegistrationActivity"/>
+        <activity android:name=".pages.home.drawer.AchievementsActivity"/>
+        <activity android:name=".pages.home.drawer.MessagesActivity"/>
+        <activity android:name=".pages.profile.EditProfileActivity"/>
+        <activity android:name=".pages.home.SearchActivity"/>
     </application>
 
 </manifest>

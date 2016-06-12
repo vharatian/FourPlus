@@ -45,14 +45,14 @@
                 android:textSize="17dp"
                 android:id="@+id/titleView"/>
 
-            <!--<com.anashidgames.gerdoo.view.FitToHeightImageView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:src="@drawable/magnify"-->
-                <!--android:padding="@dimen/smallBreak"-->
-                <!--android:layout_gravity="left"-->
-                <!--android:tint="@color/colorAccent"-->
-                <!--android:id="@+id/search"/>-->
+            <com.anashidgames.gerdoo.view.FitToHeightImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/magnify"
+                android:padding="@dimen/smallBreak"
+                android:layout_gravity="left"
+                android:tint="@color/colorAccent"
+                android:id="@+id/searchButton"/>
 
         </android.support.v7.widget.Toolbar>
 

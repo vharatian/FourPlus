@@ -53,7 +53,13 @@ public class ToggleButton extends LinearLayout {
 
     public void setData(int textResource, int iconResource){
         textView.setText(textResource);
+        iconView.setVisibility(VISIBLE);
         iconView.setImageResource(iconResource);
+    }
+
+    public void setData(int textResource){
+        textView.setText(textResource);
+        iconView.setVisibility(GONE);
     }
 
     public void toggle(){

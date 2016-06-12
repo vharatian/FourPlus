@@ -9,6 +9,7 @@ import com.anashidgames.gerdoo.core.service.model.Friend;
 import com.anashidgames.gerdoo.pages.profile.ProfileActivity;
 import com.anashidgames.gerdoo.view.row.ItemsRow;
 import com.anashidgames.gerdoo.view.row.RowItem;
+import com.anashidgames.gerdoo.view.row.SimpleItemsRow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ import retrofit2.Call;
 /**
  * Created by psycho on 4/17/16.
  */
-public class FriendsRow extends ItemsRow<Friend> {
+public class FriendsRow extends ItemsRow<FriendItemRow, Friend> {
 
     private String userId;
 
@@ -38,6 +39,7 @@ public class FriendsRow extends ItemsRow<Friend> {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
+
     public void setUserId(String userId){
         this.userId = userId;
         setData(getResources().getString(R.string.friends));
@@ -49,12 +51,12 @@ public class FriendsRow extends ItemsRow<Friend> {
     }
 
     @Override
-    public List<RowItem> convert(List<Friend> friends) {
-        List<RowItem> result = new ArrayList<>();
-        for(Friend friend : friends){
-            result.add(new RowItem(friend.getName(), null, friend.getImageUrl(),
-                    ProfileActivity.newIntent(getContext(), friend.getUserId())));
-        }
-        return result;
+    public FriendItemRow newItemView(Context context) {
+        return new FriendItemRow(context);
+    }
+
+    @Override
+    public void bind(FriendItemRow view, Friend data) {
+        view.setFriend(data);
     }
 }

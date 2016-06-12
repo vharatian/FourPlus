@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/normalBreak">
+
+
+    <com.anashidgames.gerdoo.view.basic.BoldTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lines="1"
+        android:ellipsize="end"
+        android:textSize="18dp"
+        android:textColor="@color/white"
+        android:id="@+id/titleView"
+        android:gravity="right"
+        android:paddingRight="@dimen/normalBreak"
+        android:background="@color/colorPrimaryDark"/>
+
+    <com.anashidgames.gerdoo.view.basic.TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:padding="@dimen/xlargeBreak"
+        android:id="@+id/messageView"
+        android:background="@color/colorPrimarySide"
+        android:textColor="@color/white"
+        android:textSize="17dp"/>
+
+</LinearLayout>

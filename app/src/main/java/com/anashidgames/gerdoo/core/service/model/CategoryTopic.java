@@ -28,6 +28,16 @@ public class CategoryTopic {
         this.bannerUrl = bannerUrl;
     }
 
+    public CategoryTopic(SearchedTopic item) {
+        imageUrl = item.getImageUrl();
+        title = item.getTitle();
+        categoryTitle = item.getCategoryTitle();
+        leaderBoardId = item.getLeaderBoardId();
+        matchMakingName = item.getMatchMakingName();
+        bannerUrl = item.getBannerUrl();
+
+    }
+
     public String getImageUrl() {
         return imageUrl;
     }

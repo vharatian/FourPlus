@@ -149,7 +149,9 @@ public abstract class FormFragment extends KeyboardHiderFragment {
     }
 
     public void showMessage(String message){
-        messageView.setText(message);
+        if (messageView != null) {
+            messageView.setText(message);
+        }
     }
 
     protected void addInput(ValidatableInput input) {
@@ -178,7 +180,7 @@ public abstract class FormFragment extends KeyboardHiderFragment {
     private class SubmitCallBack extends CallbackWithErrorDialog {
 
         public SubmitCallBack() {
-            super(getContext());
+            super(getActivity());
         }
 
         @Override

@@ -1,18 +1,31 @@
 package com.anashidgames.gerdoo.core.service;
 
+import com.anashidgames.gerdoo.core.payment.Purchase;
+import com.anashidgames.gerdoo.core.service.model.AchievementItem;
+import com.anashidgames.gerdoo.core.service.model.AnswerFriendRequestParameter;
 import com.anashidgames.gerdoo.core.service.model.Category;
 import com.anashidgames.gerdoo.core.service.model.CategoryTopic;
 import com.anashidgames.gerdoo.core.service.model.ChangeImageParams;
+import com.anashidgames.gerdoo.core.service.model.DoneResponse;
+import com.anashidgames.gerdoo.core.service.model.EditProfileParameters;
+import com.anashidgames.gerdoo.core.service.model.EditProfileResponse;
+import com.anashidgames.gerdoo.core.service.model.FriendRequestParameters;
 import com.anashidgames.gerdoo.core.service.model.GetScoreParams;
 import com.anashidgames.gerdoo.core.service.model.GetSkillResponse;
 import com.anashidgames.gerdoo.core.service.model.LeaderBoardParams;
 import com.anashidgames.gerdoo.core.service.model.MatchData;
+import com.anashidgames.gerdoo.core.service.model.Message;
 import com.anashidgames.gerdoo.core.service.model.Rank;
+import com.anashidgames.gerdoo.core.service.model.SearchParameters;
+import com.anashidgames.gerdoo.core.service.model.SearchedTopic;
+import com.anashidgames.gerdoo.core.service.model.SearchedUser;
+import com.anashidgames.gerdoo.core.service.model.ShopCategoryData;
+import com.anashidgames.gerdoo.core.service.model.ShopCategoryItemsParameter;
 import com.anashidgames.gerdoo.core.service.model.ShopItem;
 import com.anashidgames.gerdoo.core.service.model.parameters.GetCategoryTopicsParams;
 import com.anashidgames.gerdoo.core.service.model.parameters.GetSubCategoriesParams;
 import com.anashidgames.gerdoo.core.service.model.server.ChangeImageResponse;
-import com.anashidgames.gerdoo.core.service.model.server.FollowToggleResponse;
+import com.anashidgames.gerdoo.core.service.model.server.FriendRequestResponse;
 import com.anashidgames.gerdoo.core.service.model.Friend;
 import com.anashidgames.gerdoo.core.service.model.Gift;
 import com.anashidgames.gerdoo.core.service.model.HomeItem;
@@ -207,10 +220,10 @@ class MockService implements GerdooService {
         String coverUrl = "https://i.imgsafe.org/c77e5e5.jpg";
 
         String followToggleUrl = "url";
-        Boolean following = random.nextBoolean();
+        int friendshipState = 1 + random.nextInt(3);
         if (userId == null){
             followToggleUrl = null;
-            following = null;
+            friendshipState = ProfileInfo.FRIEND_SHIP_STATE_NON;
         }
 
         Boolean online = (userId == null) || random.nextBoolean();
@@ -219,7 +232,7 @@ class MockService implements GerdooService {
         int tie = random.nextInt(100-loss);
         int win = 100-loss-tie;
 
-        ProfileInfo info = new ProfileInfo("اسم فامیل", proPicUrl, coverUrl, followToggleUrl, following, proPicUrl, coverUrl, online, "", "", "", "", win, loss, tie, random.nextInt(10000));
+        ProfileInfo info = new ProfileInfo("اسم فامیل", proPicUrl, coverUrl, followToggleUrl, friendshipState, proPicUrl, coverUrl, online, "", "", "", "", win, loss, tie, random.nextInt(10000), "userId");
 
         return behaviorDelegate.returningResponse(info).getProfile(userId);
     }
@@ -247,7 +260,7 @@ class MockService implements GerdooService {
 
             name += i;
 
-            response.add(new Friend(imageUrl, name, UUID.randomUUID().toString()));
+            response.add(new Friend(imageUrl, name, UUID.randomUUID().toString(), random.nextBoolean()));
         }
 
         return behaviorDelegate.returningResponse(response).getFriends(userId);
@@ -275,9 +288,15 @@ class MockService implements GerdooService {
     }
 
     @Override
-    public Call<FollowToggleResponse> toggleFollow(@Url String followToggleUrl) {
-        FollowToggleResponse response = new FollowToggleResponse(random.nextBoolean(), "url");
-        return behaviorDelegate.returningResponse(response).toggleFollow(followToggleUrl);
+    public Call<FriendRequestResponse> friendRequest(@Body FriendRequestParameters parameter) {
+        FriendRequestResponse response = new FriendRequestResponse(random.nextBoolean());
+        return behaviorDelegate.returningResponse(response).friendRequest(parameter);
+    }
+
+    @Override
+    public Call<FriendRequestResponse> unfriendRequest(@Body FriendRequestParameters parameter) {
+        FriendRequestResponse response = new FriendRequestResponse(random.nextBoolean());
+        return behaviorDelegate.returningResponse(response).friendRequest(parameter);
     }
 
     @Override
@@ -299,16 +318,89 @@ class MockService implements GerdooService {
     }
 
     @Override
-    public Call<List<ShopItem>> getShopItems(@Path("cloudCodeId") String cloudId) {
-        List<ShopItem> items = new ArrayList<>();
-        String proPicUrl = "http://indiabright.com/wp-content/uploads/2015/11/profile_picture_by_kyo_tux-d4hrimy.png";
-
-
+    public Call<List<ShopCategoryData>> getShopCategories(@Path("cloudCodeId") String cloudId) {
+        List<ShopCategoryData> items = new ArrayList<>();
 
         for (int i = 0; i<20; i++){
-            items.add(new ShopItem("", proPicUrl, "پکیج فروشی", 2000));
+            items.add(new ShopCategoryData("", "پکیج فروشی"));
         }
 
-        return behaviorDelegate.returningResponse(items).getShopItems(cloudId);
+        return behaviorDelegate.returningResponse(items).getShopCategories(cloudId);
+    }
+
+    @Override
+    public Call<List<AchievementItem>> getAllAchievements(@Path("cloudCodeId") String cloudCodeId) {
+        List<AchievementItem> items = new ArrayList<>();
+        String imageUrl = "http://images.akamai.steamusercontent.com/ugc/35239975375061668/ACB134564983985B087613F528F1038B1B5F6ADA/";
+
+        for (int i=0; i<20; i++){
+            items.add(new AchievementItem("title" + i, imageUrl, random.nextBoolean()));
+        }
+
+        return behaviorDelegate.returningResponse(items).getAllAchievements(cloudCodeId);
+    }
+
+    @Override
+    public Call<List<Message>> getMessages(@Path("cloudCodeId") String cloudCodeId) {
+        List<Message> messages = new ArrayList<>();
+        for (int i=0; i<20; i++){
+            messages.add(new Message("title" + i, "message" + i));
+        }
+        return behaviorDelegate.returningResponse(messages).getMessages(cloudCodeId);
+    }
+
+    @Override
+    public Call<EditProfileResponse> editProfile(@Body EditProfileParameters editProfileParameters) {
+        EditProfileResponse response = new EditProfileResponse(random.nextBoolean());
+        return behaviorDelegate.returningResponse(response).editProfile(editProfileParameters);
+    }
+
+    @Override
+    public Call<List<SearchedUser>> searchUser(@Body SearchParameters searchParameters) {
+        List<SearchedUser> result = new ArrayList<>();
+
+        String imageUrl = "http://indiabright.com/wp-content/uploads/2015/11/profile_picture_by_kyo_tux-d4hrimy.png";
+
+        for (int i=0; i<20; i++){
+            result.add(new SearchedUser(imageUrl, "نام نام خانوادگی", Math.abs(random.nextInt())));
+        }
+        return behaviorDelegate.returningResponse(result).searchUser(searchParameters);
+    }
+
+    @Override
+    public Call<List<ShopItem>> getShopCategoryItems(@Body ShopCategoryItemsParameter shopCategoryItemsParameter) {
+        List<ShopItem> items = new ArrayList<>();
+        String imageUrl = "http://indiabright.com/wp-content/uploads/2015/11/profile_picture_by_kyo_tux-d4hrimy.png";
+
+
+        for(int i=0; i<20; i++){
+            items.add(new ShopItem(imageUrl, "فروشی", "فروشی", ""));
+        }
+        return behaviorDelegate.returningResponse(items).getShopCategoryItems(shopCategoryItemsParameter);
+    }
+
+    @Override
+    public Call<DoneResponse> sendPurchaseInfo(@Body Purchase info) {
+        DoneResponse response = new DoneResponse(random.nextBoolean());
+        return behaviorDelegate.returningResponse(response).sendPurchaseInfo(info);
+    }
+
+    @Override
+    public Call<DoneResponse> answerFriendRequest(@Body AnswerFriendRequestParameter answerFriendRequestParameter) {
+        DoneResponse response = new DoneResponse(random.nextBoolean());
+        return behaviorDelegate.returningResponse(response).answerFriendRequest(answerFriendRequestParameter);
+    }
+
+
+    @Override
+    public Call<List<SearchedTopic>> searchTopics(@Body SearchParameters searchParameters) {
+        List<SearchedTopic> result = new ArrayList<>();
+
+        String imageUrl = "https://i.imgsafe.org/3118243.png";
+
+        for (int i=0; i<20; i++){
+            result.add(new SearchedTopic(imageUrl, "عنوان", "زیر عنوان"));
+        }
+        return behaviorDelegate.returningResponse(result).searchTopics(searchParameters);
     }
 }

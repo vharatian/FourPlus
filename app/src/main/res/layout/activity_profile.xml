@@ -6,12 +6,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context="com.anashidgames.gerdoo.pages.profile.ProfileActivity"
         android:background="@color/colorPrimaryDark">
+
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbarHeight">
+
+            <com.anashidgames.gerdoo.view.FitToHeightImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/back"
+                android:padding="@dimen/smallBreak"
+                android:layout_gravity="left"
+                android:id="@+id/backButton"/>
+
+            <com.anashidgames.gerdoo.view.basic.BoldTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="17dp"
+                android:layout_marginRight="@dimen/normalBreak"
+                android:text="@string/profile"
+                android:id="@+id/titleView"/>
+
+        </android.support.v7.widget.Toolbar>
 
         <com.pnikosis.materialishprogress.ProgressWheel
             android:layout_width="80dp"
@@ -23,87 +49,22 @@
             android:layout_marginTop="200dp"
             android:id="@+id/progress"/>
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/mainLayout">
+            android:orientation="vertical"
+            android:id="@id/mainLayout">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/profileCoverHeight">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:id="@+id/coverView"
-                        android:scaleType="centerCrop"/>
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/profileCoverShadowHeight"
-                        android:src="@drawable/cover_gradient"
-                        android:layout_gravity="bottom"/>
-
-                    <com.anashidgames.gerdoo.view.FitToWidthImageView
-                        android:layout_width="30dp"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/camera"
-                        android:layout_gravity="top|right"
-                        android:tint="@color/gray"
-                        android:layout_margin="@dimen/normalBreak"
-                        android:id="@+id/coverEditButton"/>
-
-                </FrameLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/lineHeight"
-                    android:background="@color/colorAccent"/>
-
-                <com.anashidgames.gerdoo.view.chart.pie.PieChart
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/statusPieChartHeight"
-                    android:id="@+id/statusChart"
-                    android:layout_marginTop="@dimen/xxlargeBreak"
-                    android:layout_marginBottom="@dimen/normalBreak"/>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/lineHeight"
-                    android:background="@color/colorAccent"/>
-
-                <com.anashidgames.gerdoo.pages.profile.view.FriendsRow
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/profileItemsRowHeight"
-                    android:id="@+id/friendRow"/>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/lineHeight"
-                    android:background="@color/colorAccent"/>
-
-                <com.anashidgames.gerdoo.pages.profile.view.GiftsRow
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/profileItemsRowHeight"
-                    android:id="@+id/giftsRow"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="top|right"
-                android:layout_marginRight="@dimen/xxlargeBreak"
-                android:id="@+id/userDataLayout">
+                android:orientation="horizontal"
+                android:layout_margin="@dimen/normalBreak">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:orientation="vertical"
                     android:layout_gravity="top"
                     android:layout_marginRight="@dimen/normalBreak">
@@ -141,23 +102,24 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:layout_gravity="right"
-                        android:id="@+id/followLayout"
-                        android:layout_marginTop="@dimen/largeBreak"
+                        android:id="@+id/requestLayout"
+                        android:layout_marginTop="@dimen/normalBreak"
                         android:layout_marginBottom="@dimen/normalBreak">
 
                         <com.anashidgames.gerdoo.view.basic.TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="12dp"
-                            android:id="@+id/followTextView"
+                            android:id="@+id/requestTextView"
                             android:layout_gravity="center"
+                            android:textColor="@color/black"
                             android:layout_marginRight="@dimen/smallBreak"/>
 
                         <ImageView
                             android:layout_width="@dimen/onlineStatusSize"
                             android:layout_height="@dimen/onlineStatusSize"
                             android:scaleType="fitCenter"
-                            android:id="@+id/followIcon"
+                            android:id="@+id/requestIcon"
                             android:layout_gravity="center"/>
 
                     </LinearLayout>
@@ -170,9 +132,41 @@
                     app:civ_border_color="@color/colorAccent"
                     app:civ_border_width="@dimen/lineHeight"/>
 
+
             </LinearLayout>
 
-        </FrameLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/lineHeight"
+                android:background="@color/colorAccent"/>
 
+            <com.anashidgames.gerdoo.view.chart.pie.PieChart
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/statusPieChartHeight"
+                android:id="@+id/statusChart"
+                android:layout_marginTop="@dimen/xxlargeBreak"
+                android:layout_marginBottom="@dimen/normalBreak"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/lineHeight"
+                android:background="@color/colorAccent"/>
+
+            <com.anashidgames.gerdoo.pages.profile.view.FriendsRow
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/friendsRowHeight"
+                android:id="@+id/friendRow"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/lineHeight"
+                android:background="@color/colorAccent"/>
+
+            <com.anashidgames.gerdoo.pages.profile.view.GiftsRow
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/profileItemsRowHeight"
+                android:id="@+id/giftsRow"/>
+
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>

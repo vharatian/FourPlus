@@ -69,5 +69,10 @@
     <dimen name="rankTableRowUserImageSize">40dp</dimen>
     <dimen name="scoreClockHeight">30dp</dimen>
     <dimen name="scoreClockWidth">60dp</dimen>
+    <dimen name="searchItemImage">60dp</dimen>
+    <dimen name="friendImageSize">75dp</dimen>
+    <dimen name="friendItemRowWidth">80dp</dimen>
+    <dimen name="requestIconSize">30dp</dimen>
+    <dimen name="friendsRowHeight">220dp</dimen>
 
 </resources>

@@ -16,13 +16,12 @@ import com.anashidgames.gerdoo.core.PsychoImageLoader;
 /**
  * Created by psycho on 4/3/16.
  */
-public abstract class ItemsRow<T> extends LinearLayout implements ScrollableRow.DataProvider<T> {
-
+public abstract class ItemsRow<V extends View, T> extends LinearLayout implements ScrollableRow.DataProvider<T>, ScrollableRow.RowAdapter<V, T> {
 
     private TextView titleView;
     private ImageView iconView;
     private ExpandableRelativeLayout expandableLayout;
-    private ScrollableRow<T> itemsRow;
+    private ScrollableRow<V, T> itemsRow;
     private View headerView;
     private View lineView;
     private ImageView arrowView;
@@ -57,7 +56,7 @@ public abstract class ItemsRow<T> extends LinearLayout implements ScrollableRow.
     }
 
     protected void init(Context context) {
-        inflate(context, R.layout.view_category, this);
+        inflate(context, R.layout.view_items_row, this);
 
         titleView = (TextView) findViewById(R.id.titleView);
         iconView = (ImageView) findViewById(R.id.iconView);
@@ -68,6 +67,7 @@ public abstract class ItemsRow<T> extends LinearLayout implements ScrollableRow.
         arrowView = (ImageView) findViewById(R.id.arrowView);
 
         itemsRow.setDataProvider(this);
+        itemsRow.setRowAdapter(this);
     }
 
     public void setExpansionHeight(int height){
@@ -106,6 +106,10 @@ public abstract class ItemsRow<T> extends LinearLayout implements ScrollableRow.
         }else{
             iconView.setVisibility(GONE);
         }
+    }
+
+    public void setRowAdapter(ScrollableRow.RowAdapter<V, T> rowAdapter) {
+        itemsRow.setRowAdapter(rowAdapter);
     }
 
     private void setHeader(Row row) {

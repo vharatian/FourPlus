@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.anashidgames.gerdoo.core.service.GerdooServer;
 import com.anashidgames.gerdoo.R;
+import com.anashidgames.gerdoo.core.service.auth.AuthenticationManager;
 import com.anashidgames.gerdoo.core.service.model.AuthenticationInfo;
 import com.anashidgames.gerdoo.pages.auth.view.ValidatableInput;
 import com.anashidgames.gerdoo.pages.auth.view.validator.EmailValidator;
@@ -28,7 +29,7 @@ public class SignInFragment extends FormFragment {
     private ValidatableInput mailInput;
     private ValidatableInput passwordInput;
 
-    private GerdooServer server;
+    private AuthenticationManager authenticationManager;
 
     public SignInFragment() {
         super(R.id.message, R.id.signInBtn);
@@ -41,7 +42,7 @@ public class SignInFragment extends FormFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_sign_in, container, false);
 
-        server = GerdooServer.INSTANCE;
+        authenticationManager = GerdooServer.INSTANCE.getAuthenticationManager();
 
         initViews(rootView);
 
@@ -52,7 +53,7 @@ public class SignInFragment extends FormFragment {
     protected void callServer(int formId, Callback callback) {
         String email = mailInput.getText();
         String password = passwordInput.getText();
-        Call<AuthenticationInfo> call = server.signIn(email, password);
+        Call<AuthenticationInfo> call = authenticationManager.signIn(email, password);
         call.enqueue(callback);
     }
 

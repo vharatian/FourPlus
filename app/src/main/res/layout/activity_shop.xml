@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -30,9 +30,27 @@
     </android.support.v7.widget.Toolbar>
 
 
-    <android.support.v7.widget.RecyclerView
+    <com.pnikosis.materialishprogress.ProgressWheel
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:background="@android:color/transparent"
+        app:matProg_barColor="@color/colorAccent"
+        app:matProg_progressIndeterminate="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="200dp"
+        android:id="@+id/progress"/>
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/recyclerView"/>
+        android:layout_height="wrap_content"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/categoriesLayout"/>
+
+    </ScrollView>
 
 </LinearLayout>

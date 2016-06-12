@@ -74,4 +74,16 @@
     <string name="price">قیمت: price تومان</string>
     <string name="connectingToCafeBazaar">در حال اتصال به کافه بازار</string>
     <string name="leaved">از بازی خارج شد</string>
+    <string name="completeRegistration">تکمیل ثبت نام</string>
+    <string name="achievements">دستاورد ها</string>
+    <string name="changeProfile">تغییر پروفایل</string>
+    <string name="followed">دنبال شده</string>
+    <string name="waiting">انتظار تایید</string>
+    <string name="editProfile">تغییر پروفایل</string>
+    <string name="firstName">نام کوچک</string>
+    <string name="lastName">نام خانوادگی</string>
+    <string name="search">جستجو</string>
+    <string name="users">کاربران</string>
+    <string name="failiurShoping">خرید انجام نشد</string>
+    <string name="successfullShop">خرید با موفقیت انجام شد</string>
 </resources>

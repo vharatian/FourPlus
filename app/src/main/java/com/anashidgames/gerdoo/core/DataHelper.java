@@ -79,13 +79,34 @@ public class DataHelper {
     }
 
     public void setGustSignUpInfo(GustSignUpInfo info) {
+        removeString(SIGN_UP_INFO);
         String json = gson.toJson(info);
         writeString(GUST_SIGN_UP_INFO, json);
     }
 
+    public GustSignUpInfo getGustSignUpInfo(){
+        String info = preferences.getString(GUST_SIGN_UP_INFO, null);
+
+        if (info == null)
+            return null;
+
+        return gson.fromJson(info, GustSignUpInfo.class);
+    }
 
     public void setSignUpInfo(SignUpInfo info) {
+        removeString(GUST_SIGN_UP_INFO);
         String json = gson.toJson(info);
         writeString(SIGN_UP_INFO, json);
     }
+
+    public SignUpInfo getSignUpInfo(){
+        String info = preferences.getString(SIGN_UP_INFO, null);
+
+        if (info == null)
+            return null;
+
+        return gson.fromJson(info, SignUpInfo.class);
+    }
+
+
 }

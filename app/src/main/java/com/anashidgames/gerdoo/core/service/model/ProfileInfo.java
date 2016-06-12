@@ -4,11 +4,17 @@ package com.anashidgames.gerdoo.core.service.model;
  * Created by psycho on 4/16/16.
  */
 public class ProfileInfo {
+    public static final int FRIEND_SHIP_STATE_NON = 0;
+    public static final int FRIEND_SHIP_STATE_FRIEND = 1;
+    public static final int FRIEND_SHIP_STATE_NOT_FRIEND = 2;
+    public static final int FRIEND_SHIP_STATE_WAITING = 3;
+
+
     private String name;
     private String imageUrl;
     private String coverUrl;
     private String followToggleUrl;
-    private Boolean following;
+    private int friendShipState;
     private String imageChangeUrl;
     private String coverChangeUrl;
     private Boolean online;
@@ -20,13 +26,14 @@ public class ProfileInfo {
     private int loss;
     private int tie;
     private int matchesCount;
+    private String userId;
 
-    public ProfileInfo(String name, String imageUrl, String coverUrl, String followToggleUrl, Boolean following, String imageChangeUrl, String coverChangeUrl, Boolean online, String sampleFriendsUrl, String allFriendsUrl, String sampleGiftsUrl, String allGiftsUrl, int win, int loss, int tie, int matchesCount) {
+    public ProfileInfo(String name, String imageUrl, String coverUrl, String followToggleUrl, int fiendShipState, String imageChangeUrl, String coverChangeUrl, Boolean online, String sampleFriendsUrl, String allFriendsUrl, String sampleGiftsUrl, String allGiftsUrl, int win, int loss, int tie, int matchesCount, String userId) {
         this.name = name;
         this.imageUrl = imageUrl;
         this.coverUrl = coverUrl;
         this.followToggleUrl = followToggleUrl;
-        this.following = following;
+        this.friendShipState = fiendShipState;
         this.imageChangeUrl = imageChangeUrl;
         this.coverChangeUrl = coverChangeUrl;
         this.online = online;
@@ -38,6 +45,7 @@ public class ProfileInfo {
         this.loss = loss;
         this.tie = tie;
         this.matchesCount = matchesCount;
+        this.userId = userId;
     }
 
     public String getName() {
@@ -56,8 +64,8 @@ public class ProfileInfo {
         return followToggleUrl;
     }
 
-    public Boolean getFollowing() {
-        return following;
+    public int getFriendShipState() {
+        return friendShipState;
     }
 
     public String getImageChangeUrl() {
@@ -104,19 +112,19 @@ public class ProfileInfo {
         return matchesCount;
     }
 
-    public void toggleFollow(String newToggleFollowUrl){
-        if (following == null)
-            return;
-
-        this.followToggleUrl = newToggleFollowUrl;
-        following = !following;
-    }
-
     public void setCoverUrl(String coverUrl) {
         this.coverUrl = coverUrl;
     }
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setFriendShipState(int friendShipState) {
+        this.friendShipState = friendShipState;
     }
 }

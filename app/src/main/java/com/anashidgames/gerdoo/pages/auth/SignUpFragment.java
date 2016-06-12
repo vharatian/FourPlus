@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.anashidgames.gerdoo.core.DataHelper;
 import com.anashidgames.gerdoo.core.service.GerdooServer;
+import com.anashidgames.gerdoo.core.service.auth.AuthenticationManager;
 import com.anashidgames.gerdoo.core.service.model.AuthenticationInfo;
 import com.anashidgames.gerdoo.pages.auth.view.validator.EmailValidator;
 import com.anashidgames.gerdoo.R;
@@ -37,7 +38,7 @@ public class SignUpFragment extends FormFragment {
     private ValidatableInput passwordRepeatInput;
 
     private DataHelper dataHelper;
-    private GerdooServer server;
+    private AuthenticationManager authenticationManager;
 
     public SignUpFragment() {
         super(R.id.message, R.id.signUpBtn);
@@ -50,7 +51,7 @@ public class SignUpFragment extends FormFragment {
         View rootView = inflater.inflate(R.layout.fragment_sign_up, container, false);
 
         dataHelper = new DataHelper(getActivity());
-        server = GerdooServer.INSTANCE;
+        authenticationManager = GerdooServer.INSTANCE.getAuthenticationManager();
 
         initViews(rootView);
         return rootView;
@@ -64,12 +65,12 @@ public class SignUpFragment extends FormFragment {
     @Override
     protected void callServer(int formId, Callback callback) {
         if(formId == ANONYMOUS_FORM_ID){
-            GerdooServer.INSTANCE.gustSignUp(callback);
+            authenticationManager.gustSignUp(callback);
         }else  {
             String email = mailInput.getText();
             String phoneNumber = phoneNumberInput.getText();
             String password = passwordInput.getText();
-            server.signUp(email, phoneNumber, password, callback);
+            authenticationManager.signUp(email, phoneNumber, password, callback);
         }
     }
 

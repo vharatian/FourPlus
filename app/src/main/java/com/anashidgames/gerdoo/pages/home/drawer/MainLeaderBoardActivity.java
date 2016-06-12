@@ -1,4 +1,4 @@
-package com.anashidgames.gerdoo.pages.home;
+package com.anashidgames.gerdoo.pages.home.drawer;
 
 import android.content.Context;
 import android.content.Intent;

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbarHeight">
+
+        <com.anashidgames.gerdoo.view.FitToHeightImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/back"
+            android:padding="@dimen/smallBreak"
+            android:layout_gravity="left"
+            android:id="@+id/backButton"/>
+
+        <com.anashidgames.gerdoo.view.basic.BoldTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="17dp"
+            android:layout_marginRight="@dimen/normalBreak"
+            android:text="@string/editProfile"
+            android:id="@+id/titleView"/>
+
+    </android.support.v7.widget.Toolbar>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_margin="@dimen/longBreak">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:hint="@string/firstName"
+            android:gravity="right"
+            android:textColorHint="@color/gray"
+            android:textColor="@color/gray"
+            android:id="@+id/firstNameEdit"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:hint="@string/lastName"
+            android:gravity="right"
+            android:textColorHint="@color/gray"
+            android:textColor="@color/gray"
+            android:id="@+id/lastNameEdit"/>
+
+        <LinearLayout
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:id="@+id/submitButton"
+            android:background="@drawable/dark_button_background_valid"
+            android:layout_marginTop="@dimen/xlargeBreak"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+            <com.anashidgames.gerdoo.view.FitToHeightImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/check"
+                android:layout_gravity="center"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

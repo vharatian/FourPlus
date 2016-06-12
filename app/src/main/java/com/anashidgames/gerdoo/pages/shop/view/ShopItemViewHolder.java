@@ -9,14 +9,13 @@ import android.widget.TextView;
 
 import com.anashidgames.gerdoo.R;
 import com.anashidgames.gerdoo.core.PsychoImageLoader;
-import com.anashidgames.gerdoo.core.service.model.ShopItem;
-import com.anashidgames.gerdoo.pages.shop.ShopActivity;
+import com.anashidgames.gerdoo.core.service.model.ShopCategoryData;
 import com.anashidgames.gerdoo.pages.topic.list.PsychoViewHolder;
 
 /**
  * Created by psycho on 5/23/16.
  */
-public class ShopItemViewHolder extends PsychoViewHolder<ShopItem>{
+public class ShopItemViewHolder extends PsychoViewHolder<ShopCategoryData>{
 
 
 
@@ -31,7 +30,7 @@ public class ShopItemViewHolder extends PsychoViewHolder<ShopItem>{
     private TextView descriptionView;
     private TextView priceView;
 
-    private ShopItem item;
+    private ShopCategoryData item;
     private OnClickListener clickListener;
 
     public ShopItemViewHolder(View itemView) {
@@ -48,14 +47,14 @@ public class ShopItemViewHolder extends PsychoViewHolder<ShopItem>{
     }
 
     @Override
-    public void bind(ShopItem item) {
+    public void bind(ShopCategoryData item) {
         super.bind(item);
         this.item = item;
 
-        Context context = itemView.getContext();
-        PsychoImageLoader.loadImage(context, item.getImageUrl(), R.drawable.home_topic_place_holder, imageView);
-        descriptionView.setText(item.getDescription());
-        priceView.setText(context.getString(R.string.price).replace("price", "" + item.getPrice()));
+//        Context context = itemView.getContext();
+//        PsychoImageLoader.loadImage(context, item.getImageUrl(), R.drawable.home_topic_place_holder, imageView);
+//        descriptionView.setText(item.getDescription());
+//        priceView.setText(context.getString(R.string.price).replace("price", "" + item.getPrice()));
     }
 
     public void setOnClickListener(OnClickListener clickListener){
@@ -64,7 +63,7 @@ public class ShopItemViewHolder extends PsychoViewHolder<ShopItem>{
 
 
     public interface OnClickListener {
-        void onClick(View v, ShopItem item);
+        void onClick(View v, ShopCategoryData item);
     }
 
     private class InnerListener implements View.OnClickListener {

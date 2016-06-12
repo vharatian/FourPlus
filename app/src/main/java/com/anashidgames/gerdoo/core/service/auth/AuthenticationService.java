@@ -1,6 +1,7 @@
 package com.anashidgames.gerdoo.core.service.auth;
 
 import com.anashidgames.gerdoo.core.service.model.AuthenticationInfo;
+import com.anashidgames.gerdoo.core.service.model.CompleteRegistrationParameters;
 import com.anashidgames.gerdoo.core.service.model.GustSignUpInfo;
 import com.anashidgames.gerdoo.core.service.model.SignUpInfo;
 import com.anashidgames.gerdoo.core.service.model.parameters.SignUpParameters;
@@ -34,4 +35,7 @@ public interface AuthenticationService {
 
     @POST("/auth/guest-users")
     Call<GustSignUpInfo> gustSignUp();
+
+    @POST("/auth/guest-users/complete-registration")
+    Call<SignUpInfo> completeRegistration(@Body CompleteRegistrationParameters signUpParameters);
 }

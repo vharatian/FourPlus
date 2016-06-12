@@ -5,11 +5,10 @@ import android.util.AttributeSet;
 
 import com.anashidgames.gerdoo.R;
 import com.anashidgames.gerdoo.core.service.GerdooServer;
-import com.anashidgames.gerdoo.core.service.model.Friend;
 import com.anashidgames.gerdoo.core.service.model.Gift;
-import com.anashidgames.gerdoo.pages.profile.ProfileActivity;
 import com.anashidgames.gerdoo.view.row.ItemsRow;
 import com.anashidgames.gerdoo.view.row.RowItem;
+import com.anashidgames.gerdoo.view.row.SimpleItemsRow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +18,7 @@ import retrofit2.Call;
 /**
  * Created by psycho on 4/17/16.
  */
-public class GiftsRow extends ItemsRow<Gift> {
+public class GiftsRow extends SimpleItemsRow<Gift> {
 
     private String userId;
 
@@ -45,7 +44,7 @@ public class GiftsRow extends ItemsRow<Gift> {
     }
 
     @Override
-    public Call<List<Gift>> getItems() {
+    public Call<List<Gift>> getList() {
         return GerdooServer.INSTANCE.getGifts(userId);
     }
 
@@ -53,7 +52,7 @@ public class GiftsRow extends ItemsRow<Gift> {
     public List<RowItem> convert(List<Gift> friends) {
         List<RowItem> result = new ArrayList<>();
         for(Gift gift : friends){
-            result.add(new RowItem(gift.getName(), null, gift.getImageUrl(),null));
+            result.add(new RowItem(gift.getName(), null, gift.getImageUrl()));
         }
         return result;
     }
